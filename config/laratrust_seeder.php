@@ -2,16 +2,16 @@
 
 return [
     'role_structure' => [
-        'superadministrator' => [
+        'superadministrateur' => [
             'users' => 'c,r,u,d',
             'acl' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'administrator' => [
+        'administrateur' => [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'user' => [
+        'utilisateur' => [
             'profile' => 'r,u'
         ],
     ],
