@@ -10,6 +10,6 @@ class AdminsController extends Controller
 		return redirect()->route('admin.dashboard');
 	}
     public function dashboard() {
-    	return 'dashboard';
+    	return view('admins.dashboard');
     }
 }
