@@ -8,14 +8,18 @@
 
     <div class="navbar-menu" id="navMenu">
         <div class="navbar-start">
-            <a class="navbar-item" href="https://bulma.io">
+            <a class="navbar-item" href="/">
                 <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
             </a>
         </div>
         <div class="navbar-end">
             <!-- Authentication Links -->
             @guest
-            <a class="navbar-item" href="{{ route('login') }}">{{ __('Login') }}</a>
+           <div id="login">
+<login-view>
+    
+</login-view>
+</div> 
             <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
             @else
             <a class="navbar-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
@@ -29,8 +33,6 @@
     </div>
 </div>
 </div>
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -56,4 +58,5 @@ $target.classList.toggle('is-active');
 }
 
 });
+
 </script>
