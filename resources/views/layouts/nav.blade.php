@@ -5,7 +5,7 @@
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
     </a>
-    
+
     <div class="navbar-menu" id="navMenu">
         <div class="navbar-start">
             <a class="navbar-item" href="https://bulma.io">
@@ -29,6 +29,7 @@
     </div>
 </div>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
