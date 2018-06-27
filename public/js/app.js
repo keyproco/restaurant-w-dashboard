@@ -1000,9 +1000,13 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_buefy___default.a);
  */
 
 Vue.component('login-view', __webpack_require__(47));
-
-var app = new Vue({
+Vue.component('login-profile', __webpack_require__(50));
+var login = new Vue({
   el: '#login'
+});
+
+var loginProfile = new Vue({
+  el: '#login-profile'
 });
 
 /***/ }),
@@ -40923,8 +40927,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         };
-    },
-    mounted: function mounted() {}
+    }
 });
 
 /***/ }),
@@ -41026,6 +41029,249 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-446bbb60", module.exports)
+  }
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(44)
+/* script */
+var __vue_script__ = __webpack_require__(51)
+/* template */
+var __vue_template__ = __webpack_require__(52)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/login-profile.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-51d9b03e", Component.options)
+  } else {
+    hotAPI.reload("data-v-51d9b03e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            navigation: window.location.pathname,
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            currentUser: 'Oussama'
+        };
+    },
+
+    methods: {
+        logoutMe: function logoutMe() {
+            document.getElementById('logout-form').submit();
+        }
+    }
+});
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-dropdown",
+    {
+      attrs: { position: "is-bottom-left" },
+      model: {
+        value: _vm.navigation,
+        callback: function($$v) {
+          _vm.navigation = $$v
+        },
+        expression: "navigation"
+      }
+    },
+    [
+      _c(
+        "a",
+        {
+          staticClass: "navbar-item",
+          attrs: { slot: "trigger" },
+          slot: "trigger"
+        },
+        [
+          _c("span", [_vm._v("Mon compte")]),
+          _vm._v(" "),
+          _c("b-icon", { attrs: { icon: "menu-down" } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("b-dropdown-item", { attrs: { custom: "" } }, [
+        _vm._v("\n        Hello "),
+        _c("b", [_vm._v(_vm._s(_vm.currentUser) + "!")]),
+        _vm._v(" : )\n    ")
+      ]),
+      _vm._v(" "),
+      _c("hr", { staticClass: "dropdown-divider" }),
+      _vm._v(" "),
+      _c(
+        "a",
+        { attrs: { href: "/" } },
+        [
+          _c(
+            "b-dropdown-item",
+            { attrs: { value: "/" } },
+            [
+              _c("b-icon", { attrs: { icon: "home" } }),
+              _vm._v("\n        Accueil\n    ")
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        { attrs: { href: "/home" } },
+        [
+          _c(
+            "b-dropdown-item",
+            { attrs: { value: "/home" } },
+            [
+              _c("b-icon", { attrs: { pack: "fas", icon: "tachometer-alt" } }),
+              _vm._v("\n        Profile\n    ")
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "b-dropdown-item",
+        { attrs: { value: "blog", disabled: "" } },
+        [
+          _c("b-icon", { attrs: { icon: "book-open" } }),
+          _vm._v("\n        Compte\n    ")
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("hr", { staticClass: "dropdown-divider" }),
+      _vm._v(" "),
+      _c(
+        "b-dropdown-item",
+        { attrs: { value: "settings" } },
+        [
+          _c("b-icon", { attrs: { icon: "settings" } }),
+          _vm._v("\n        Commandes\n    ")
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        { attrs: { id: "logout-form", method: "POST", action: "/logout" } },
+        [
+          _c("input", {
+            attrs: { type: "hidden", name: "_token" },
+            domProps: { value: _vm.csrf }
+          }),
+          _vm._v(" "),
+          _c(
+            "b-dropdown-item",
+            { attrs: { value: "logout" }, on: { click: _vm.logoutMe } },
+            [
+              _c("b-icon", { attrs: { icon: "logout" } }),
+              _vm._v("\n        Me déconnecter\n    ")
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-51d9b03e", module.exports)
   }
 }
 

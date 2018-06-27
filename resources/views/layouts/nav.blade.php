@@ -16,16 +16,13 @@
             <!-- Authentication Links -->
             @guest
            <div id="login">
-<login-view>
-    
-</login-view>
-</div> 
+                <login-view></login-view>
+            </div> 
             <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
             @else
-            <a class="navbar-item" href="{{ route('logout') }}" onclick="event.preventDefault(); 
-            document.getElementById('logout-form').submit();">
-            {{ __('Logout') }}
-        </a>
+            <div id="login-profile">
+                <login-profile></login-profile>
+            </div>        
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
