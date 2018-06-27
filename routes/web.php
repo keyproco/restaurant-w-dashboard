@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::prefix('a')->group(function() {
+Route::prefix('a')->middleware('role:superadministrator|administrator|manager')->group(function() {
 	Route::get('', 'AdminsController@index');
 	Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
 });
