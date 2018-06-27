@@ -20,12 +20,14 @@ Vue.use(Buefy);
  */
 
 Vue.component('login-view', require('./components/login-view.vue'));
-
-const app = new Vue({
+Vue.component('login-profile', require('./components/login-profile.vue'));
+const login = new Vue({
     el: '#login'
 });
 
 
-
+const loginProfile = new Vue({
+    el: '#login-profile'
+});
 
 

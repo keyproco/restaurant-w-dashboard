@@ -14,6 +14,5 @@
     </div>
   </div>
 </section>
-<login-form></login-form>
 
 

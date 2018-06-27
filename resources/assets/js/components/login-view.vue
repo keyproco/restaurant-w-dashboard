@@ -44,9 +44,7 @@
             return {
                 csrf : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-        },
-        mounted() {
-
         }
+
     }
 </script>
