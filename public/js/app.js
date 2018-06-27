@@ -1002,11 +1002,11 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_buefy___default.a);
 Vue.component('login-view', __webpack_require__(47));
 Vue.component('login-profile', __webpack_require__(50));
 var login = new Vue({
-  el: '#login'
+  el: document.getElementById('login')
 });
 
 var loginProfile = new Vue({
-  el: '#login-profile'
+  el: document.getElementById('login-profile')
 });
 
 /***/ }),

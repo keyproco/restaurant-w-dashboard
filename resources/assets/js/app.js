@@ -22,12 +22,12 @@ Vue.use(Buefy);
 Vue.component('login-view', require('./components/login-view.vue'));
 Vue.component('login-profile', require('./components/login-profile.vue'));
 const login = new Vue({
-    el: '#login'
+    el: document.getElementById('login') 
 });
 
 
 const loginProfile = new Vue({
-    el: '#login-profile'
+    el: document.getElementById('login-profile') 
 });
 
 
