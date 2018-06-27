@@ -9,7 +9,7 @@
     General
   </p>
   <ul class="menu-list">
-    <li><a>Tableau de bord</a></li>
+    <li><a href="/a/dashboard">Tableau de bord</a></li>
     <li><a>Clients</a></li>
     <li><a>Commandes</a></li>
   </ul>
@@ -23,7 +23,7 @@
     Utilisateurs
   </p>
   <ul class="menu-list">
-    <li><a>Gérer les utilisateurs</a></li>
+    <li><a href="/a/users">Gérer les utilisateurs</a></li>
     <li><a>Roles et Permissions</a></li>
   </ul>
 </aside>
