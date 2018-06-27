@@ -14491,3 +14491,7 @@ label.panel-block:hover {
   background: rgba(255, 56, 96, 0.05);
 }
 
+.dashboard-wrapper {
+  background-color: #dfe6e9;
+}
+
