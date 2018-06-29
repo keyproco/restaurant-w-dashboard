@@ -40991,7 +40991,9 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("b-checkbox", [_vm._v("Se souvenir de moi")])
+                  _c("b-checkbox", { attrs: { name: "remember" } }, [
+                    _vm._v("Se souvenir de moi")
+                  ])
                 ],
                 1
               ),

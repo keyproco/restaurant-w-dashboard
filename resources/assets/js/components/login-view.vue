@@ -27,7 +27,7 @@
                                             required>
                                         </b-input>
                                     </b-field>
-                                    <b-checkbox>Se souvenir de moi</b-checkbox>
+                                    <b-checkbox name="remember">Se souvenir de moi</b-checkbox>
                                 </section>
                                 <footer class="modal-card-foot">
                                     <button class="button is-primary">Login</button>

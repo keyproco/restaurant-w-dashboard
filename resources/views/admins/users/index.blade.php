@@ -13,11 +13,7 @@
        <th><abbr title="Update-date">Action</abbr></th>
     </tr>
   </thead>
-  <tfoot>
-    <tr>
-      <th><abbr title="Users">{{ $number }}</abbr></th>
-    </tr>
-  </tfoot>
+
    	@foreach($users as $user)
   <tbody>
     <tr>
