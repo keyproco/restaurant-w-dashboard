@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Carbon\Carbon;
 class UserController extends Controller
 {
     /**
@@ -13,9 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        $countUsers = User::all()->count();
-        return view('admins.users.index', ['users' => $users, 'number' => $countUsers]);
+        $users = User::orderBy('id', 'desc')->paginate(2);
+        return view('admins.users.index', ['users' => $users]);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return 'User shown';
     }
 
     /**
@@ -58,7 +58,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return ' EDIT page';
     }
 
     /**
@@ -81,6 +81,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }

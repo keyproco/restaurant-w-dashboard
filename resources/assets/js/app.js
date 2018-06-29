@@ -19,6 +19,7 @@ Vue.use(Buefy);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+
 Vue.component('login-view', require('./components/login-view.vue'));
 Vue.component('login-profile', require('./components/login-profile.vue'));
 const login = new Vue({

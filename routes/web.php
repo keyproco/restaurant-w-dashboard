@@ -22,3 +22,4 @@ Route::prefix('a')->middleware('role:superadministrator|administrator|manager')-
 	Route::resource('/users', 'UserController');
 });
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/current-user', 'HomeController@getCurrentUser');

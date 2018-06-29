@@ -40908,6 +40908,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -41118,7 +41119,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             navigation: window.location.pathname,
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            currentUser: 'Oussama'
+            currentUser: ''
         };
     },
 
@@ -41126,6 +41127,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         logoutMe: function logoutMe() {
             document.getElementById('logout-form').submit();
         }
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        axios.get('/current-user').then(function (r) {
+            return _this.currentUser = r.data;
+        }).catch(function (e) {
+            return console.log('fail');
+        });
     }
 });
 

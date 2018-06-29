@@ -37,18 +37,21 @@
 </template>
 
 <script>
-export default {
+export default  {
     data() {
         return {
             navigation: window.location.pathname,
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            currentUser: 'Oussama'
+            currentUser: ''
         }
     },
     methods: {
         logoutMe() {
             document.getElementById('logout-form').submit();
         }
+    },
+    mounted() {
+        axios.get('/current-user').then((r) => this.currentUser = r.data).catch((e) => console.log('fail'));
     }
 }
 </script>
