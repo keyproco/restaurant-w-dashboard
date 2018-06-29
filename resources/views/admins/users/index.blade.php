@@ -2,7 +2,7 @@
 
 
 @section('content')
-<div class="card">
+<div class="card m-t-10">
 	<div class="card-content">
 <table class="table is-center">
   <thead>

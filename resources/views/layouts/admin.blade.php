@@ -2,7 +2,7 @@
 <body>
     <div id="admin">
         @include('layouts.nav')
-<div class="columns">
+<div class="columns m-t-20">
   <div class="column is-one-fifth">
 <aside class="menu">
   <p class="menu-label">
