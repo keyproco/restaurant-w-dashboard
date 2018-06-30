@@ -14879,3 +14879,13 @@ label.panel-block:hover {
   background-color: #dfe6e9;
 }
 
+#chart {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+div .container {
+  width: 500px;
+}
+
