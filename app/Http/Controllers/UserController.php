@@ -47,8 +47,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return view('admins.users.show', ['user' => $user] );
+        return 'show the informations';
     }
 
     /**
@@ -59,7 +58,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return ' EDIT page';
+        $user = User::findOrFail($id);
+        return view('admins.users.show', ['user' => $user] );
     }
 
     /**
@@ -74,6 +74,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->updated_at = Carbon::now();
         $user->save();
         return back();
     }

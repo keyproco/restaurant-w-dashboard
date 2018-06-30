@@ -4,10 +4,15 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+window.Vue = require('vue');
 
 require('./bootstrap');
+import Graph from './components/charts/graph.js';
+new Vue({
+    el: '#chart',
+    components: { Graph }
+});
 
-window.Vue = require('vue');
 
 import Buefy from 'buefy';
 

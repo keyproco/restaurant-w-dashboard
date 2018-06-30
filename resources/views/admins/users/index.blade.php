@@ -1,6 +1,6 @@
 @extends('admins.dashboard')
 
-
+@section('title') Gérer les utilisateurs @endsection
 @section('content')
 <div class="card m-t-10">
 	<div class="card-content">
