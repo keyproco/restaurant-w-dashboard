@@ -1,19 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Tableau de bord')
-
 @section('content')
 <div class="columns">
-    <div class="column is-one-thirds">
-    <div class="box"></div>
-  </div>
-
-  <div class="column is-one-thirds">
-    <div class="box">Stats here</div>
-  </div>
-  <div class="column is-one-thirds">
-    <div class="box">Stats here</div>
-  </div>
-</div>
 <div id="chart">
           <div class="container">
             <graph :labels="{{ $labels }}" 
@@ -29,5 +17,16 @@
              ></graph>
         </div>
 </div>
+    <div class="column is-one-thirds">
+    <div class="box"></div>
+  </div>
+  <div class="column is-one-thirds">
+    <div class="box">Stats here</div>
+  </div>
+  <div class="column is-one-thirds">
+    <div class="box">Stats here</div>
+  </div>
+</div>
 @endsection
+
 

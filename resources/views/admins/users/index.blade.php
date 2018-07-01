@@ -1,4 +1,4 @@
-@extends('admins.dashboard')
+@extends('layouts.admin')
 
 @section('title') Gérer les utilisateurs @endsection
 @section('content')

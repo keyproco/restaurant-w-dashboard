@@ -14,7 +14,8 @@ class AdminsController extends Controller
 		$users = collect(User::countUsersByMonth());
 		$users = $users->values();
 		$labels = collect(['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout','Septembre','Octobre','Novembre','Decembre' ]);
+         $path = request()->segment(2);
+    	return view('admins.dashboard', compact('users', 'labels', 'path'));
 
-    	return view('admins.dashboard', compact('users', 'labels'));
     }
 }

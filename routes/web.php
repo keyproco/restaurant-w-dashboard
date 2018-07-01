@@ -23,5 +23,3 @@ Route::prefix('a')->middleware('role:superadministrator|administrator|manager')-
 });
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/current-user', 'HomeController@getCurrentUser');
-
-Route::get('/dashboard', 'AdminsController@usersByMonth');
