@@ -72572,7 +72572,7 @@ module.exports = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_chart_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_chart_js__);
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    template: '<div">\n\t\t\t\t\t<canvas  ref="canvas">\n\t\t\t\t\t</canvas>\n\t\t\t\t\t<div  class="legend" v-html="legend"></div>\n\t\t\t\t</div>',
+    template: '<div>\n\t\t\t\t\t<canvas  ref="canvas">\n\t\t\t\t\t</canvas>\n\t\t\t\t\t<div  class="legend" v-html="legend"></div>\n\t\t\t\t</div>',
     props: {
         labels: {},
         values: {},

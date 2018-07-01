@@ -1,6 +1,6 @@
 import Chart from 'chart.js';
 export default {
-	template: `<div">
+	template: `<div>
 					<canvas  ref="canvas">
 					</canvas>
 					<div  class="legend" v-html="legend"></div>

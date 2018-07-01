@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>
-@yield('title', 'Wait bro')
+@yield('title')
 </title>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -26,7 +26,7 @@
     General
   </p>
   <ul class="menu-list">
-    <li><a href="/a/dashboard">Tableau de bord</a></li>
+    <li><a href="/a/dashboard" class="{{ $path == 'dashboard' ? 'is-active' : ''  }}">Tableau de bord</a></li>
     <li><a>Clients</a></li>
     <li><a>Commandes</a></li>
   </ul>
@@ -40,7 +40,7 @@
     Utilisateurs
   </p>
   <ul class="menu-list">
-    <li><a href="/a/users">Gérer les utilisateurs</a></li>
+    <li><a href="/a/users" class="{{$path == 'users' ? 'is-active' : '' }}">Gérer les utilisateurs</a></li>
     <li><a>Roles et Permissions</a></li>
   </ul>
 </aside>
