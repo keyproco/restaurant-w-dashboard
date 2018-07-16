@@ -9,7 +9,7 @@
     <div class="navbar-menu" id="navMenu">
         <div class="navbar-start">
             <a class="navbar-item" href="/">
-                <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+                <img src="https://bulma.io/images/bulma-logo.png" alt="i am alt" width="112" height="28">
             </a>
         </div>
         <div class="navbar-end">

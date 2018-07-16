@@ -17,16 +17,16 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+         @include('layouts.nav')
     <div id="admin">
-        @include('layouts.nav')
 <div class="columns m-t-5">
   <div class="column is-one-fifth">
 <aside class="menu">
   <p class="menu-label">
-    General
+    Général
   </p>
   <ul class="menu-list">
-    <li><a href="/a/dashboard" class="{{ $path == 'dashboard' ? 'is-active' : ''  }}">Tableau de bord</a></li>
+    <li><a href="{{ route('dashboard') }}" class="{{ $path == 'dashboard' ? 'is-active' : ''  }}">Tableau de bord</a></li>
     <li><a>Clients</a></li>
     <li><a>Commandes</a></li>
   </ul>
@@ -34,14 +34,14 @@
     Administration
   </p>
   <ul class="menu-list">
-    <li><a>Authentication</a></li>
+    <li><a>Authentification</a></li>
   </ul>
   <p class="menu-label">
     Utilisateurs
   </p>
   <ul class="menu-list">
-    <li><a href="/a/users" class="{{$path == 'users' ? 'is-active' : '' }}">Gérer les utilisateurs</a></li>
-    <li><a>Roles et Permissions</a></li>
+    <li><a href="{{ route('users.index') }}" class="{{$path == 'users' ? 'is-active' : '' }}">Gérer les utilisateurs</a></li>
+    <li><a href="{{ route('permissions.index') }}" class="{{ $path == 'permissions' ? 'is-active' : ''  }}">Roles et Permissions</a></li>
   </ul>
 </aside>
   </div>
