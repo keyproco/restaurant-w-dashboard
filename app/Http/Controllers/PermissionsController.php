@@ -13,7 +13,8 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        return view('admins.permissions.index', ['permissions' => Permission::all()]);
+        return view('admins.permissions.index', ['permissions' => Permission::all(),
+            'path' => request()->segment(2)]);
     }
 
     /**
