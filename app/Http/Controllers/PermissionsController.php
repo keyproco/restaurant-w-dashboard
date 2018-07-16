@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use Carbon\Carbon;
-class UserController extends Controller
+use App\Permission;
+class PermissionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->paginate(2);
-        return view('admins.users.index', ['users' => $users, 'path' => request()->segment(2)]);
+        return view('admins.permissions.index', ['permissions' => Permission::all()]);
     }
 
     /**
@@ -47,7 +45,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return 'show the informations';
+        //
     }
 
     /**
@@ -58,9 +56,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-                 $path = request()->segment(2);
-        return view('admins.users.show', ['user' => $user, 'path' => $path] );
+        //
     }
 
     /**
@@ -72,12 +68,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->updated_at = Carbon::now();
-        $user->save();
-        return back();
+        //
     }
 
     /**
@@ -88,6 +79,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-
+        //
     }
 }
