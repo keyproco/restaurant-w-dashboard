@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Tableau de bord')
 @section('content')
-
 <div class="card m-t-10">  
 	<div class="card-content">
 <table class="table">
