@@ -42382,7 +42382,6 @@ module.exports = function spread(callback) {
                 pointHighlightStroke: "rgba(220,220,220,1)",
                 data: this.values,
                 responsive: true
-
             }]
         };
         console.log(this.values, this.labels);

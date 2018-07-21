@@ -14879,3 +14879,13 @@ label.panel-block:hover {
   background-color: #dfe6e9;
 }
 
+.card {
+  width: 95%;
+  margin: auto;
+}
+
+.table {
+  width: 100%;
+  margin: auto;
+}
+
