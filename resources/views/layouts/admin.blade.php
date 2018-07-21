@@ -18,9 +18,9 @@
 <body>
          @include('layouts.nav')
     <div id="admin">
-<div class="columns m-t-5">
+<div class="columns m-t-15">
   <div class="column is-one-fifth">
-<aside class="menu">
+<aside class="menu m-l-20">
   <p class="menu-label">
     Général
   </p>
@@ -30,10 +30,11 @@
     <li><a>Commandes</a></li>
   </ul>
   <p class="menu-label">
-    Administration
+    Gestion des produits
   </p>
   <ul class="menu-list">
-    <li><a>Authentification</a></li>
+    <li><a>Produits</a></li>
+    <li><a>Catégories</a></li>
   </ul>
   <p class="menu-label">
     Utilisateurs
