@@ -1,9 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'Tableau de bord')
 @section('content')
-<div class="card m-t-10">
+
+<div class="card m-t-10">  
 	<div class="card-content">
-<table class="table is-center">
+<table class="table">
   <thead>
     <tr>
       <th>ID</th>
@@ -23,13 +24,14 @@
       <td>{{ $permission->created_at->toFormattedDateString() }}</td>
       <td>{{ $permission->updated_at->toFormattedDateString() }}</td>
       <td><a href="" class="button is-success">Modifier</a>
-<a href="" class="button is-info">Afficher</a>
-<a href="" class="button is-danger">Supprimer</a></td>
+      <a href="" class="button is-info">Afficher</a>
+      <a href="{{ route('permissions.destroy', $permission->id) }}" class="button is-danger">Supprimer</a></td>
       </td>
     </tr>
-           @endforeach
+      @endforeach
   </tbody>
 </table>	
+{{ $permissions->links('vendor.pagination.default') }}
 @endsection
 
 

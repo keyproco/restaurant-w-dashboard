@@ -34,7 +34,6 @@ export default {
               pointHighlightStroke: "rgba(220,220,220,1)",
               data: this.values,
               responsive: true,
-
             },
           ]
         };

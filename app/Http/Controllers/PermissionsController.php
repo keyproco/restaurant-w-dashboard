@@ -13,7 +13,8 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        return view('admins.permissions.index', ['permissions' => Permission::all(),
+        return view('admins.permissions.index', [
+            'permissions' => Permission::orderBy('id', 'asc')->paginate(4),
             'path' => request()->segment(2)]);
     }
 
@@ -80,6 +81,6 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }
