@@ -55617,18 +55617,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
             data: this.products
-            // defaultOpenedDetails: [1]
-            // :opened-detailed="defaultOpenedDetails" 
         };
     },
 
@@ -55681,12 +55675,7 @@ var render = function() {
             _c(
               "b-table-column",
               {
-                attrs: {
-                  field: "name",
-                  sortable: "",
-                  label: "Nom du produit",
-                  sortable: ""
-                }
+                attrs: { field: "name", label: "Nom du produit", sortable: "" }
               },
               [_vm._v("\n            " + _vm._s(props.row.name) + "\n        ")]
             ),
@@ -55721,7 +55710,7 @@ var render = function() {
                 _vm._v(
                   "\n             " +
                     _vm._s(props.row.category.name) +
-                    " \n        "
+                    "\n        "
                 )
               ],
               1
@@ -55759,9 +55748,7 @@ var render = function() {
             _c("article", { staticClass: "media" }, [
               _c("figure", { staticClass: "media-left" }, [
                 _c("p", { staticClass: "image is-64x64" }, [
-                  _c("img", {
-                    attrs: { src: "static/img/placeholder-128x128.png" }
-                  })
+                  _c("img", { attrs: { src: props.row.image } })
                 ])
               ]),
               _vm._v(" "),
@@ -55772,12 +55759,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("small", [_vm._v("@" + _vm._s(props.row.price))]),
                     _vm._v(" "),
-                    _c("br"),
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(props.row.price) +
-                        "\n                    "
-                    )
+                    _c("br")
                   ])
                 ])
               ])
