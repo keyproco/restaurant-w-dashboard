@@ -9,7 +9,7 @@ window.Vue = require('vue');
 require('./bootstrap');
 import Graph from './components/charts/graph.js';
 new Vue({
-    el: '#chart',
+    el: document.getElementById('chart'),
     components: { Graph }
 });
 
@@ -25,6 +25,11 @@ Vue.use(Buefy);
  */
 
 
+import ProductTable from './components/table';
+const products = new Vue({
+	el: document.getElementById('products'),
+	components: {ProductTable}
+});
 Vue.component('login-view', require('./components/login-view.vue'));
 Vue.component('login-profile', require('./components/login-profile.vue'));
 const login = new Vue({

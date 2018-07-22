@@ -21,6 +21,7 @@ Route::prefix('admin')->middleware('role:superadministrator|administrator|manage
 	Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
 	Route::resource('/users', 'UserController');
 	Route::resource('/permissions', 'PermissionsController');
+	Route::resource('/products', 'ProductsController');
 });
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/current-user', 'HomeController@getCurrentUser');
