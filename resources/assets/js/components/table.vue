@@ -21,7 +21,7 @@
             <b-table-column field="price" label="Prix" sortable>
                 {{ props.row.price }}
             </b-table-column>
-            <b-table-column label="Catégorie">
+            <b-table-column sortable field="category.name"label="Catégorie">
                 <b-icon pack="fa"
                     :icon="props.row.category.name === 'burger' ? 'mars' : 'venus'">
                 </b-icon>

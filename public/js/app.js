@@ -55703,7 +55703,13 @@ var render = function() {
             _vm._v(" "),
             _c(
               "b-table-column",
-              { attrs: { label: "Catégorie" } },
+              {
+                attrs: {
+                  sortable: "",
+                  field: "category.name",
+                  label: "Catégorie"
+                }
+              },
               [
                 _c("b-icon", {
                   attrs: {
