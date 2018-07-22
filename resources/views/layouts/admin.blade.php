@@ -30,10 +30,10 @@
     <li><a>Commandes</a></li>
   </ul>
   <p class="menu-label">
-    Gestion des produits
+    Gestion du restaurant
   </p>
   <ul class="menu-list">
-    <li><a>Produits</a></li>
+    <li><a href="{{ route('products.index') }}" class="{{$path == 'products' ? 'is-active' : '' }}">Produits</a></li>
     <li><a>Catégories</a></li>
   </ul>
   <p class="menu-label">
