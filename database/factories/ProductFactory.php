@@ -19,5 +19,6 @@ $factory->define(App\Product::class, function (Faker $faker) {
         'price' => $faker->numberBetween(5, 12),
         'description' => $faker->text(80),
         'category_id' => $faker->numberBetween(1, 3),
+        'image' => $faker->imageUrl(256, 256),
     ];
 });
