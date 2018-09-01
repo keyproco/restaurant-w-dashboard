@@ -1,20 +1,20 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-window.Vue = require('vue');
+window.Vue = require("vue");
 
-require('./bootstrap');
-import Graph from './components/charts/graph.js';
+window.Event = new Vue();
+
+require("./bootstrap");
+import Graph from "./components/charts/graph.js";
 new Vue({
-    el: document.getElementById('chart'),
+    el: document.getElementById("chart"),
     components: { Graph }
 });
 
-
-import Buefy from 'buefy';
+import Buefy from "buefy";
 
 Vue.use(Buefy);
 
@@ -24,21 +24,28 @@ Vue.use(Buefy);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
-import ProductTable from './components/table';
+import ProductTable from "./components/table";
+import CreateProduct from "./components/products/create";
 const products = new Vue({
-	el: document.getElementById('products'),
-	components: {ProductTable}
+    el: document.getElementById("products"),
+    components: { ProductTable, CreateProduct },
+    methods: {
+        createProduct() {
+            console.log("adding the product");
+        },
+        mounted() {
+            Event.$on("created", data => {
+                this.products = [];
+            });
+        }
+    }
 });
-Vue.component('login-view', require('./components/login-view.vue'));
-Vue.component('login-profile', require('./components/login-profile.vue'));
+Vue.component("login-view", require("./components/login-view.vue"));
+Vue.component("login-profile", require("./components/login-profile.vue"));
 const login = new Vue({
-    el: document.getElementById('login') 
+    el: document.getElementById("login")
 });
-
 
 const loginProfile = new Vue({
-    el: document.getElementById('login-profile') 
+    el: document.getElementById("login-profile")
 });
-
-

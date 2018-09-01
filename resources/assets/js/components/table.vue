@@ -1,4 +1,20 @@
 <template>
+    <section>
+        <button class="button is-medium" @click="toast">
+            Launch toast (default)
+        </button>
+
+        <button class="button is-medium is-success" @click="success">
+            Launch toast (custom)
+        </button>
+
+        <button class="button is-medium is-danger" @click="danger">
+            Launch toast (custom)
+        </button>
+    </section>
+</template>
+
+<template>
     <b-table
         :data="data"
         paginated
@@ -8,7 +24,6 @@
         detail-key="id"
         @details-open="(row, index) => $toast.open(`${ row.name}`)"
     >
-
         <template slot-scope="props">
             <b-table-column sortable  field="id" label="ID" width="40" numeric>
                 {{ props.row.id }}
@@ -25,11 +40,12 @@
                 </b-icon>
                  {{ props.row.category.name }}
             </b-table-column>
-            <b-table-column field="date" label="Date" sortable centered>
-                <span class="tag is-success">
+            <b-table-column field="date" label="Ajouté" sortable centered>
+                <span class="tag is-info">
                     {{ new Date(props.row.created_at).toLocaleDateString() }}
                 </span>
             </b-table-column>
+             <b-loading :is-full-page="isFullPage" :active.sync="isLoading" ></b-loading>
         </template>
 
         <template slot="detail" slot-scope="props">
@@ -42,8 +58,9 @@
                 <div class="media-content">
                     <div class="content">
                         <p>
-                            <strong>{{  props.row.price }}</strong>
-                            <small>@{{  props.row.price }}</small>
+                            <strong>{{  props.row.name }}</strong>
+                            <br>
+                            <small>{{  props.row.description }}</small>
                             <br>
                         </p>
                     </div>
@@ -54,17 +71,47 @@
 </template>
 
 <script>
-
-
     export default {
         data() {
             return {
                 data : this.products,
+                isLoading: false,
+                isFullPage: false
             }
         },
         props: [ 'products'],
-        mounted() {
-            console.log(this.products)
-        }
+        methods: {
+        },
+        mounted() { 
+            Event.$on("created", data => {
+                this.isLoading = true;
+                axios.get(`/admin/products/${data.data.id}` )
+                .then(r => {
+                    this.isLoading = false;
+                    this.data.push(r.data);
+                    this.$toast.open({
+            message: ` vient d'être ajouté avec succès!`,
+            type: 'is-success'
+            })            
+    
+                    })
+
+                .catch( e => {
+                    this.isLoading = false;
+                    this.$toast.open({
+                    message: `Le produit n'a pas pu être enregistré`,
+                    type: 'is-danger'
+                })
+                    } )
+            });
+
+
+        },
+    created() {
+
+    },
+updated() {
+
+},
     }
 </script>
