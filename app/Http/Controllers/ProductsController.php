@@ -13,7 +13,6 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        // return collect(Product::all());
         $products = Product::all()->load('category');
         return view('admins.products.index', [
             'products' =>  $products,
@@ -28,7 +27,6 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -38,8 +36,21 @@ class ProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+
     {
-        //
+        try {
+            $product = new Product();
+            $product->name = $request->name;
+            $product->price = $request->price;;
+            $product->category_id = $request->radio;
+            $product->image = "https://lorempixel.com/256/256/?84043";
+            $product->description = $request->description;
+            $product->save();
+            return $product;
+        }
+        catch( \Exception $e ) {
+            return $e;
+        }
     }
 
     /**
@@ -50,7 +61,7 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        //
+        return Product::findOrFail($id)->load('category');
     }
 
     /**

@@ -111,6 +111,7 @@ class LaratrustSeeder extends Seeder
         DB::table('permission_user')->truncate();
         DB::table('role_user')->truncate();
         \App\User::truncate();
+        \App\Product::truncate();
         \App\Role::truncate();
         \App\Permission::truncate();
         Schema::enableForeignKeyConstraints();
