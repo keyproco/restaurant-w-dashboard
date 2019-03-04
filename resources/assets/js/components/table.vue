@@ -69,7 +69,6 @@
         </template>
     </b-table>
 </template>
-
 <script>
     export default {
         data() {
@@ -83,14 +82,15 @@
         methods: {
         },
         mounted() { 
+
             Event.$on("created", data => {
                 this.isLoading = true;
-                axios.get(`/admin/products/${data.data.id}` )
+                axios.get(`http://127.0.0.1:8000/admin/products/${data.data.id}` )
                 .then(r => {
                     this.isLoading = false;
                     this.data.push(r.data);
                     this.$toast.open({
-            message: ` vient d'être ajouté avec succès!`,
+            message: ` vient d'être ajouté avec succès ok!`,
             type: 'is-success'
             })            
     
@@ -108,7 +108,6 @@
 
         },
     created() {
-
     },
 updated() {
 

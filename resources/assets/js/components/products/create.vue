@@ -4,7 +4,7 @@
         <div class="block">
             <b-radio v-model="radio"
                 native-value="1">
-                Hamburger
+                HAMBURGER
             </b-radio>
             <b-radio v-model="radio"
                 native-value="2">
@@ -57,7 +57,7 @@
         methods: {
             createProduct() {
                 axios
-                .post('/admin/products', this.$data)
+                .post('http://127.0.0.1:8000/admin/products', this.$data)
                 .then((s) =>  Event.$emit('created', s)) 
                 .catch((e) => console.log('error', e))
             }

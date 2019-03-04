@@ -2,7 +2,7 @@
 @section('title', 'Produits')
 @section('content')
 <div id="products">
-  <product-table :products="{{ $products }}" > </product-table>
+<product-table :products="{{ $products }}" > </product-table>
   <create-product @created="createProduct"> </create-product>
 </div>
 @endsection
