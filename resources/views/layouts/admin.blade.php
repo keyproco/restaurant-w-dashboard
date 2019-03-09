@@ -9,6 +9,8 @@
 
     <title>
 @yield('title')
+
+
 </title>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -17,36 +19,69 @@
 </head>
 <body>
          @include('layouts.nav')
-    <div id="admin">
-<div class="columns m-t-15">
-  <div class="column is-one-fifth">
-<aside class="menu m-l-20">
-  <p class="menu-label">
-    Général
-  </p>
-  <ul class="menu-list">
-    <li><a href="{{ route('dashboard') }}" class="{{ $path == 'dashboard' ? 'is-active' : ''  }}">Tableau de bord</a></li>
-    <li><a>Clients</a></li>
-    <li><a>Commandes</a></li>
-  </ul>
-  <p class="menu-label">
-    Gestion du restaurant
-  </p>
-  <ul class="menu-list">
-    <li><a href="{{ route('products.index') }}" class="{{$path == 'products' ? 'is-active' : '' }}">Produits</a></li>
-    <li><a>Catégories</a></li>
-  </ul>
-  <p class="menu-label">
-    Utilisateurs
-  </p>
-  <ul class="menu-list">
-    <li><a href="{{ route('users.index') }}" class="{{$path == 'users' ? 'is-active' : '' }}">Gérer les utilisateurs</a></li>
-    <li><a href="{{ route('permissions.index') }}" class="{{ $path == 'permissions' ? 'is-active' : ''  }}">Roles et Permissions</a></li>
-  </ul>
-</aside>
+
+  <div id="chart"  class="columns" >
+    <div class="column is-one-fifth">
+      <section>
+        <aside class="menu">
+          <p class="menu-label">Général</p>
+          <ul class="menu-list">
+            <li>
+              <router-link to="/admin/dashboard/" exact > Tableau de bord </router-link>  
+            </li>
+            <li>
+              <a>Blog</a>
+            </li>
+          </ul>
+          <p class="menu-label">Gestion des aliments</p>
+          <ul class="menu-list">
+            <li>
+               <router-link to="/admin/dashboard/manage-products" exact> Gérer les produits </router-link>  
+            </li>
+            <li>
+              <a >Manage Your Team</a>
+            </li>
+            <li>
+              <a>Invitations</a>
+            </li>
+            <li>
+              <a>Cloud Storage Environment </a>
+            </li>
+            <li>
+              <a>Authentication</a>
+            </li>
+          </ul>
+          <p class="menu-label">Gestion des ressources</p>
+          <ul class="menu-list">
+            <li>
+              <a>Permissions</a>
+            </li>
+            <li>
+ <router-link to="/admin/dashboard/manage-users" exact > Utilisateurs</router-link>  
+            </li>
+            <li>
+              <a>Staff</a>
+            </li>
+          </ul>
+        </aside>
+      </section>
+    </div>
+    <div class="column">  <router-view> </router-view></div>
+
   </div>
-  <div class="container  dashboard-wrapper">
-  	@yield('content')
+
+
+
+
+
+  <div class="  dashboard-wrapper">
+  
+  <div  id="chart" >
+  <router-view> </router-view>
+
+
+
+</div>
   </div>
 </div>
     </div>

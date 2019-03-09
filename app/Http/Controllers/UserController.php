@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::orderBy('id', 'desc')->paginate(2);
-        return view('admins.users.index', ['users' => $users, 'path' => request()->segment(2)]);
+        return view('layouts.users.index', ['users' => $users, 'path' => request()->segment(2)]);
     }
 
     /**

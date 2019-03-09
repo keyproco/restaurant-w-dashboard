@@ -13,12 +13,8 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::all()->load('category');
-
-        return view('admins.products.index', [
-            'products' =>  $products,
-            'path' => request()->segment(2)
-        ]);
+         
+        return collect(Product::all()->load('category'));
     }
 
     /**
