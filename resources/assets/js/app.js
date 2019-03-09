@@ -6,17 +6,29 @@
 window.Vue = require("vue");
 
 window.Event = new Vue();
-
+import router from "./routes";
 require("./bootstrap");
 import Graph from "./components/charts/graph.js";
-new Vue({
-    el: document.getElementById("chart"),
-    components: { Graph }
-});
-
 import Buefy from "buefy";
 
 Vue.use(Buefy);
+Vue.use(VueRouter);
+new Vue({
+    el: document.getElementById("chart"),
+    // components: { Graph },
+    router: router
+});
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+const token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+} else {
+    console.error(
+        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+    );
+}
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -26,6 +38,7 @@ Vue.use(Buefy);
 
 import ProductTable from "./components/table";
 import CreateProduct from "./components/products/create";
+import VueRouter from "vue-router";
 const products = new Vue({
     el: document.getElementById("products"),
     components: { ProductTable, CreateProduct },
