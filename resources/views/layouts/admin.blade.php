@@ -30,8 +30,11 @@
               <router-link to="/admin/dashboard/" exact > Tableau de bord </router-link>  
             </li>
             <li>
-              <a>Blog</a>
+              <a>Commandes</a>
             </li>
+            <li>
+              <a>Paniers</a>
+            </li>          
           </ul>
           <p class="menu-label">Gestion des aliments</p>
           <ul class="menu-list">
