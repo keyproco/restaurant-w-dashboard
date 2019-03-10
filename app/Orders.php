@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orders extends Model
 {
-    public function items() {
-        return $this->hasMany(OrderItems::class);
+    public function products() {
+        return $this->belongsToMany(Product::class);
     }
 
 }
