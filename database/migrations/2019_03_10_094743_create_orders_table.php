@@ -15,6 +15,9 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('delivery_id');
+            $table->integer('payment_type');
             $table->boolean('confirmed')->default(false);
             $table->integer('status')->default(0);
             $table->integer('total')->default(0);
