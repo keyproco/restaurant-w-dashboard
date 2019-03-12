@@ -27,6 +27,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    public function orders() {
+        return $this->hasMany(Orders::class);
+    }
 
     public static function countUsersByMonth() {
         $users = User::select('id', 'created_at')
