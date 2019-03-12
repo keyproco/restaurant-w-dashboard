@@ -15595,3 +15595,7 @@ label.panel-block:hover {
   margin: auto;
 }
 
+.hero.is-info {
+  background-color: red;
+}
+

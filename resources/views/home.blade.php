@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="columns">
+<div id="app" class="columns">
     <div class="column is-one-quarter">
         <aside class="menu">
   <p class="menu-label">
     Options
   </p>
   <ul class="menu-list">
-    <li><a>Mon compte</a></li>
-    <li><a>Mes commandes</a></li>
-    <li><a>Mes adresses</a></li>
+    <li><router-link to="mon-compte" exact >Mon compte</router-link></li>
+
+    <li><router-link to="mes-commandes" exact >Mes commandes</router-link>  </li>
+    <li><router-link to="mes-paiements" exact >Mes paiements</router-link></li>
   </ul>
 </aside>
     </div>
-    <div class="column">another column</div>
+    <div class="column">  <router-view> </router-view></div>
 </div>
 @endsection

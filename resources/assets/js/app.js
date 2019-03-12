@@ -7,6 +7,7 @@ window.Vue = require("vue");
 
 window.Event = new Vue();
 import router from "./routes";
+import routerC from "./customer-routes";
 require("./bootstrap");
 import Graph from "./components/charts/graph.js";
 import Buefy from "buefy";
@@ -17,6 +18,11 @@ new Vue({
     el: document.getElementById("chart"),
     // components: { Graph },
     router: router
+});
+new Vue({
+    el: document.getElementById("app"),
+    // components: { Graph },
+    router: routerC
 });
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
