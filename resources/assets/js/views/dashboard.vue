@@ -13,7 +13,6 @@ export default {
   mounted() {},
   created() {
     console.log("dashboard vue.js");
-    console.log(this.products);
   },
   updated() {}
 };

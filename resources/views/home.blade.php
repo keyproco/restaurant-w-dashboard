@@ -8,6 +8,7 @@
     Options
   </p>
   <ul class="menu-list">
+        <li><router-link to="home" exact >Accueil</router-link></li>
     <li><router-link to="mon-compte" exact >Mon compte</router-link></li>
 
     <li><router-link to="mes-commandes" exact >Mes commandes</router-link>  </li>
