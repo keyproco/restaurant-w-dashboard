@@ -36448,7 +36448,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     Event.$on("created", function (data) {
       _this.isLoading = true;
-      axios.get("http://127.0.0.1:8000/admin/products/" + data.data.id).then(function (r) {
+      axios.get("http://127.0.0.1:8000/admin/products/" + data.data.id, {}, {
+        useCredentials: true
+      }).then(function (r) {
         _this.isLoading = false;
         _this.data.push(r.data);
         _this.$toast.open({
