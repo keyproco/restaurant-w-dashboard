@@ -35765,14 +35765,15 @@ module.exports = __webpack_require__(246);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_charts_graph_js__ = __webpack_require__(188);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy__ = __webpack_require__(233);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_buefy__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_table__ = __webpack_require__(234);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_table__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_products_create__ = __webpack_require__(237);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_products_create___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_products_create__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__customer_routes__ = __webpack_require__(251);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_charts_graph_js__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_buefy__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_buefy__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_table__ = __webpack_require__(234);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_table__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_products_create__ = __webpack_require__(237);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_products_create___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_products_create__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_router__ = __webpack_require__(16);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -35782,16 +35783,22 @@ window.Vue = __webpack_require__(14);
 
 window.Event = new Vue();
 
+
 __webpack_require__(167);
 
 
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_2_buefy___default.a);
-Vue.use(__WEBPACK_IMPORTED_MODULE_5_vue_router__["a" /* default */]);
+Vue.use(__WEBPACK_IMPORTED_MODULE_3_buefy___default.a);
+Vue.use(__WEBPACK_IMPORTED_MODULE_6_vue_router__["a" /* default */]);
 new Vue({
     el: document.getElementById("chart"),
     // components: { Graph },
     router: __WEBPACK_IMPORTED_MODULE_0__routes__["a" /* default */]
+});
+new Vue({
+    el: document.getElementById("app"),
+    // components: { Graph },
+    router: __WEBPACK_IMPORTED_MODULE_1__customer_routes__["a" /* default */]
 });
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
@@ -35814,7 +35821,7 @@ if (token) {
 
 var products = new Vue({
     el: document.getElementById("products"),
-    components: { ProductTable: __WEBPACK_IMPORTED_MODULE_3__components_table___default.a, CreateProduct: __WEBPACK_IMPORTED_MODULE_4__components_products_create___default.a },
+    components: { ProductTable: __WEBPACK_IMPORTED_MODULE_4__components_table___default.a, CreateProduct: __WEBPACK_IMPORTED_MODULE_5__components_products_create___default.a },
     methods: {
         createProduct: function createProduct() {
             console.log("adding the product");
@@ -71857,6 +71864,319 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue__ = __webpack_require__(252);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__ = __webpack_require__(255);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__ = __webpack_require__(258);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__);
+
+
+
+
+var routes = [{
+    path: "/mes-commandes",
+    component: __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue___default.a
+}, {
+    path: "/mon-compte",
+    component: __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue___default.a
+}, {
+    path: "/mes-paiements",
+    component: __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue___default.a
+}];
+
+/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
+    routes: routes,
+    mode: "history",
+    linkActiveClass: "is-active"
+}));
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(7)
+/* script */
+var __vue_script__ = __webpack_require__(253)
+/* template */
+var __vue_template__ = __webpack_require__(254)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/customer/my-orders.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4690a1a8", Component.options)
+  } else {
+    hotAPI.reload("data-v-4690a1a8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 253 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  methods: {},
+  mounted: function mounted() {},
+  created: function created() {
+    console.log("mesCommandes");
+  },
+  updated: function updated() {}
+});
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [_vm._v("Mes commandes")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4690a1a8", module.exports)
+  }
+}
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(7)
+/* script */
+var __vue_script__ = __webpack_require__(256)
+/* template */
+var __vue_template__ = __webpack_require__(257)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/customer/my-account.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2b1facfa", Component.options)
+  } else {
+    hotAPI.reload("data-v-2b1facfa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 256 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  methods: {},
+  mounted: function mounted() {},
+  created: function created() {
+    console.log("Mon compte");
+  },
+  updated: function updated() {}
+});
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [_vm._v("Mon Compte")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2b1facfa", module.exports)
+  }
+}
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(7)
+/* script */
+var __vue_script__ = __webpack_require__(259)
+/* template */
+var __vue_template__ = __webpack_require__(260)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/customer/my-bills.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7eb401d9", Component.options)
+  } else {
+    hotAPI.reload("data-v-7eb401d9", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 259 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  methods: {},
+  mounted: function mounted() {},
+  created: function created() {
+    console.log("paiements");
+  },
+  updated: function updated() {}
+});
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [_vm._v("Mes paiements")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7eb401d9", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
