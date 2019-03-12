@@ -35800,15 +35800,6 @@ new Vue({
     // components: { Graph },
     router: __WEBPACK_IMPORTED_MODULE_1__customer_routes__["a" /* default */]
 });
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-var token = document.head.querySelector('meta[name="csrf-token"]');
-if (token) {
-    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-} else {
-    console.error("CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token");
-}
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36298,7 +36289,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {},
   created: function created() {
     console.log("dashboard vue.js");
-    console.log(this.products);
   },
   updated: function updated() {}
 });

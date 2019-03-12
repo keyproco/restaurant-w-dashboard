@@ -22,9 +22,13 @@ Route::prefix('admin')->middleware('role:superadministrator|administrator|manage
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/current-user', 'HomeController@getCurrentUser');
 
-Route::get('admin/dashboard/{vue_capture?}', function () {
- return view('layouts.admin');
+Route::get('/{vue_capture?}', function () {
+ return view('home');
 })->where('vue_capture', '[\/\w\.-]*');
+
+
+
+
 
 	Route::resource('/users', 'UserController');
 	Route::resource('/permissions', 'PermissionsController');
