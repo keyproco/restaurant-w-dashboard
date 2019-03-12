@@ -71881,11 +71881,17 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue__);
+
 
 
 
 
 var routes = [{
+    path: "/home",
+    component: __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue___default.a
+}, {
     path: "/mes-commandes",
     component: __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue___default.a
 }, {
@@ -72175,6 +72181,98 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-7eb401d9", module.exports)
+  }
+}
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(7)
+/* script */
+var __vue_script__ = __webpack_require__(262)
+/* template */
+var __vue_template__ = __webpack_require__(263)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/customer/home.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c57aac66", Component.options)
+  } else {
+    hotAPI.reload("data-v-c57aac66", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 262 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  methods: {},
+  mounted: function mounted() {},
+  created: function created() {
+    console.log("Mon compte");
+  },
+  updated: function updated() {}
+});
+
+/***/ }),
+/* 263 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [_vm._v("Accueil")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c57aac66", module.exports)
   }
 }
 
