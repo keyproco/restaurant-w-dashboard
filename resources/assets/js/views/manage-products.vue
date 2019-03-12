@@ -78,7 +78,13 @@ export default {
     Event.$on("created", data => {
       this.isLoading = true;
       axios
-        .get(`http://127.0.0.1:8000/admin/products/${data.data.id}`)
+        .get(
+          `http://127.0.0.1:8000/admin/products/${data.data.id}`,
+          {},
+          {
+            useCredentials: true
+          }
+        )
         .then(r => {
           this.isLoading = false;
           this.data.push(r.data);
