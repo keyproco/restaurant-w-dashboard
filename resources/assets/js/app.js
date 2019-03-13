@@ -9,19 +9,20 @@ window.Event = new Vue();
 import router from "./routes";
 import routerC from "./customer-routes";
 require("./bootstrap");
-import Graph from "./components/charts/graph.js";
+import Product from "./components/product.vue";
 import Buefy from "buefy";
 
 Vue.use(Buefy);
 Vue.use(VueRouter);
+
+Vue.component("product", require("./components/product.vue"));
 new Vue({
     el: document.getElementById("chart"),
-    // components: { Graph },
     router: router
 });
 new Vue({
     el: document.getElementById("app"),
-    // components: { Graph },
+    components: { Product },
     router: routerC
 });
 

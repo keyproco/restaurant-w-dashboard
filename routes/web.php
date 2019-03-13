@@ -20,7 +20,9 @@ Route::prefix('admin')->middleware('role:superadministrator|administrator|manage
 	Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
 });
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/by-categories', 'Category@productsByCategories')->name('categories');
 Route::get('/current-user', 'HomeController@getCurrentUser');
+
 
 Route::get('/{vue_capture?}', function () {
  return view('home');
