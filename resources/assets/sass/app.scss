@@ -20,5 +20,13 @@
 }
 
 .hero.is-info {
-    background-color: red;
+    background-color: #f8f8fa;
+    .title {
+        color: #303e52;
+        font-weight: 600;
+        font-size: 4rem;
+    }
+    .subtitle {
+        color: #c59d5f;
+    }
 }
