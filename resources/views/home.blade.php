@@ -16,6 +16,6 @@
   </ul>
 </aside>
     </div>
-    <div class="column"> <router-view> </router-view> <product></product></div>
+    <div class="column"> <router-view> </router-view> </div>
 </div>
 @endsection

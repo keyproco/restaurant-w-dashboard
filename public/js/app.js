@@ -16217,6 +16217,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -16227,9 +16230,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    selectedProduct: function selectedProduct(product) {
+    addproduct: function addproduct(product) {
       this.list.push(product.id);
-      console.log(this.list);
+      axios.post("/add", product.id).then(function (r) {
+        return console.log(r);
+      });
     }
   },
   mounted: function mounted() {
@@ -16258,77 +16263,102 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns" }, [
-    _c("div", { staticClass: "column is-two-thirds" }, [
-      _c("p", { staticClass: "bd-notification is-info" }, [
-        _vm._v("First column")
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "columns" },
+    _c(
+      "div",
+      { staticClass: "column is-two-thirds" },
+      [
+        _c("p", { staticClass: "bd-notification is-info" }, [
+          _vm._v("First column")
+        ]),
+        _vm._v(" "),
         _vm._l(_vm.data, function(category) {
-          return _c(
-            "div",
-            { key: category.id, staticClass: "column" },
-            [
-              _c("h1", [_vm._v(_vm._s(category.name))]),
-              _vm._v(" "),
+          return _c("div", { key: category.id }, [
+            _c("h1", [_vm._v(_vm._s(category.name))]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "columns is-multiline" },
               _vm._l(category.products, function(product) {
-                return _c("div", { key: product.id, staticClass: "card" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "card-image",
-                      on: {
-                        click: function($event) {
-                          _vm.selectedProduct(product)
-                        }
-                      }
-                    },
-                    [
+                return _c(
+                  "div",
+                  { key: product.id, staticClass: "column is-one-third" },
+                  [
+                    _c("div", { staticClass: "card" }, [
                       _c(
-                        "figure",
-                        { staticClass: "image is-4by3 is-rounded" },
-                        [
-                          _c("img", {
-                            attrs: {
-                              src: product.image,
-                              alt: "Placeholder image"
+                        "div",
+                        {
+                          staticClass: "card-image",
+                          on: {
+                            click: function($event) {
+                              _vm.add(product)
                             }
-                          })
+                          }
+                        },
+                        [
+                          _c(
+                            "figure",
+                            { staticClass: "image is-4by3 is-rounded" },
+                            [
+                              _c("img", {
+                                attrs: {
+                                  src: product.image,
+                                  alt: "Placeholder image"
+                                }
+                              })
+                            ]
+                          )
                         ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-content" }, [
-                    _c("div", { staticClass: "media" }, [
-                      _vm._m(0, true),
+                      ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "media-content" }, [
-                        _c("p", { staticClass: "title is-4" }, [
-                          _vm._v(_vm._s(product.name))
+                      _c("div", { staticClass: "card-content" }, [
+                        _c("div", { staticClass: "media" }, [
+                          _vm._m(0, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "media-content" }, [
+                            _c("p", { staticClass: "title is-4" }, [
+                              _vm._v(_vm._s(product.name))
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "subtitle is-6" }, [
+                              _vm._v("@johnsmith")
+                            ])
+                          ])
                         ]),
                         _vm._v(" "),
-                        _c("p", { staticClass: "subtitle is-6" }, [
-                          _vm._v("@johnsmith")
-                        ])
+                        _vm._m(1, true)
                       ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(1, true)
-                  ])
-                ])
-              })
-            ],
-            2
-          )
-        }),
-        0
-      )
-    ]),
+                    ])
+                  ]
+                )
+              }),
+              0
+            )
+          ])
+        })
+      ],
+      2
+    ),
     _vm._v(" "),
-    _vm._m(2)
+    _c("div", { staticClass: "column" }, [
+      _c("p", { staticClass: "bd-notification is-danger" }, [
+        _vm._v("Second column")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "columns" }, [
+        _c(
+          "div",
+          { staticClass: "column" },
+          [
+            _c("p", { staticClass: "bd-notification is-danger" }, [
+              _vm._v("Auto")
+            ]),
+            _vm._v(" "),
+            _c("product")
+          ],
+          1
+        )
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -16353,10 +16383,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "content" }, [
       _vm._v(
-        "\n              Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n              Phasellus nec iaculis mauris.\n              "
+        "\n                Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n                Phasellus nec iaculis mauris.\n                "
       ),
       _c("a", [_vm._v("@bulmaio")]),
-      _vm._v(".\n              "),
+      _vm._v(".\n                "),
       _c("a", { attrs: { href: "#" } }, [_vm._v("#css")]),
       _vm._v(" "),
       _c("a", { attrs: { href: "#" } }, [_vm._v("#responsive")]),
@@ -16365,24 +16395,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("time", { attrs: { datetime: "2016-1-1" } }, [
         _vm._v("11:09 PM - 1 Jan 2016")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column" }, [
-      _c("p", { staticClass: "bd-notification is-danger" }, [
-        _vm._v("Second column")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "columns" }, [
-        _c("div", { staticClass: "column" }, [
-          _c("p", { staticClass: "bd-notification is-danger" }, [
-            _vm._v("Auto")
-          ])
-        ])
       ])
     ])
   }
