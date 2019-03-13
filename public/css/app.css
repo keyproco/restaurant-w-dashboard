@@ -15596,6 +15596,16 @@ label.panel-block:hover {
 }
 
 .hero.is-info {
-  background-color: red;
+  background-color: #f8f8fa;
+}
+
+.hero.is-info .title {
+  color: #303e52;
+  font-weight: 600;
+  font-size: 4rem;
+}
+
+.hero.is-info .subtitle {
+  color: #c59d5f;
 }
 
