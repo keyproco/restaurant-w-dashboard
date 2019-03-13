@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Orders as Orders;
+use App\Product as Product;
 class OrderController extends Controller
 {
     /**
@@ -34,7 +35,21 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $id = auth()->user()->id;
+            $result = Orders::where(['user_id' => $id, 'confirmed' => false])->first();
+            if(!empty($result)) {
+
+                $product = Product::find($request->id);
+                $result->products()->attach($product, ['quantity' => 10]);
+            echo "same order";            }
+            elseif(empty($result)) {
+                $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1]);
+                $product = Product::find($request->id);
+                $order->products()->attach($product, ['quantity' => 10]);
+                echo "Nouvelle commande";
+                
+            }       
     }
 
     /**

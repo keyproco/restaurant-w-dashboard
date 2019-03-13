@@ -16230,9 +16230,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    addproduct: function addproduct(product) {
+    addOrder: function addOrder(product) {
       this.list.push(product.id);
-      axios.post("/add", product.id).then(function (r) {
+      axios.post("/order", { id: product.id }).then(function (r) {
         return console.log(r);
       });
     }
@@ -16290,7 +16290,7 @@ var render = function() {
                           staticClass: "card-image",
                           on: {
                             click: function($event) {
-                              _vm.add(product)
+                              _vm.addOrder(product)
                             }
                           }
                         },
