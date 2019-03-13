@@ -19,7 +19,7 @@ Route::prefix('admin')->middleware('role:superadministrator|administrator|manage
 	Route::get('', 'AdminsController@index')->name('dashboard');
 	Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
 });
-Route::post('/new-order', 'UserController@newOrder');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/by-categories', 'Category@productsByCategories')->name('categories');
 Route::get('/current-user', 'HomeController@getCurrentUser');
@@ -32,7 +32,7 @@ Route::get('/{vue_capture?}', function () {
 
 
 
-
+	Route::resource('/order', 'OrderController');
 	Route::resource('/users', 'UserController');
 	Route::resource('/permissions', 'PermissionsController');
 	Route::resource('/products', 'ProductsController');

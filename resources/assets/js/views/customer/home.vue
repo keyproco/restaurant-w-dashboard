@@ -7,7 +7,7 @@
         <div class="columns is-multiline">
           <div :key="product.id" v-for="(product) in category.products" class="column is-one-third">
             <div class="card">
-              <div @click="add(product)" class="card-image">
+              <div @click="addOrder(product)" class="card-image">
                 <figure class="image is-4by3 is-rounded">
                   <img :src="product.image" alt="Placeholder image">
                 </figure>
@@ -65,9 +65,9 @@ export default {
     };
   },
   methods: {
-    addproduct: function(product) {
+    addOrder: function(product) {
       this.list.push(product.id);
-      axios.post("/add", product.id).then(r => console.log(r));
+      axios.post("/order", { id: product.id }).then(r => console.log(r));
     }
   },
   mounted() {

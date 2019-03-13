@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orders extends Model
 {
+    protected $fillable = ['user_id', 'confirmed', 'delivery_id', 'payment_type'];
+
     public function products() {
         return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
