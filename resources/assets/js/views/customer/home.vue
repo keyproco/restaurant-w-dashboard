@@ -5,7 +5,12 @@
       <div :key="category.id" v-for="(category) in data">
         <h1>{{category.name}}</h1>
         <div class="columns is-multiline">
-          <div :key="product.id" v-for="(product) in category.products" class="column is-one-third">
+          <div
+            :key="product.id"
+            v-for="(product) in category.products"
+            class="column is-4 is-mobile"
+            style="min-width: 250px"
+          >
             <div class="card">
               <div @click="addOrder(product)" class="card-image">
                 <figure class="image is-4by3 is-rounded">
@@ -44,13 +49,7 @@
       </div>
     </div>
     <div class="column">
-      <p class="bd-notification is-danger">Second column</p>
-      <div class="columns">
-        <div class="column">
-          <p class="bd-notification is-danger">Auto</p>
-          <product/>
-        </div>
-      </div>
+      <product/>
     </div>
   </div>
 </template>
