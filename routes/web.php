@@ -23,8 +23,13 @@ Route::prefix('admin')->middleware('role:superadministrator|administrator|manage
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/by-categories', 'Category@productsByCategories')->name('categories');
 Route::get('/current-user', 'HomeController@getCurrentUser');
-
-
+	Route::resource('/order', 'OrderController');
+	
+	Route::resource('/user-orders', 'UserController');
+	Route::resource('/users', 'UserController');
+	Route::resource('/permissions', 'PermissionsController');
+	Route::resource('/products', 'ProductsController');
+	
 Route::get('/{vue_capture?}', function () {
  return view('home');
 })->where('vue_capture', '[\/\w\.-]*');
@@ -32,7 +37,3 @@ Route::get('/{vue_capture?}', function () {
 
 
 
-	Route::resource('/order', 'OrderController');
-	Route::resource('/users', 'UserController');
-	Route::resource('/permissions', 'PermissionsController');
-	Route::resource('/products', 'ProductsController');
