@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
 <div id="app" class="columns">
-    <div class="column is-one-quarter">
+    <div  style="background-color: #172A39; " class="column is-narrow">
         <aside class="menu">
   <p class="menu-label">
     Options
@@ -16,6 +17,6 @@
   </ul>
 </aside>
     </div>
-    <div class="column"> <router-view> </router-view> </div>
-</div>
+    <div style="background-color: #0A1F30;" class="column"> <router-view> </router-view> </div>
+</div></div>
 @endsection

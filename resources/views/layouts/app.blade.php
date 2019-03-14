@@ -1,8 +1,10 @@
 @include('layouts.head')
 <body>
-    <div >
+
         @include('layouts.nav')
-        @yield('content')
-    </div>
+       <div class="m-t-25">
+            @yield('content')
+       </div>
+
 </body>
 </html>

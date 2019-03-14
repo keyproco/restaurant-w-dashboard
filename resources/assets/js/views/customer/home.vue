@@ -11,36 +11,24 @@
             class="column is-4 is-mobile"
             style="min-width: 250px"
           >
-            <div class="card">
-              <div @click="addOrder(product)" class="card-image">
-                <figure class="image is-4by3 is-rounded">
-                  <img :src="product.image" alt="Placeholder image">
+            <div class="card" style="-webkit-box-shadow: none; box-shadow:none">
+              <div @click="addOrder(product)" class="card-image is-flex is-hcentered">
+                <figure class="image is-128x128">
+                  <img class="is-rounded" :src="product.image" alt="Placeholder image">
                 </figure>
               </div>
               <div class="card-content">
                 <div class="media">
-                  <div class="media-left">
-                    <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      >
-                    </figure>
-                  </div>
                   <div class="media-content">
-                    <p class="title is-4">{{product.name}}</p>
-                    <p class="subtitle is-6">@johnsmith</p>
+                    <p style=" color:#c59d5f" class="title is-5 has-text-centered">{{product.name}}</p>
+                    <p style="color:#d35400" class="subtitle is-6 has-text-centered">
+                      <b>{{product.price}}$</b>
+                    </p>
                   </div>
                 </div>
-
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris.
+                  {{product.description}}
                   <a>@bulmaio</a>.
-                  <a href="#">#css</a>
-                  <a href="#">#responsive</a>
-                  <br>
-                  <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                 </div>
               </div>
             </div>
