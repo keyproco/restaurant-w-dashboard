@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Orders as Orders;
 use App\Product as Product;
+use DB;
 class OrderController extends Controller
 {
     /**
@@ -35,20 +36,28 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
         $id = auth()->user()->id;
-            $result = Orders::where(['user_id' => $id, 'confirmed' => false])->first();
-            if(!empty($result)) {
-
-                $product = Product::find($request->id);
-                $result->products()->attach($product, ['quantity' => 10]);
-            echo "same order";            }
-            elseif(empty($result)) {
-                $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1]);
-                $product = Product::find($request->id);
-                $order->products()->attach($product, ['quantity' => 10]);
-                echo "Nouvelle commande";
-                
+        $result = Orders::where(['user_id' => $id, 'confirmed' => false])->first();
+        if(!empty($result)) {
+            $product = Product::find($request->id);
+            $result->products()->attach($product, ['quantity' => 10]);
+            echo "same order";
+            // needs where the order_id == the order
+            $query = DB::table('products')
+            ->join('orders_product', 'products.id', '=', 'orders_product.product_id')
+            ->select(DB::raw('sum(price * quantity) as total'))
+            ->first();
+            $result->total = $query->total;
+            $result->save();
+        }
+        elseif(empty($result)) {
+            //create new order
+            $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1, 'total' =>  $query->total ]);
+            // find the requested product and attach it to it order_product.
+            $product = Product::find($request->id);
+            $order->products()->attach($product, ['quantity' => 10]);
+            // query to total and update the value
+            echo "Nouvelle commande";    
             }       
     }
 
