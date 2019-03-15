@@ -38,7 +38,9 @@ class OrderController extends Controller
     {
         $id = auth()->user()->id;
         $result = Orders::where(['user_id' => $id, 'confirmed' => false])->first();
+ 
         if(!empty($result)) {
+            $orderId = $result->id;
             $product = Product::find($request->id);
             $result->products()->attach($product, ['quantity' => 10]);
             echo "same order";
@@ -46,13 +48,14 @@ class OrderController extends Controller
             $query = DB::table('products')
             ->join('orders_product', 'products.id', '=', 'orders_product.product_id')
             ->select(DB::raw('sum(price * quantity) as total'))
+            ->where('orders_id', $orderId)
             ->first();
             $result->total = $query->total;
             $result->save();
         }
         elseif(empty($result)) {
             //create new order
-            $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1, 'total' =>  $query->total ]);
+            $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1, 'total' =>  0 ]);
             // find the requested product and attach it to it order_product.
             $product = Product::find($request->id);
             $order->products()->attach($product, ['quantity' => 10]);
