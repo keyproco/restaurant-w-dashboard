@@ -14849,15 +14849,13 @@ module.exports = __webpack_require__(76);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__customer_routes__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_product_vue__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_product_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_product_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_buefy__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_buefy__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_table__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_table__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_products_create__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_products_create___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_products_create__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_router__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_buefy__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_table__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_table__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_products_create__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_products_create___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_products_create__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_router__ = __webpack_require__(3);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14872,8 +14870,8 @@ __webpack_require__(40);
 
 
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_3_buefy___default.a);
-Vue.use(__WEBPACK_IMPORTED_MODULE_6_vue_router__["a" /* default */]);
+Vue.use(__WEBPACK_IMPORTED_MODULE_2_buefy___default.a);
+Vue.use(__WEBPACK_IMPORTED_MODULE_5_vue_router__["a" /* default */]);
 
 Vue.component("product", __webpack_require__(12));
 new Vue({
@@ -14882,7 +14880,6 @@ new Vue({
 });
 new Vue({
     el: document.getElementById("app"),
-    components: { Product: __WEBPACK_IMPORTED_MODULE_2__components_product_vue___default.a },
     router: __WEBPACK_IMPORTED_MODULE_1__customer_routes__["a" /* default */]
 });
 
@@ -14897,7 +14894,7 @@ new Vue({
 
 var products = new Vue({
     el: document.getElementById("products"),
-    components: { ProductTable: __WEBPACK_IMPORTED_MODULE_4__components_table___default.a, CreateProduct: __WEBPACK_IMPORTED_MODULE_5__components_products_create___default.a },
+    components: { ProductTable: __WEBPACK_IMPORTED_MODULE_3__components_table___default.a, CreateProduct: __WEBPACK_IMPORTED_MODULE_4__components_products_create___default.a },
     methods: {
         createProduct: function createProduct() {
             console.log("adding the product");
@@ -16068,6 +16065,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_product_vue__);
 //
 //
 //
@@ -16113,32 +16112,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       data: [],
-      list: []
+      orders: {}
     };
   },
 
+  components: { Product: __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default.a },
   methods: {
     addOrder: function addOrder(product) {
-      this.list.push(product.id);
-      axios.post("/order", { id: product.id }).then(function (r) {
-        return console.log(r);
+      var _this = this;
+
+      axios.post("/order", { id: product.id, quantity: 2 }).then(function (r) {
+        console.log("add-order", r.data);
+        _this.orders.total = r.data.total;
+        _this.orders.products.push(r.data.product);
       });
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     axios.get("http://localhost:8000/by-categories").then(function (r) {
-      _this.data = r.data;
-      console.log(_this.data);
-      _this.isLoading = false;
+      _this2.data = r.data;
+      console.log(_this2.data);
+      _this2.isLoading = false;
     }).catch(function (e) {
       console.log("product-error", e);
+    });
+    axios.get("user-orders").then(function (orders) {
+      _this2.orders = orders.data;
+      console.log("parent", _this2.orders);
+    }).catch(function (e) {
+      return console.log(e);
     });
   },
   created: function created() {
@@ -16158,9 +16171,9 @@ var render = function() {
   return _c("div", { staticClass: "columns" }, [
     _c(
       "div",
-      { staticClass: "column is-two-thirds" },
+      { staticClass: "column is-9" },
       [
-        _c("p", { staticClass: "bd-notification is-info" }, [
+        _c("p", { staticClass: "bd-notification is-danger" }, [
           _vm._v("First column")
         ]),
         _vm._v(" "),
@@ -16174,11 +16187,7 @@ var render = function() {
               _vm._l(category.products, function(product) {
                 return _c(
                   "div",
-                  {
-                    key: product.id,
-                    staticClass: "column is-4 is-mobile",
-                    staticStyle: { "min-width": "250px" }
-                  },
+                  { key: product.id, staticClass: "column is-4 is-mobile" },
                   [
                     _c(
                       "div",
@@ -16187,19 +16196,21 @@ var render = function() {
                         staticStyle: {
                           "-webkit-box-shadow": "none",
                           "box-shadow": "none"
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.addOrder(product)
+                          }
                         }
                       },
                       [
+                        _c("div", { staticClass: "level" }, [
+                          _vm._v("D'autres infos")
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "div",
-                          {
-                            staticClass: "card-image is-flex is-hcentered",
-                            on: {
-                              click: function($event) {
-                                _vm.addOrder(product)
-                              }
-                            }
-                          },
+                          { staticClass: "card-image is-flex is-hcentered" },
                           [
                             _c("figure", { staticClass: "image is-128x128" }, [
                               _c("img", {
@@ -16238,15 +16249,18 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "content" }, [
-                            _vm._v(
-                              "\n                " +
-                                _vm._s(product.description) +
-                                "\n                "
-                            ),
-                            _c("a", [_vm._v("@bulmaio")]),
-                            _vm._v(".\n              ")
+                            _vm._v(_vm._s(product.description))
                           ])
-                        ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "level",
+                            staticStyle: { "background-color": "#f6b93b" }
+                          },
+                          [_vm._v("_")]
+                        )
                       ]
                     )
                   ]
@@ -16260,7 +16274,12 @@ var render = function() {
       2
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "column" }, [_c("product")], 1)
+    _c(
+      "div",
+      { staticClass: "column is-3" },
+      [_c("product", { attrs: { orders: _vm.orders } })],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -27636,14 +27655,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      basket: {}
+      basket: {
+        total: 0
+      }
     };
   },
 
+  props: {
+    orders: {
+      type: Object,
+      default: function _default() {
+        return { data: "empty" };
+      }
+    }
+  },
   methods: {
     removeItem: function removeItem(item) {
       console.log(item);
@@ -27651,16 +27684,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {},
   created: function created() {
-    var _this = this;
-
-    axios.get("user-orders").then(function (basket) {
-      _this.basket = basket.data;
-      console.log(_this.basket);
-    }).catch(function (e) {
-      return console.log(e);
-    });
+    this.basket = this.orders;
+    console.log(this.basket);
+    console.log("Product Created", this.orders);
   },
-  updated: function updated() {}
+  updated: function updated() {
+    this.basket = this.orders;
+    console.log(this.basket);
+    console.log("Product Updated ", this.orders);
+  }
 });
 
 /***/ }),
@@ -27673,17 +27705,23 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "column", staticStyle: { "background-color": "#172A39" } },
+    {
+      staticStyle: { "background-color": "#172A39" },
+      attrs: { clas: "column" }
+    },
     [
       _c("h4", { staticStyle: { color: "white" } }, [_vm._v("Mon panier")]),
       _vm._v(" "),
-      _vm._l(_vm.basket.products, function(product) {
+      _vm._l(_vm.orders.products, function(product) {
         return _c("ul", { key: product.id }, [
           _c(
             "div",
             {
               staticClass: "box is-radiusless",
-              staticStyle: { "box-shadow": "0 2px 4px #172A39" }
+              staticStyle: {
+                "background-color": "#0a3d62",
+                "box-shadow": "0 2px 4px #172A39"
+              }
             },
             [
               _c("article", { staticClass: "media" }, [
@@ -27740,22 +27778,16 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _vm._m(0),
+      _c("div", { staticClass: "box m-t-10" }, [
+        _c("b", [_vm._v("Total : " + _vm._s(_vm.basket.total) + "$")])
+      ]),
       _vm._v(" "),
-      _vm._m(1)
+      _vm._m(0)
     ],
     2
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "box m-t-10" }, [
-      _c("b", [_vm._v("Total : 100$")])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

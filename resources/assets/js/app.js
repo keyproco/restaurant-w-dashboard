@@ -9,7 +9,7 @@ window.Event = new Vue();
 import router from "./routes";
 import routerC from "./customer-routes";
 require("./bootstrap");
-import Product from "./components/product.vue";
+
 import Buefy from "buefy";
 
 Vue.use(Buefy);
@@ -22,7 +22,6 @@ new Vue({
 });
 new Vue({
     el: document.getElementById("app"),
-    components: { Product },
     router: routerC
 });
 
