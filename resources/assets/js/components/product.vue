@@ -1,9 +1,13 @@
 <template>
-  <div style="background-color: #172A39; " class="column">
+  <div clas="column" style="background-color: #172A39; ">
     <h4 style="color:white
 ;" class>Mon panier</h4>
-    <ul :key="product.id" v-for=" product in basket.products">
-      <div style=" box-shadow: 0 2px 4px #172A39;" class="box is-radiusless">
+    <ul :key="product.id" v-for=" product in orders.products">
+      <div
+        style="
+         ;background-color:#0a3d62; box-shadow: 0 2px 4px #172A39;"
+        class="box is-radiusless"
+      >
         <article class="media">
           <div class="media-left">
             <figure class="image is-64x64">
@@ -26,7 +30,7 @@
       </div>
     </ul>
     <div class="box m-t-10">
-      <b>Total : 100$</b>
+      <b>Total : {{basket.total}}$</b>
     </div>
     <a class="button is-primary m-t-25" style="width:100%;">
       <b>Commander</b>
@@ -39,8 +43,18 @@
 export default {
   data() {
     return {
-      basket: {}
+      basket: {
+        total: 0
+      }
     };
+  },
+  props: {
+    orders: {
+      type: Object,
+      default: function() {
+        return { data: "empty" };
+      }
+    }
   },
   methods: {
     removeItem: function(item) {
@@ -49,14 +63,14 @@ export default {
   },
   mounted() {},
   created() {
-    axios
-      .get("user-orders")
-      .then(basket => {
-        this.basket = basket.data;
-        console.log(this.basket);
-      })
-      .catch(e => console.log(e));
+    this.basket = this.orders;
+    console.log(this.basket);
+    console.log("Product Created", this.orders);
   },
-  updated() {}
+  updated() {
+    this.basket = this.orders;
+    console.log(this.basket);
+    console.log("Product Updated ", this.orders);
+  }
 };
 </script>

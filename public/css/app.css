@@ -15615,3 +15615,16 @@ label.panel-block:hover {
   color: #c59d5f;
 }
 
+.menu-list a.is-active {
+  background-color: #c59d5f;
+}
+
+.menu-list a:hover {
+  background-color: #172a39;
+  color: #c59d5f;
+}
+
+.card {
+  background-color: #172a39;
+}
+

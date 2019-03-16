@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
-    <div class="column is-two-thirds">
-      <p class="bd-notification is-info">First column</p>
+    <div class="column is-9">
+      <p class="bd-notification is-danger">First column</p>
       <div :key="category.id" v-for="(category) in data">
         <h1>{{category.name}}</h1>
         <div class="columns is-multiline">
@@ -9,10 +9,14 @@
             :key="product.id"
             v-for="(product) in category.products"
             class="column is-4 is-mobile"
-            style="min-width: 250px"
           >
-            <div class="card" style="-webkit-box-shadow: none; box-shadow:none">
-              <div @click="addOrder(product)" class="card-image is-flex is-hcentered">
+            <div
+              @click="addOrder(product)"
+              class="card"
+              style="-webkit-box-shadow: none; box-shadow:none"
+            >
+              <div class="level">D'autres infos</div>
+              <div class="card-image is-flex is-hcentered">
                 <figure class="image is-128x128">
                   <img class="is-rounded" :src="product.image" alt="Placeholder image">
                 </figure>
@@ -26,35 +30,39 @@
                     </p>
                   </div>
                 </div>
-                <div class="content">
-                  {{product.description}}
-                  <a>@bulmaio</a>.
-                </div>
+                <div class="content">{{product.description}}</div>
               </div>
+              <div style=" background-color: #f6b93b;" class="level">_</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="column">
-      <product/>
+    <div class="column is-3">
+      <product :orders="orders"/>
     </div>
   </div>
 </template>
 
 
 <script>
+import Product from "../../components/product.vue";
+
 export default {
   data() {
     return {
       data: [],
-      list: []
+      orders: {}
     };
   },
+  components: { Product },
   methods: {
     addOrder: function(product) {
-      this.list.push(product.id);
-      axios.post("/order", { id: product.id }).then(r => console.log(r));
+      axios.post("/order", { id: product.id, quantity: 2 }).then(r => {
+        console.log("add-order", r.data);
+        this.orders.total = r.data.total;
+        this.orders.products.push(r.data.product);
+      });
     }
   },
   mounted() {
@@ -68,6 +76,13 @@ export default {
       .catch(e => {
         console.log("product-error", e);
       });
+    axios
+      .get("user-orders")
+      .then(orders => {
+        this.orders = orders.data;
+        console.log("parent", this.orders);
+      })
+      .catch(e => console.log(e));
   },
   created() {
     console.log("Mon Accueil");

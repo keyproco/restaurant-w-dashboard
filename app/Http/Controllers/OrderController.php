@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Orders as Orders;
 use App\Product as Product;
 use DB;
+use Illuminate\Http\Request;
+
 class OrderController extends Controller
 {
     /**
@@ -38,30 +39,35 @@ class OrderController extends Controller
     {
         $id = auth()->user()->id;
         $result = Orders::where(['user_id' => $id, 'confirmed' => false])->first();
- 
-        if(!empty($result)) {
+        $quantity = $request->quantity;
+        if (!empty($result)) {
             $orderId = $result->id;
             $product = Product::find($request->id);
-            $result->products()->attach($product, ['quantity' => 10]);
-            echo "same order";
-            // needs where the order_id == the order
+            $result->products()->attach($product, ['quantity' => $quantity]);
             $query = DB::table('products')
-            ->join('orders_product', 'products.id', '=', 'orders_product.product_id')
-            ->select(DB::raw('sum(price * quantity) as total'))
-            ->where('orders_id', $orderId)
-            ->first();
+                ->join('orders_product', 'products.id', '=', 'orders_product.product_id')
+                ->select(DB::raw('sum(price * quantity) as total'))
+                ->where('orders_id', $orderId)
+                ->first();
             $result->total = $query->total;
             $result->save();
-        }
-        elseif(empty($result)) {
+            return [
+                'total' => $query->total,
+                'product' => Orders::find($orderId)->products->find($request->id),
+            ];
+
+        } elseif (empty($result)) {
             //create new order
-            $order = Orders::create(['user_id' => $id, 'delivery_id' => 2, 'payment_type' => 1, 'total' =>  0 ]);
+            $order = Orders::create(
+                ['user_id' => $id,
+                    'delivery_id' => 2,
+                    'payment_type' => 1, 'total' => 0]);
             // find the requested product and attach it to it order_product.
             $product = Product::find($request->id);
             $order->products()->attach($product, ['quantity' => 10]);
             // query to total and update the value
-            echo "Nouvelle commande";    
-            }       
+            echo "Nouvelle commande";
+        }
     }
 
     /**

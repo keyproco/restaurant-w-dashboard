@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+
 class UserController extends Controller
 {
     /**
@@ -58,8 +59,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-                 $path = request()->segment(2);
-        return view('admins.users.show', ['user' => $user, 'path' => $path] );
+        $path = request()->segment(2);
+        return view('admins.users.show', ['user' => $user, 'path' => $path]);
     }
 
     /**
