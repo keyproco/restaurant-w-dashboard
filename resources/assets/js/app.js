@@ -15,7 +15,6 @@ import Buefy from "buefy";
 Vue.use(Buefy);
 Vue.use(VueRouter);
 
-Vue.component("product", require("./components/product.vue"));
 new Vue({
     el: document.getElementById("chart"),
     router: router

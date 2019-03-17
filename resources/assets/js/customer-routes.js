@@ -1,8 +1,9 @@
 import VueRouter from "vue-router";
-import order from "./views/customer/my-orders.vue";
+import orders from "./views/customer/my-orders.vue";
 import account from "./views/customer/my-account.vue";
 import bills from "./views/customer/my-bills.vue";
 import home from "./views/customer/home.vue";
+import order from "./views/customer/order.vue";
 let routes = [
     {
         path: "/home",
@@ -10,7 +11,7 @@ let routes = [
     },
     {
         path: "/mes-commandes",
-        component: order
+        component: orders
     },
     {
         path: "/mon-compte",
@@ -19,6 +20,10 @@ let routes = [
     {
         path: "/mes-paiements",
         component: bills
+    },
+    {
+        path: "/cofirmer-commande",
+        component: order
     }
 ];
 
