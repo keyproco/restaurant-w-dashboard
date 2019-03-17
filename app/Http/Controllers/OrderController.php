@@ -17,7 +17,7 @@ class OrderController extends Controller
     public function index()
     {
         $id = auth()->user()->id;
-        return Orders::where(['user_id' => $id, 'confirmed' => true])->get();
+        return Orders::where(['user_id' => $id])->get();
 
     }
 
