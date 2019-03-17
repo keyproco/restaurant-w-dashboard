@@ -1,6 +1,8 @@
 // Variables
 @import "variables";
 /* Bulma framework*/
+@import url("https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300");
+$family-sans-serif: "Open Sans Condensed", sans-serif;
 $primary: #c59d5f;
 @import "~bulma/bulma";
 
@@ -37,9 +39,14 @@ $primary: #c59d5f;
     background-color: #c59d5f;
 }
 .menu-list a:hover {
-    background-color: #172a39;
+    background-color: #0a1f30;
     color: #c59d5f;
 }
 .card {
     background-color: #172a39;
+}
+
+.menu-list a {
+    color: white;
+    font-weight: 600;
 }

@@ -15673,7 +15673,8 @@ if (false) {
 
 var routes = [{
     path: "/home",
-    component: __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue___default.a
+    component: __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue___default.a,
+    chilidren: []
 }, {
     path: "/mes-commandes",
     component: __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue___default.a
@@ -15684,7 +15685,8 @@ var routes = [{
     path: "/mes-paiements",
     component: __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue___default.a
 }, {
-    path: "/cofirmer-commande",
+    path: "/cofirmer-commande/",
+    name: "confirm",
     component: __WEBPACK_IMPORTED_MODULE_5__views_customer_order_vue___default.a
 }];
 
@@ -15761,7 +15763,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {},
   mounted: function mounted() {},
   created: function created() {
-    console.log("mesCommandes");
+    axios.get("/order").then(function (r) {
+      return console.log(r);
+    }).catch(function (r) {
+      return console.log(r);
+    });
   },
   updated: function updated() {}
 });
@@ -16214,6 +16220,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -16235,18 +16246,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     removeItem: function removeItem(item) {
       console.log(item);
+    },
+    orderItems: function orderItems(basket) {
+      this.$router.push({ name: "confirm", params: { basket: basket } });
     }
   },
   mounted: function mounted() {},
   created: function created() {
     this.basket = this.orders;
-    console.log(this.basket);
+    console.log("basket", this.basket);
     console.log("Product Created", this.orders);
   },
   updated: function updated() {
     this.basket = this.orders;
     console.log(this.basket);
-    console.log("Product Updated ", this.orders);
+    console.log("Order ID ", this.orders.id);
+    console.log(this.$route.params);
   }
 });
 
@@ -16337,16 +16352,19 @@ var render = function() {
         _c("b", [_vm._v("Total : " + _vm._s(_vm.basket.total) + "$")])
       ]),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/cofirmer-commande" } }, [
-        _c(
-          "a",
-          {
-            staticClass: "button is-primary m-t-25",
-            staticStyle: { width: "100%" }
-          },
-          [_c("b", [_vm._v("Commander")])]
-        )
-      ])
+      _c(
+        "a",
+        {
+          staticClass: "button is-primary m-t-25",
+          staticStyle: { width: "100%" },
+          on: {
+            click: function($event) {
+              _vm.orderItems(_vm.basket)
+            }
+          }
+        },
+        [_c("b", [_vm._v("Commander")])]
+      )
     ],
     2
   )
@@ -16551,16 +16569,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      basket: {},
+      columns: [{
+        field: "name",
+        label: "Produit"
+      }, {
+        field: "pivot.quantity",
+        label: "quantité"
+      }, {
+        field: "price",
+        label: "Prix",
+        centered: true
+      }]
+    };
   },
 
-  methods: {},
+  methods: {
+    confirmOrder: function confirmOrder(orderId) {
+      axios.put("/order/" + orderId).then(function (r) {
+        return console.log(r);
+      }).catch(function (e) {
+        return console.log(e);
+      });
+    }
+  },
   mounted: function mounted() {},
   created: function created() {
-    console.log("ma commande");
+    this.basket = this.$route.params.basket;
+    console.log(this.basket);
   },
   updated: function updated() {}
 });
@@ -16573,9 +16628,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("Ma commande")])
+  return _c("div", { staticClass: "columns" }, [
+    _c("div", { staticClass: "column" }, [
+      _c("div", { staticStyle: { "background-color": "white" } }, [
+        _vm._v("Ma commande")
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c(
+          "section",
+          [
+            _c("b-table", {
+              attrs: { data: _vm.basket.products, columns: _vm.columns }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("section", [
+          _c("p", [_vm._v("Total à payer : " + _vm._s(_vm.basket.total))])
+        ]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "button",
+            on: {
+              click: function($event) {
+                _vm.confirmOrder(_vm.basket.id)
+              }
+            }
+          },
+          [_vm._v("Confirmer la commande")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "column" }, [
+      _c("div", { staticStyle: { "background-color": "white" } }, [
+        _vm._v("Adresse")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
