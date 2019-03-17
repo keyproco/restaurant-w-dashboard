@@ -16,7 +16,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        echo "ok";
+        $id = auth()->user()->id;
+        return Orders::where(['user_id' => $id, 'confirmed' => true])->get();
+
     }
 
     /**
@@ -64,7 +66,7 @@ class OrderController extends Controller
                     'payment_type' => 1, 'total' => 0]);
             // find the requested product and attach it to it order_product.
             $product = Product::find($request->id);
-            $order->products()->attach($product, ['quantity' => 10]);
+            $order->products()->attach($product, ['quantity' => 1]);
             // query to total and update the value
             echo "Nouvelle commande";
         }
@@ -89,7 +91,7 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        echo "Hello from edit";
     }
 
     /**
@@ -101,7 +103,10 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $order = Orders::findOrFail($id);
+        $order->confirmed = true;
+        $order->save();
+        return $order;
     }
 
     /**

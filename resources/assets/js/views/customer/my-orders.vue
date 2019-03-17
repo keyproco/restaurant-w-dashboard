@@ -11,7 +11,10 @@ export default {
   methods: {},
   mounted() {},
   created() {
-    console.log("mesCommandes");
+    axios
+      .get("/order")
+      .then(r => console.log(r))
+      .catch(r => console.log(r));
   },
   updated() {}
 };

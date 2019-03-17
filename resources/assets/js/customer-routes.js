@@ -7,7 +7,8 @@ import order from "./views/customer/order.vue";
 let routes = [
     {
         path: "/home",
-        component: home
+        component: home,
+        chilidren: []
     },
     {
         path: "/mes-commandes",
@@ -22,7 +23,8 @@ let routes = [
         component: bills
     },
     {
-        path: "/cofirmer-commande",
+        path: "/cofirmer-commande/",
+        name: "confirm",
         component: order
     }
 ];

@@ -32,11 +32,16 @@
     <div class="box m-t-10">
       <b>Total : {{basket.total}}$</b>
     </div>
-    <router-link to="/cofirmer-commande">
+    <!-- <router-link to="cofirmer-commande">
       <a class="button is-primary m-t-25" style="width:100%;">
         <b>Commander</b>
       </a>
-    </router-link>
+    </router-link>-->
+    <!-- <router-link to="cofirmer-commande"> -->
+    <a @click="orderItems(basket)" class="button is-primary m-t-25" style="width:100%;">
+      <b>Commander</b>
+    </a>
+    <!-- </router-link> -->
   </div>
 </template>
 
@@ -61,18 +66,22 @@ export default {
   methods: {
     removeItem: function(item) {
       console.log(item);
+    },
+    orderItems: function(basket) {
+      this.$router.push({ name: "confirm", params: { basket: basket } });
     }
   },
   mounted() {},
   created() {
     this.basket = this.orders;
-    console.log(this.basket);
+    console.log("basket", this.basket);
     console.log("Product Created", this.orders);
   },
   updated() {
     this.basket = this.orders;
     console.log(this.basket);
-    console.log("Product Updated ", this.orders);
+    console.log("Order ID ", this.orders.id);
+    console.log(this.$route.params);
   }
 };
 </script>

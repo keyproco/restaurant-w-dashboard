@@ -17,6 +17,8 @@
   </ul>
 </aside>
     </div>
-    <div style="background-color: #0A1F30;" class="column"> <router-view> </router-view> </div>
+  <div style="background-color: #0A1F30;" class="column">
+    <router-view> </router-view>
+  </div>
 </div></div>
 @endsection
