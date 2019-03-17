@@ -32,9 +32,11 @@
     <div class="box m-t-10">
       <b>Total : {{basket.total}}$</b>
     </div>
-    <a class="button is-primary m-t-25" style="width:100%;">
-      <b>Commander</b>
-    </a>
+    <router-link to="/cofirmer-commande">
+      <a class="button is-primary m-t-25" style="width:100%;">
+        <b>Commander</b>
+      </a>
+    </router-link>
   </div>
 </template>
 
