@@ -15754,17 +15754,87 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      activeTab: 0,
+      isLoading: false,
+      orders: [],
+      columns: [{
+        field: "id",
+        label: "n° de commande",
+        width: "40",
+        numeric: true
+      }, {
+        field: "status",
+        label: "Statut"
+      }, {
+        field: "confirmed",
+        label: "confirmé",
+        centered: true
+      }, {
+        field: "total",
+        label: "Total",
+        centered: true
+      }]
+    };
   },
 
   methods: {},
   mounted: function mounted() {},
   created: function created() {
+    var _this = this;
+
+    this.isLoading = true;
     axios.get("/order").then(function (r) {
-      return console.log(r);
+      _this.orders = r.data;
+      _this.isLoading = false;
     }).catch(function (r) {
       return console.log(r);
     });
@@ -15780,7 +15850,167 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("Mes commandes")])
+  return _c("div", { staticClass: "columns" }, [
+    _c("div", { staticClass: "column" }, [
+      _c(
+        "section",
+        [
+          _c(
+            "b-tabs",
+            {
+              model: {
+                value: _vm.activeTab,
+                callback: function($$v) {
+                  _vm.activeTab = $$v
+                },
+                expression: "activeTab"
+              }
+            },
+            [
+              _c(
+                "b-tab-item",
+                { attrs: { label: "Commandes livrés" } },
+                [
+                  _c(
+                    "b-table",
+                    {
+                      attrs: { loading: _vm.isLoading, data: _vm.orders },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function(props) {
+                            return [
+                              _c(
+                                "b-table-column",
+                                {
+                                  attrs: {
+                                    field: "id",
+                                    label: "N°",
+                                    width: "40",
+                                    numeric: ""
+                                  }
+                                },
+                                [_vm._v(_vm._s(props.row.id))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "b-table-column",
+                                {
+                                  attrs: {
+                                    field: "first_name",
+                                    label: "First Name"
+                                  }
+                                },
+                                [_vm._v(_vm._s(props.row.first_name))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "b-table-column",
+                                { attrs: { field: "total", label: "Total" } },
+                                [_vm._v(_vm._s(props.row.total) + " €")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "b-table-column",
+                                {
+                                  attrs: {
+                                    field: "date",
+                                    label: "Commandé",
+                                    centered: ""
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { staticClass: "tag is-success" },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          new Date(
+                                            props.row.created_at
+                                          ).toLocaleDateString()
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "b-table-column",
+                                { attrs: { label: "Confirmé" } },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      props.row.confirmed === false
+                                        ? "Non"
+                                        : "Oui"
+                                    )
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "b-table-column",
+                                { attrs: { label: "Status" } },
+                                [_vm._v(_vm._s(props.row.status))]
+                              )
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _c("template", { slot: "empty" }, [
+                        _c("section", { staticClass: "section" }, [
+                          _c(
+                            "div",
+                            { staticClass: "content has-text-centered" },
+                            [
+                              _c(
+                                "p",
+                                [
+                                  _c("b-icon", {
+                                    attrs: {
+                                      icon: "emoticon-sad",
+                                      size: "is-large"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("p", [_vm._v("Aucune commande")])
+                            ]
+                          )
+                        ])
+                      ])
+                    ],
+                    2
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("b-tab-item", { attrs: { label: "Commande en cours" } }, [
+                _vm._v("Lorem\n          "),
+                _c("br"),
+                _vm._v("ipsum\n          "),
+                _c("br"),
+                _vm._v("dolor\n          "),
+                _c("br"),
+                _vm._v("sit\n          "),
+                _c("br"),
+                _vm._v("amet.\n        ")
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
