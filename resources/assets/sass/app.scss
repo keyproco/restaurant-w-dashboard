@@ -46,6 +46,34 @@ $primary: #c59d5f;
     background-color: #172a39;
 }
 
+.tabs ul {
+    border-bottom-color: #c59d5f;
+}
+.tabs a {
+    color: white;
+    &:hover {
+        color: #c59d5f;
+        border-bottom-color: #c59d5f;
+    }
+}
+.tabs li.is-active a {
+    border-bottom-color: #2ecc71;
+    color: #2ecc71;
+}
+tbody {
+    background-color: #172a39;
+}
+thead {
+    background-color: #c59d5f;
+}
+.table {
+    color: white;
+}
+.table thead td,
+.table thead th {
+    color: white;
+}
+
 .menu-list a {
     color: white;
     font-weight: 600;
