@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserConfirmedOrder;
 use App\Orders as Orders;
 use App\Product as Product;
 use DB;
@@ -106,6 +107,7 @@ class OrderController extends Controller
         $order = Orders::findOrFail($id);
         $order->confirmed = true;
         $order->save();
+        UserConfirmedOrder::dispatch($order);
         return $order;
     }
 
