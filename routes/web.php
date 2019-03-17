@@ -9,31 +9,29 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
+use App\Events\UserConfirmedOrder;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 Auth::routes();
-Route::prefix('admin')->middleware('role:superadministrator|administrator|manager')->group(function() {
-	Route::get('', 'AdminsController@index')->name('dashboard');
-	Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
+Route::prefix('admin')->middleware('role:superadministrator|administrator|manager')->group(function () {
+    Route::get('', 'AdminsController@index')->name('dashboard');
+    Route::get('/dashboard', 'AdminsController@dashboard')->name('admin.dashboard');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/by-categories', 'Category@productsByCategories')->name('categories');
 Route::get('/current-user', 'HomeController@getCurrentUser');
-	Route::resource('/order', 'OrderController');
-	
-	Route::resource('/user-orders', 'UserController');
-	Route::resource('/users', 'UserController');
-	Route::resource('/permissions', 'PermissionsController');
-	Route::resource('/products', 'ProductsController');
-	
+Route::resource('/order', 'OrderController');
+
+Route::resource('/user-orders', 'UserController');
+Route::resource('/users', 'UserController');
+Route::resource('/permissions', 'PermissionsController');
+Route::resource('/products', 'ProductsController');
+
 Route::get('/{vue_capture?}', function () {
- return view('home');
+    return view('home');
 })->where('vue_capture', '[\/\w\.-]*');
-
-
-
-
