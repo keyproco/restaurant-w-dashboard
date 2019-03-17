@@ -15825,9 +15825,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -41827,7 +41824,7 @@ var render = function() {
             [
               _c(
                 "b-tab-item",
-                { attrs: { label: "Commandes livrés" } },
+                { attrs: { label: "Commandes livrées" } },
                 [
                   _c(
                     "b-table",
@@ -41853,7 +41850,7 @@ var render = function() {
                                     numeric: ""
                                   }
                                 },
-                                [_vm._v(_vm._s(props.row.id))]
+                                [_vm._v("N°" + _vm._s(props.row.id))]
                               ),
                               _vm._v(" "),
                               _c(
@@ -41861,7 +41858,7 @@ var render = function() {
                                 {
                                   attrs: {
                                     field: "date",
-                                    label: "Commandé",
+                                    label: "Commandé le",
                                     centered: ""
                                   }
                                 },
@@ -41968,11 +41965,11 @@ var render = function() {
                                   attrs: {
                                     field: "id",
                                     label: "N°",
-                                    width: "40",
+                                    width: "140",
                                     numeric: ""
                                   }
                                 },
-                                [_vm._v(_vm._s(props.row.id))]
+                                [_vm._v("N° " + _vm._s(props.row.id))]
                               ),
                               _vm._v(" "),
                               _c(
@@ -41980,7 +41977,7 @@ var render = function() {
                                 {
                                   attrs: {
                                     field: "date",
-                                    label: "Commandé",
+                                    label: "Commandé le",
                                     centered: ""
                                   }
                                 },
