@@ -15644,6 +15644,7 @@ label.panel-block:hover {
 .tabs li.is-active a {
   border-bottom-color: #2ecc71;
   color: #2ecc71;
+  font-weight: 600;
 }
 
 tbody {
