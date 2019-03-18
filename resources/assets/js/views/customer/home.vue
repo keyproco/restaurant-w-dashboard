@@ -52,14 +52,16 @@ export default {
   data() {
     return {
       data: [],
-      orders: {}
+      orders: {
+        products: []
+      }
     };
   },
   components: { Product },
   methods: {
     addOrder: function(product) {
       axios.post("/order", { id: product.id, quantity: 2 }).then(r => {
-        console.log("add-order", r.data);
+        console.log("add-order", r.data.product);
         this.orders.total = r.data.total;
         this.orders.products.push(r.data.product);
       });
@@ -70,7 +72,6 @@ export default {
       .get(`http://localhost:8000/by-categories`)
       .then(r => {
         this.data = r.data;
-        console.log(this.data);
         this.isLoading = false;
       })
       .catch(e => {
@@ -79,14 +80,12 @@ export default {
     axios
       .get("user-orders")
       .then(orders => {
-        this.orders = orders.data;
+        this.orders = orders.data == "" ? this.orders : orders.data;
         console.log("parent", this.orders);
       })
       .catch(e => console.log(e));
   },
-  created() {
-    console.log("Mon Accueil");
-  },
+  created() {},
   updated() {}
 };
 </script>

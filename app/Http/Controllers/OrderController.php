@@ -69,7 +69,18 @@ class OrderController extends Controller
             $product = Product::find($request->id);
             $order->products()->attach($product, ['quantity' => 1]);
             // query to total and update the value
-            echo "Nouvelle commande";
+            $query = DB::table('products')
+                ->join('orders_product', 'products.id', '=', 'orders_product.product_id')
+                ->select(DB::raw('sum(price * quantity) as total'))
+                ->where('orders_id', $order->id
+                )
+                ->first();
+            return [
+                'total' => $query->total,
+                'product' => Orders::find($order->id)->products->find($request->id),
+
+            ];
+
         }
     }
 

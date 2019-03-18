@@ -9,7 +9,10 @@
         <section>
           <p>Total à payer : {{ basket.total}}</p>
         </section>
-        <a @click="confirmOrder(basket.id)" class="button">Confirmer la commande</a>
+        <a
+          @click="confirmOrder(basket.products[0].pivot.orders_id)"
+          class="button"
+        >Confirmer la commande</a>
       </div>
     </div>
     <div class="column">
@@ -51,7 +54,7 @@ export default {
   mounted() {},
   created() {
     this.basket = this.$route.params.basket;
-    console.log(this.basket);
+    console.log("Confirmer", this.basket);
   },
   updated() {}
 };
