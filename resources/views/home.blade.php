@@ -21,4 +21,17 @@
     <router-view> </router-view>
   </div>
 </div></div>
+<style>
+.menu-list a {
+    color: white;
+    font-weight: 600;
+}
+.menu-list a.is-active {
+    background-color: #c59d5f;
+}
+.menu-list a:hover {
+    background-color: #0a1f30;
+    color: #c59d5f;
+}</style>
+
 @endsection
