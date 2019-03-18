@@ -16837,7 +16837,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       data: [],
-      orders: {}
+      orders: {
+        products: []
+      }
     };
   },
 
@@ -16847,7 +16849,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       axios.post("/order", { id: product.id, quantity: 2 }).then(function (r) {
-        console.log("add-order", r.data);
+        console.log("add-order", r.data.product);
         _this.orders.total = r.data.total;
         _this.orders.products.push(r.data.product);
       });
@@ -16858,21 +16860,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     axios.get("http://localhost:8000/by-categories").then(function (r) {
       _this2.data = r.data;
-      console.log(_this2.data);
       _this2.isLoading = false;
     }).catch(function (e) {
       console.log("product-error", e);
     });
     axios.get("user-orders").then(function (orders) {
-      _this2.orders = orders.data;
+      _this2.orders = orders.data == "" ? _this2.orders : orders.data;
       console.log("parent", _this2.orders);
     }).catch(function (e) {
       return console.log(e);
     });
   },
-  created: function created() {
-    console.log("Mon Accueil");
-  },
+  created: function created() {},
   updated: function updated() {}
 });
 
@@ -17075,10 +17074,6 @@ var render = function() {
                         _c("br"),
                         _vm._v(" "),
                         _c("small", [_vm._v(_vm._s(product.price) + " $")]),
-                        _vm._v(" "),
-                        _c("small", [
-                          _vm._v("quantité: " + _vm._s(product.pivot.quantity))
-                        ]),
                         _vm._v(" "),
                         _c("br")
                       ]),
@@ -17336,6 +17331,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -17367,7 +17365,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {},
   created: function created() {
     this.basket = this.$route.params.basket;
-    console.log(this.basket);
+    console.log("Confirmer", this.basket);
   },
   updated: function updated() {}
 });
@@ -17407,7 +17405,7 @@ var render = function() {
             staticClass: "button",
             on: {
               click: function($event) {
-                _vm.confirmOrder(_vm.basket.id)
+                _vm.confirmOrder(_vm.basket.products[0].pivot.orders_id)
               }
             }
           },

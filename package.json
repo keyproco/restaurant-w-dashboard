@@ -25,6 +25,7 @@
         "bulma": "^0.7.1",
         "chart.js": "^2.7.2",
         "laravel-echo": "^1.5.3",
-        "pusher-js": "^4.4.0"
+        "pusher-js": "^4.4.0",
+        "watch": "^1.0.2"
     }
 }
