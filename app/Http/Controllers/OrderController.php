@@ -107,7 +107,7 @@ class OrderController extends Controller
         $order = Orders::findOrFail($id);
         $order->confirmed = true;
         $order->save();
-        UserConfirmedOrder::dispatch($order);
+        UserConfirmedOrder::dispatch($order->load('user'));
         return $order;
     }
 
