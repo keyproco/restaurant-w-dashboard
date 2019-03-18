@@ -32,6 +32,10 @@ Route::resource('/users', 'UserController');
 Route::resource('/permissions', 'PermissionsController');
 Route::resource('/products', 'ProductsController');
 
+Route::get('/admin/dashboard/{vue_capture?}', function () {
+    return view('layouts.admin');
+})->where('vue_capture', '[\/\w\.-]*');
+
 Route::get('/{vue_capture?}', function () {
     return view('home');
 })->where('vue_capture', '[\/\w\.-]*');

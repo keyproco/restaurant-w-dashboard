@@ -61,12 +61,17 @@ class OrderController extends Controller
 
         } elseif (empty($result)) {
             //create new order
-            $order = Orders::create(
-                ['user_id' => $id,
-                    'delivery_id' => 2,
-                    'payment_type' => 1, 'total' => 0]);
-            // find the requested product and attach it to it order_product.
             $product = Product::find($request->id);
+            $order = Orders::forceCreate(
+                [
+                    'user_id' => $id,
+                    'delivery_id' => 2,
+                    'payment_type' => 4,
+                    'total' => $product->price,
+
+                ]);
+            // find the requested product and attach it to it order_product.
+
             $order->products()->attach($product, ['quantity' => 1]);
             // query to total and update the value
             $query = DB::table('products')
@@ -119,7 +124,7 @@ class OrderController extends Controller
         $order->confirmed = true;
         $order->save();
         UserConfirmedOrder::dispatch($order->load('user'));
-        return $order;
+
     }
 
     /**

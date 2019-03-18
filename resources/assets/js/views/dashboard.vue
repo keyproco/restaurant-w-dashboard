@@ -8,14 +8,9 @@ export default {
   data() {
     return {};
   },
-  props: ["products"],
   methods: {},
-  mounted() {},
-  created() {
-    console.log("dashboard vue.js");
-
+  mounted() {
     window.Echo.channel("orders").listen("UserConfirmedOrder", e => {
-      console.log("event dispatched!", e);
       this.$toast.open({
         message:
           e.order.user.name +
@@ -24,8 +19,10 @@ export default {
           "  €",
         type: "is-success"
       });
+      console.log("From Dashboard", e);
     });
   },
+  created() {},
   updated() {}
 };
 </script>

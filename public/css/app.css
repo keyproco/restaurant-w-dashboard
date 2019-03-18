@@ -15615,15 +15615,6 @@ label.panel-block:hover {
   color: #c59d5f;
 }
 
-.menu-list a.is-active {
-  background-color: #c59d5f;
-}
-
-.menu-list a:hover {
-  background-color: #0a1f30;
-  color: #c59d5f;
-}
-
 .card {
   background-color: #172a39;
 }
@@ -15662,10 +15653,5 @@ thead {
 .table thead td,
 .table thead th {
   color: white;
-}
-
-.menu-list a {
-  color: white;
-  font-weight: 600;
 }
 

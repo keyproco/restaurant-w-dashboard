@@ -15318,22 +15318,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {};
   },
 
-  props: ["products"],
   methods: {},
-  mounted: function mounted() {},
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
-    console.log("dashboard vue.js");
-
     window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
-      console.log("event dispatched!", e);
       _this.$toast.open({
         message: e.order.user.name + " commande pour un total de " + e.order.total + "  €",
         type: "is-success"
       });
+      console.log("From Dashboard", e);
     });
   },
+  created: function created() {},
   updated: function updated() {}
 });
 
@@ -17501,9 +17498,6 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */](
     encrypted: true
 });
 
-window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
-    console.log("event dispatched!", e);
-});
 
 /***/ }),
 /* 51 */
