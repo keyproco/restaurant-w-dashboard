@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Orders;
 use App\User;
+use Carbon\Carbon;
+
 class AdminsController extends Controller
 {
-	public function index() {
-		
-		return redirect()->route('admin.dashboard');
-	}
-    public function dashboard() {
-		$users = collect(User::countUsersByMonth());
-		$users = $users->values();
-		$labels = collect(['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout','Septembre','Octobre','Novembre','Decembre' ]);
-         $path = request()->segment(2);
-    	return view('layouts.admin', compact('users', 'labels', 'path'));
+    public function index()
+    {
+        return redirect()->route('admin.dashboard');
+    }
+    public function overview()
+    {
 
-   }
+        $users = collect(User::countUsersByMonth());
+        $labels = collect(['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']);
+        return [
+            'usersByMonth' => [
+                'users' => $users->values(),
+                'labels' => $labels,
+            ],
+            'todaySales' => Orders::whereDay('updated_at', '=', Carbon::today()->day)->sum('total'),
+        ];
+    }
 }

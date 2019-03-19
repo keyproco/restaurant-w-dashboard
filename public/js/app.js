@@ -15312,6 +15312,131 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -15321,6 +15446,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {},
   mounted: function mounted() {
     var _this = this;
+
+    axios.get("/admin/stats/").then(function (e) {
+      return console.log("ordersAmount", e);
+    });
 
     window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
       _this.$toast.open({
@@ -15342,9 +15471,241 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("Dashboard")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _vm._v("Dashboard\n  "),
+      _c("div", { staticClass: "tile is-ancestor" }, [
+        _c("div", { staticClass: "tile is-horizontal is-8" }, [
+          _c("div", { staticClass: "tile" }, [
+            _c("div", { staticClass: "tile is-parent is-vertical" }, [
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title is-5" }, [
+                    _vm._v("Recette du jour")
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [_vm._v("en $")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "tile is-parent" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title is-5" }, [
+                  _vm._v("Nombre de commandes")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("Aligned with the right tile")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tile is-parent" }, [
+          _c(
+            "article",
+            { staticClass: "tile is-child notification is-white" },
+            [
+              _c("div", { staticClass: "content" }, [
+                _c("p", { staticClass: "title is-5" }, [_vm._v("Tall tile")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("With even more content")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "tile is-ancestor" }, [
+        _c("div", { staticClass: "tile is-vertical is-8" }, [
+          _c("div", { staticClass: "tile" }, [
+            _c("div", { staticClass: "tile is-parent is-vertical" }, [
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "tile is-parent" }, [
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("Middle tile")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [
+                    _vm._v("With an image")
+                  ]),
+                  _vm._v(" "),
+                  _c("figure", { staticClass: "image is-4by3" }, [
+                    _c("img", {
+                      attrs: {
+                        src: "https://bulma.io/images/placeholders/640x480.png"
+                      }
+                    })
+                  ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "tile is-parent" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title" }, [_vm._v("Wide tile")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("Aligned with the right tile")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tile is-parent" }, [
+          _c(
+            "article",
+            { staticClass: "tile is-child notification is-white" },
+            [
+              _c("div", { staticClass: "content" }, [
+                _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("With even more content")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "tile is-ancestor" }, [
+        _c("div", { staticClass: "tile is-vertical is-8" }, [
+          _c("div", { staticClass: "tile" }, [
+            _c("div", { staticClass: "tile is-parent is-vertical" }, [
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "tile is-parent" }, [
+              _c(
+                "article",
+                { staticClass: "tile is-child notification is-white" },
+                [
+                  _c("p", { staticClass: "title" }, [_vm._v("Middle tile")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "subtitle" }, [
+                    _vm._v("With an image")
+                  ]),
+                  _vm._v(" "),
+                  _c("figure", { staticClass: "image is-4by3" }, [
+                    _c("img", {
+                      attrs: {
+                        src: "https://bulma.io/images/placeholders/640x480.png"
+                      }
+                    })
+                  ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "tile is-parent" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title" }, [_vm._v("Wide tile")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("Aligned with the right tile")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tile is-parent" }, [
+          _c(
+            "article",
+            { staticClass: "tile is-child notification is-white" },
+            [
+              _c("div", { staticClass: "content" }, [
+                _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [
+                  _vm._v("With even more content")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" })
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
