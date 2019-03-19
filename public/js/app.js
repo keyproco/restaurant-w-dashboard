@@ -17331,10 +17331,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      confirmed: false,
       basket: {},
       columns: [{
         field: "name",
@@ -17352,8 +17358,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     confirmOrder: function confirmOrder(orderId) {
+      var _this = this;
+
       axios.put("/order/" + orderId).then(function (r) {
-        return console.log(r);
+        return _this.confirmed = true;
       }).catch(function (e) {
         return console.log(e);
       });
@@ -17381,34 +17389,50 @@ var render = function() {
         _vm._v("Ma commande")
       ]),
       _vm._v(" "),
-      _c("div", [
-        _c(
-          "section",
-          [
-            _c("b-table", {
-              attrs: { data: _vm.basket.products, columns: _vm.columns }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("section", [
-          _c("p", [_vm._v("Total à payer : " + _vm._s(_vm.basket.total))])
-        ]),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "button",
-            on: {
-              click: function($event) {
-                _vm.confirmOrder(_vm.basket.products[0].pivot.orders_id)
-              }
-            }
-          },
-          [_vm._v("Confirmer la commande")]
-        )
-      ])
+      _vm.confirmed
+        ? _c(
+            "div",
+            [
+              _c("b-notification", { attrs: { type: "is-success" } }, [
+                _vm._v(
+                  "Votre commande a été confirmé, veuillez suivre le statut de votre commande"
+                )
+              ])
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.confirmed
+        ? _c("div", [
+            _c(
+              "section",
+              [
+                _c("b-table", {
+                  attrs: { data: _vm.basket.products, columns: _vm.columns }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("section", [
+              _c("p", [_vm._v("Total à payer : " + _vm._s(_vm.basket.total))])
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "button",
+                on: {
+                  click: function($event) {
+                    _vm.confirmOrder(_vm.basket.products[0].pivot.orders_id)
+                  }
+                }
+              },
+              [_vm._v("Confirmer la commande")]
+            )
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _vm._m(0)
@@ -17498,6 +17522,9 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */](
     encrypted: true
 });
 
+window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
+    console.log("event dispatched!", e);
+});
 
 /***/ }),
 /* 51 */
