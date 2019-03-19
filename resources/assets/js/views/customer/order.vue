@@ -2,7 +2,12 @@
   <div class="columns">
     <div class="column">
       <div style="background-color: white">Ma commande</div>
-      <div>
+      <div v-if="confirmed">
+        <b-notification
+          type="is-success"
+        >Votre commande a été confirmé, veuillez suivre le statut de votre commande</b-notification>
+      </div>
+      <div v-if="!confirmed">
         <section>
           <b-table :data="basket.products" :columns="columns"></b-table>
         </section>
@@ -25,6 +30,7 @@
 export default {
   data() {
     return {
+      confirmed: false,
       basket: {},
       columns: [
         {
@@ -47,7 +53,7 @@ export default {
     confirmOrder: function(orderId) {
       axios
         .put(`/order/${orderId}`)
-        .then(r => console.log(r))
+        .then(r => (this.confirmed = true))
         .catch(e => console.log(e));
     }
   },
