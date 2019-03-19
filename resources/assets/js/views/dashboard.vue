@@ -6,7 +6,7 @@
           <div class="tile is-parent is-vertical">
             <article class="tile is-child notification is-white">
               <p class="title is-5">Recette du jour</p>
-              <p class="subtitle">en $</p>
+              <p class="subtitle">{{stats.todaySales}}</p>
             </article>
           </div>
         </div>
@@ -131,13 +131,22 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      stats: {
+        todaySales: 0
+      }
+    };
   },
   methods: {},
   mounted() {
-    axios.get("/admin/stats/").then(e => console.log("ordersAmount", e));
+    axios.get("/admin/stats/").then(e => {
+      console.log(e.data.todaySales);
+      this.stats.todaySales = e.data.todaySales;
+    });
 
     window.Echo.channel("orders").listen("UserConfirmedOrder", e => {
+      this.stats.todaySales =
+        parseInt(e.order.total) + parseInt(this.stats.todaySales);
       this.$toast.open({
         message:
           e.order.user.name +
