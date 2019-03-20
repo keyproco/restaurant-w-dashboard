@@ -9,7 +9,11 @@ window.Event = new Vue();
 import router from "./routes";
 import routerC from "./customer-routes";
 require("./bootstrap");
-
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
+library.add(faCartArrowDown);
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+Vue.component("icon", FontAwesomeIcon);
 import Buefy from "buefy";
 
 Vue.use(Buefy);
