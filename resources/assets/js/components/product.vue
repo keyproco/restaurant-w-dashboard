@@ -30,7 +30,11 @@
       </div>
     </ul>
     <div class="box m-t-10">
-      <b>Total : {{basket.total}}$</b>
+      <b>
+        <icon icon="cart-arrow-down" size="lg"/>
+        : {{basket.products.length}}
+        Total : {{basket.total}}$
+      </b>
     </div>
     <!-- <router-link to="cofirmer-commande">
       <a class="button is-primary m-t-25" style="width:100%;">
