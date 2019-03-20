@@ -65,8 +65,7 @@ class OrderController extends Controller
             $order = Orders::forceCreate(
                 [
                     'user_id' => $id,
-                    'delivery_id' => 2,
-                    'payment_type' => 4,
+                    'adress_id' => 1,
                     'total' => $product->price,
 
                 ]);
