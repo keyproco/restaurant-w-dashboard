@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adress as Adress;
 use App\Events\UserConfirmedOrder;
 use App\Orders as Orders;
 use App\Product as Product;
@@ -119,12 +120,18 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $order = Orders::findOrFail($id);
+        $orderP = Orders::where(['id' => $id])->first();
+        $delivery = Adress::create(['zipcode' => $request->adress['zipcode'],
+            'street' => $request->adress['street']]);
+        $order->adress_id = $delivery->id;
         $order->confirmed = true;
         $order->status = Orders::PENDING;
 
         $order->save();
         UserConfirmedOrder::dispatch($order->load('user'));
+        return $order->with('adress')->first();
 
     }
 

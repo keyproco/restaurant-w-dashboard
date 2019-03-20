@@ -20163,6 +20163,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      adress: {
+        street: "",
+        zipcode: "",
+        additonalInfo: ""
+      },
       steps: [{
         label: "Commande",
         slot: "page1"
@@ -20208,8 +20213,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     confirmOrder: function confirmOrder(orderId) {
       var _this = this;
 
-      axios.put("/order/" + orderId).then(function (r) {
-        return _this.confirmed = true;
+      axios.put("/order/" + orderId, {
+        adress: {
+          street: this.adress.street,
+          zipcode: this.adress.zipcode
+        }
+      }).then(function (r) {
+        _this.confirmed = true, console.log("confirmed with adres", r.data);
       }).catch(function (e) {
         return console.log(e);
       });
@@ -20405,6 +20415,20 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns" }, [
     _c("div", { staticClass: "column" }, [
+      _vm.confirmed
+        ? _c(
+            "div",
+            [
+              _c("b-notification", { attrs: { type: "is-success" } }, [
+                _vm._v(
+                  "Votre commande a été confirmé, veuillez suivre le statut de votre commande"
+                )
+              ])
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "div",
         { staticStyle: { "background-color": "white" } },
@@ -20420,24 +20444,6 @@ var render = function() {
             },
             [
               _c("div", { attrs: { slot: "page1" }, slot: "page1" }, [
-                _vm.confirmed
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-notification",
-                          { attrs: { type: "is-success" } },
-                          [
-                            _vm._v(
-                              "Votre commande a été confirmé, veuillez suivre le statut de votre commande"
-                            )
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
                 !_vm.confirmed
                   ? _c("div", [
                       _c(
@@ -20457,22 +20463,7 @@ var render = function() {
                         _c("p", [
                           _vm._v("Total à payer : " + _vm._s(_vm.basket.total))
                         ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "button",
-                          on: {
-                            click: function($event) {
-                              _vm.confirmOrder(
-                                _vm.basket.products[0].pivot.orders_id
-                              )
-                            }
-                          }
-                        },
-                        [_vm._v("Confirmer la commande")]
-                      )
+                      ])
                     ])
                   : _vm._e()
               ]),
@@ -20487,11 +20478,11 @@ var render = function() {
                       [
                         _c("b-input", {
                           model: {
-                            value: _vm.adresse,
+                            value: _vm.adress.street,
                             callback: function($$v) {
-                              _vm.adresse = $$v
+                              _vm.$set(_vm.adress, "street", $$v)
                             },
-                            expression: "adresse"
+                            expression: "adress.street"
                           }
                         })
                       ],
@@ -20503,13 +20494,13 @@ var render = function() {
                       { attrs: { label: "Code postal" } },
                       [
                         _c("b-input", {
-                          attrs: { type: "number", maxlength: "5" },
+                          attrs: { maxlength: "5" },
                           model: {
-                            value: _vm.zipcode,
+                            value: _vm.adress.zipcode,
                             callback: function($$v) {
-                              _vm.zipcode = $$v
+                              _vm.$set(_vm.adress, "zipcode", $$v)
                             },
-                            expression: "zipcode"
+                            expression: "adress.zipcode"
                           }
                         })
                       ],
@@ -20523,15 +20514,30 @@ var render = function() {
                         _c("b-input", {
                           attrs: { type: "number" },
                           model: {
-                            value: _vm.additionalInfo,
+                            value: _vm.adress.additionalInfo,
                             callback: function($$v) {
-                              _vm.additionalInfo = $$v
+                              _vm.$set(_vm.adress, "additionalInfo", $$v)
                             },
-                            expression: "additionalInfo"
+                            expression: "adress.additionalInfo"
                           }
                         })
                       ],
                       1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "button",
+                        on: {
+                          click: function($event) {
+                            _vm.confirmOrder(
+                              _vm.basket.products[0].pivot.orders_id
+                            )
+                          }
+                        }
+                      },
+                      [_vm._v("Confirmer la commande")]
                     )
                   ],
                   1

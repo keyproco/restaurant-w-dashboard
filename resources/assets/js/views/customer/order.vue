@@ -1,14 +1,14 @@
 <template>
   <div class="columns">
     <div class="column">
+      <div v-if="confirmed">
+        <b-notification
+          type="is-success"
+        >Votre commande a été confirmé, veuillez suivre le statut de votre commande</b-notification>
+      </div>
       <div style="background-color: white">
         <vue-good-wizard :steps="steps" :onNext="nextClicked" :onBack="backClicked">
           <div slot="page1">
-            <div v-if="confirmed">
-              <b-notification
-                type="is-success"
-              >Votre commande a été confirmé, veuillez suivre le statut de votre commande</b-notification>
-            </div>
             <div v-if="!confirmed">
               <section>
                 <b-table :data="basket.products" :columns="columns"></b-table>
@@ -16,23 +16,23 @@
               <section>
                 <p>Total à payer : {{ basket.total}}</p>
               </section>
-              <a
-                @click="confirmOrder(basket.products[0].pivot.orders_id)"
-                class="button"
-              >Confirmer la commande</a>
             </div>
           </div>
           <div slot="page2">
             <section>
               <b-field label="Adresse">
-                <b-input v-model="adresse"></b-input>
+                <b-input v-model="adress.street"></b-input>
               </b-field>
               <b-field label="Code postal">
-                <b-input v-model="zipcode" type="number" maxlength="5"></b-input>
+                <b-input v-model="adress.zipcode" maxlength="5"></b-input>
               </b-field>
               <b-field label="Appartement, étage, interphone">
-                <b-input type="number" v-model="additionalInfo"></b-input>
+                <b-input type="number" v-model="adress.additionalInfo"></b-input>
               </b-field>
+              <a
+                @click="confirmOrder(basket.products[0].pivot.orders_id)"
+                class="button"
+              >Confirmer la commande</a>
             </section>
           </div>
           <div slot="page3">
@@ -54,6 +54,11 @@ import { GoodWizard } from "vue-good-wizard";
 export default {
   data() {
     return {
+      adress: {
+        street: "",
+        zipcode: "",
+        additonalInfo: ""
+      },
       steps: [
         {
           label: "Commande",
@@ -104,8 +109,15 @@ export default {
     },
     confirmOrder: function(orderId) {
       axios
-        .put(`/order/${orderId}`)
-        .then(r => (this.confirmed = true))
+        .put(`/order/${orderId}`, {
+          adress: {
+            street: this.adress.street,
+            zipcode: this.adress.zipcode
+          }
+        })
+        .then(r => {
+          (this.confirmed = true), console.log("confirmed with adres", r.data);
+        })
         .catch(e => console.log(e));
     }
   },
