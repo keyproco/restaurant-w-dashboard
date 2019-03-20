@@ -16580,10 +16580,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      perPage: 5,
       activeTab: 0,
       isLoading: false,
       orders: [],
@@ -16658,6 +16664,8 @@ var render = function() {
                     "b-table",
                     {
                       attrs: {
+                        paginated: "",
+                        "per-page": _vm.perPage,
                         loading: _vm.isLoading,
                         data: _vm.orders.filter(function(order) {
                           return order.confirmed == 1

@@ -4,7 +4,12 @@
       <section>
         <b-tabs :animated="false" v-model="activeTab">
           <b-tab-item label="Commandes livrées">
-            <b-table :loading="isLoading" :data="orders.filter(order => order.confirmed == 1)">
+            <b-table
+              paginated
+              :per-page="perPage"
+              :loading="isLoading"
+              :data="orders.filter(order => order.confirmed == 1)"
+            >
               <template slot-scope="props">
                 <b-table-column
                   field="id"
@@ -74,6 +79,7 @@
 export default {
   data() {
     return {
+      perPage: 5,
       activeTab: 0,
       isLoading: false,
       orders: [],
