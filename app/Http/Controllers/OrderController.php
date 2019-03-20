@@ -72,7 +72,7 @@ class OrderController extends Controller
                 ]);
             // find the requested product and attach it to it order_product.
 
-            $order->products()->attach($product, ['quantity' => 1]);
+            $order->products()->attach($product, ['quantity' => $quantity]);
             // query to total and update the value
             $query = DB::table('products')
                 ->join('orders_product', 'products.id', '=', 'orders_product.product_id')

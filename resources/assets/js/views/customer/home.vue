@@ -10,11 +10,7 @@
             v-for="(product) in category.products"
             class="column is-4 is-mobile"
           >
-            <div
-              @click="addOrder(product)"
-              class="card"
-              style="-webkit-box-shadow: none; box-shadow:none"
-            >
+            <div class="card" style="-webkit-box-shadow: none; box-shadow:none">
               <div class="level">D'autres infos</div>
               <div class="card-image is-flex is-hcentered">
                 <figure class="image is-128x128">
@@ -30,9 +26,14 @@
                     </p>
                   </div>
                 </div>
-                <div class="content">{{product.description}}</div>
+                <div class="content has-text-white">{{product.description}}</div>
               </div>
-              <div style=" background-color: #f6b93b;" class="level">_</div>
+              <div style=" background-color: #f6b93b;" class="level">
+                <b-select v-model="quantity" placeholder="Quantité">
+                  <option v-for="number in 10" :value="number" :key="number">{{ number}}</option>
+                </b-select>
+                <a @click="addOrder(product )" class="button is-danger">+</a>
+              </div>
             </div>
           </div>
         </div>
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       data: [],
+      quantity: 1,
       orders: {
         products: []
       }
@@ -60,11 +62,14 @@ export default {
   components: { Product },
   methods: {
     addOrder: function(product) {
-      axios.post("/order", { id: product.id, quantity: 2 }).then(r => {
-        console.log("add-order", r.data.product);
-        this.orders.total = r.data.total;
-        this.orders.products.push(r.data.product);
-      });
+      console.log(this.number);
+      axios
+        .post("/order", { id: product.id, quantity: this.quantity })
+        .then(r => {
+          console.log("add-order", r.data.product);
+          this.orders.total = r.data.total;
+          this.orders.products.push(r.data.product);
+        });
     }
   },
   mounted() {
@@ -81,7 +86,6 @@ export default {
       .get("user-orders")
       .then(orders => {
         this.orders = orders.data == "" ? this.orders : orders.data;
-        console.log("parent", this.orders);
       })
       .catch(e => console.log(e));
   },

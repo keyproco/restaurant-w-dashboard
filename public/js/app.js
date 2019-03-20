@@ -17192,6 +17192,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -17199,6 +17200,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       data: [],
+      quantity: 1,
       orders: {
         products: []
       }
@@ -17210,7 +17212,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     addOrder: function addOrder(product) {
       var _this = this;
 
-      axios.post("/order", { id: product.id, quantity: 2 }).then(function (r) {
+      console.log(this.number);
+      axios.post("/order", { id: product.id, quantity: this.quantity }).then(function (r) {
         console.log("add-order", r.data.product);
         _this.orders.total = r.data.total;
         _this.orders.products.push(r.data.product);
@@ -17228,7 +17231,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     });
     axios.get("user-orders").then(function (orders) {
       _this2.orders = orders.data == "" ? _this2.orders : orders.data;
-      console.log("parent", _this2.orders);
     }).catch(function (e) {
       return console.log(e);
     });
@@ -17437,6 +17439,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("small", [_vm._v(_vm._s(product.price) + " $")]),
                         _vm._v(" "),
+                        _c("small", [
+                          _vm._v("quantité: " + _vm._s(product.pivot.quantity))
+                        ]),
+                        _vm._v(" "),
                         _c("br")
                       ]),
                       _vm._v(" "),
@@ -17524,11 +17530,6 @@ var render = function() {
                         staticStyle: {
                           "-webkit-box-shadow": "none",
                           "box-shadow": "none"
-                        },
-                        on: {
-                          click: function($event) {
-                            _vm.addOrder(product)
-                          }
                         }
                       },
                       [
@@ -17576,7 +17577,7 @@ var render = function() {
                             ])
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "content" }, [
+                          _c("div", { staticClass: "content has-text-white" }, [
                             _vm._v(_vm._s(product.description))
                           ])
                         ]),
@@ -17587,7 +17588,43 @@ var render = function() {
                             staticClass: "level",
                             staticStyle: { "background-color": "#f6b93b" }
                           },
-                          [_vm._v("_")]
+                          [
+                            _c(
+                              "b-select",
+                              {
+                                attrs: { placeholder: "Quantité" },
+                                model: {
+                                  value: _vm.quantity,
+                                  callback: function($$v) {
+                                    _vm.quantity = $$v
+                                  },
+                                  expression: "quantity"
+                                }
+                              },
+                              _vm._l(10, function(number) {
+                                return _c(
+                                  "option",
+                                  { key: number, domProps: { value: number } },
+                                  [_vm._v(_vm._s(number))]
+                                )
+                              }),
+                              0
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "button is-danger",
+                                on: {
+                                  click: function($event) {
+                                    _vm.addOrder(product)
+                                  }
+                                }
+                              },
+                              [_vm._v("+")]
+                            )
+                          ],
+                          1
                         )
                       ]
                     )

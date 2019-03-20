@@ -20,7 +20,7 @@
                 <strong style="color:#c59d5f">{{product.name}}</strong>
                 <br>
                 <small>{{product.price}} $</small>
-                <!-- <small>quantité: {{product.pivot.quantity}}</small> -->
+                <small>quantité: {{product.pivot.quantity}}</small>
                 <br>
               </p>
               <a @click="removeItem(product.id)" class="delete is-hcenterd"></a>
