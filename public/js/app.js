@@ -20158,6 +20158,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -20193,7 +20195,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         field: "price",
         label: "Prix",
         centered: true
-      }]
+      }],
+      checkout: {
+        stripeEmail: "",
+        stripeToken: ""
+      }
     };
   },
 
@@ -20223,12 +20229,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (e) {
         return console.log(e);
       });
+    },
+    buy: function buy() {
+      this.stripe.open({
+        name: "My Products",
+        description: "Acheter mes pizzas",
+        zipCode: true,
+        amount: 4200
+      });
     }
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    var _this2 = this;
+
+    console.log(Rapizzoi);
+    Stripe.setPublishableKey("pk_test_nZ4JNXX129EsZ6SAx0cJTcKT");
+    this.stripe = StripeCheckout.configure({
+      key: "pk_test_nZ4JNXX129EsZ6SAx0cJTcKT",
+      locale: "auto",
+      token: function token(_token) {
+        _this2.checkout.stripeToken = _token.id;
+        _this2.checkout.stripeEmail = _token.email;
+        console.log("token", _token);
+        axios.post("/pay", _this2.checkout).then(function (r) {
+          return alert("complete");
+        });
+      }
+    });
+  },
   created: function created() {
     this.basket = this.$route.params.basket;
-    console.log("Confirmer", this.basket);
+
+    console.log("stripe", this.stripe);
   },
   updated: function updated() {}
 });
@@ -20414,6 +20446,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns" }, [
+    _c("a", { staticClass: "button", on: { click: _vm.buy } }, [
+      _vm._v("Payer")
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "column" }, [
       _vm.confirmed
         ? _c(
