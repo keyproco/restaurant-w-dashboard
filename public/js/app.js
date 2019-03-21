@@ -19587,6 +19587,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -19595,6 +19614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       data: [],
       quantity: 1,
+      isLoading: false,
       orders: {
         products: []
       }
@@ -19617,6 +19637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this2 = this;
 
+    this.isLoading = true;
     axios.get("http://localhost:8000/by-categories").then(function (r) {
       _this2.data = r.data;
       _this2.isLoading = false;
@@ -19925,154 +19946,254 @@ var render = function() {
         _c(
           "b-tabs",
           { attrs: { type: "is-toggle-rounded", expanded: "" } },
-          _vm._l(_vm.data, function(category) {
-            return _c(
-              "div",
-              { key: category.id },
-              [
-                _c(
-                  "b-tab-item",
-                  { attrs: { label: category.name, icon: "google-photos" } },
-                  _vm._l(category.products, function(product) {
+          [
+            _vm.isLoading
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "is-flex",
+                    staticStyle: { "flex-wrap": "wrap" }
+                  },
+                  _vm._l(6, function(time) {
                     return _c(
-                      "div",
-                      { key: product.id, staticClass: "section is-3 is-flex" },
+                      "content-loader",
+                      {
+                        key: time * 5,
+                        staticStyle: {
+                          display: "block",
+                          width: "200px",
+                          height: "250"
+                        },
+                        attrs: {
+                          height: 150,
+                          width: 200,
+                          speed: 2,
+                          primaryColor: "#FFF7EB",
+                          secondaryColor: "#c59d5f"
+                        }
+                      },
                       [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "card",
-                            staticStyle: {
-                              width: "200px",
-                              "-webkit-box-shadow": "none",
-                              "box-shadow": "none"
-                            }
-                          },
-                          [
-                            _c("div", { staticClass: "level" }, [
-                              _vm._v("D'autres infos")
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "card-image is-flex is-hcentered"
-                              },
-                              [
-                                _c(
-                                  "figure",
-                                  { staticClass: "image is-128x128" },
-                                  [
-                                    _c("img", {
-                                      staticClass: "is-rounded",
-                                      staticStyle: {
-                                        border: "5px solid white"
-                                      },
-                                      attrs: {
-                                        src: product.image,
-                                        alt: "Placeholder image"
-                                      }
-                                    })
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "card-content" }, [
-                              _c("div", { staticClass: "media" }, [
-                                _c("div", { staticClass: "media-content" }, [
-                                  _c(
-                                    "p",
-                                    {
-                                      staticClass:
-                                        "title is-5 has-text-centered",
-                                      staticStyle: { color: "#c59d5f" }
-                                    },
-                                    [_vm._v(_vm._s(product.name))]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "p",
-                                    {
-                                      staticClass:
-                                        "subtitle is-6 has-text-centered",
-                                      staticStyle: { color: "#d35400" }
-                                    },
-                                    [
-                                      _c("b", [
-                                        _vm._v(_vm._s(product.price) + "$")
-                                      ])
-                                    ]
-                                  )
-                                ])
+                        _c("circle", {
+                          attrs: {
+                            cx: "78.49364293939723",
+                            cy: "41.37364293939723",
+                            r: "31.033642939397232"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            x: "71.66",
+                            y: "91.75",
+                            rx: "0",
+                            ry: "0",
+                            width: "18.54",
+                            height: "7.95"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            x: "27.5",
+                            y: "103.25",
+                            rx: "0",
+                            ry: "0",
+                            width: "123",
+                            height: "7.54"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            x: "27.5",
+                            y: "113.25",
+                            rx: "0",
+                            ry: "0",
+                            width: "123",
+                            height: "7.54"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            x: "27.5",
+                            y: "123.25",
+                            rx: "0",
+                            ry: "0",
+                            width: "123",
+                            height: "7.54"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            x: "53.41",
+                            y: "78.25",
+                            rx: "0",
+                            ry: "0",
+                            width: "54",
+                            height: "10"
+                          }
+                        })
+                      ]
+                    )
+                  }),
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.data, function(category) {
+              return _c(
+                "div",
+                { key: category.id },
+                [
+                  _c(
+                    "b-tab-item",
+                    { attrs: { label: category.name, icon: "google-photos" } },
+                    _vm._l(category.products, function(product) {
+                      return _c(
+                        "div",
+                        {
+                          key: product.id,
+                          staticClass: "section is-3 is-flex"
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "card",
+                              staticStyle: {
+                                width: "200px",
+                                "-webkit-box-shadow": "none",
+                                "box-shadow": "none"
+                              }
+                            },
+                            [
+                              _c("div", { staticClass: "level" }, [
+                                _vm._v("D'autres infos")
                               ]),
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "content has-text-white" },
-                                [_vm._v(_vm._s(product.description))]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "level",
-                                staticStyle: { "background-color": "#f6b93b" }
-                              },
-                              [
-                                _c(
-                                  "b-select",
-                                  {
-                                    attrs: { placeholder: "Quantité" },
-                                    model: {
-                                      value: _vm.quantity,
-                                      callback: function($$v) {
-                                        _vm.quantity = $$v
-                                      },
-                                      expression: "quantity"
-                                    }
-                                  },
-                                  _vm._l(10, function(number) {
-                                    return _c(
-                                      "option",
+                                {
+                                  staticClass: "card-image is-flex is-hcentered"
+                                },
+                                [
+                                  _c(
+                                    "figure",
+                                    { staticClass: "image is-128x128" },
+                                    [
+                                      _c("img", {
+                                        staticClass: "is-rounded",
+                                        staticStyle: {
+                                          border: "5px solid white"
+                                        },
+                                        attrs: {
+                                          src: product.image,
+                                          alt: "Placeholder image"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "card-content" }, [
+                                _c("div", { staticClass: "media" }, [
+                                  _c("div", { staticClass: "media-content" }, [
+                                    _c(
+                                      "p",
                                       {
-                                        key: number,
-                                        domProps: { value: number }
+                                        staticClass:
+                                          "title is-5 has-text-centered",
+                                        staticStyle: { color: "#c59d5f" }
                                       },
-                                      [_vm._v(_vm._s(number))]
+                                      [_vm._v(_vm._s(product.name))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "p",
+                                      {
+                                        staticClass:
+                                          "subtitle is-6 has-text-centered",
+                                        staticStyle: { color: "#d35400" }
+                                      },
+                                      [
+                                        _c("b", [
+                                          _vm._v(_vm._s(product.price) + "$")
+                                        ])
+                                      ]
                                     )
-                                  }),
-                                  0
-                                ),
+                                  ])
+                                ]),
                                 _vm._v(" "),
                                 _c(
-                                  "a",
-                                  {
-                                    staticClass: "button is-danger",
-                                    on: {
-                                      click: function($event) {
-                                        _vm.addOrder(product)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("+")]
+                                  "div",
+                                  { staticClass: "content has-text-white" },
+                                  [_vm._v(_vm._s(product.description))]
                                 )
-                              ],
-                              1
-                            )
-                          ]
-                        )
-                      ]
-                    )
-                  }),
-                  0
-                )
-              ],
-              1
-            )
-          }),
-          0
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "level",
+                                  staticStyle: { "background-color": "#f6b93b" }
+                                },
+                                [
+                                  _c(
+                                    "b-select",
+                                    {
+                                      attrs: { placeholder: "Quantité" },
+                                      model: {
+                                        value: _vm.quantity,
+                                        callback: function($$v) {
+                                          _vm.quantity = $$v
+                                        },
+                                        expression: "quantity"
+                                      }
+                                    },
+                                    _vm._l(10, function(number) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: number,
+                                          domProps: { value: number }
+                                        },
+                                        [_vm._v(_vm._s(number))]
+                                      )
+                                    }),
+                                    0
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "button is-danger",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.addOrder(product)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("+")]
+                                  )
+                                ],
+                                1
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ],
+                1
+              )
+            })
+          ],
+          2
         )
       ],
       1
@@ -63096,7 +63217,7 @@ exports = module.exports = __webpack_require__(31)(false);
 
 
 // module
-exports.push([module.i, "\n.tab-item {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\r\n", ""]);
+exports.push([module.i, "\n.tab-item {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\nsvg {\r\n  display: block;\n}\n.b-tabs .tab-content {\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  -webkit-box-align: start;\r\n      -ms-flex-align: start;\r\n          align-items: flex-start;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\r\n", ""]);
 
 // exports
 
