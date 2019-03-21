@@ -1,5 +1,6 @@
 <template>
   <div class="columns">
+    <a @click="buy" class="button">Payer</a>
     <div class="column">
       <div v-if="confirmed">
         <b-notification
@@ -49,6 +50,7 @@
   </div>
 </template>
 
+
 <script>
 import { GoodWizard } from "vue-good-wizard";
 export default {
@@ -92,7 +94,11 @@ export default {
           label: "Prix",
           centered: true
         }
-      ]
+      ],
+      checkout: {
+        stripeEmail: "",
+        stripeToken: ""
+      }
     };
   },
   components: {
@@ -119,12 +125,34 @@ export default {
           (this.confirmed = true), console.log("confirmed with adres", r.data);
         })
         .catch(e => console.log(e));
+    },
+    buy() {
+      this.stripe.open({
+        name: "My Products",
+        description: "Acheter mes pizzas",
+        zipCode: true,
+        amount: 4200
+      });
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(Rapizzoi);
+    Stripe.setPublishableKey("pk_test_nZ4JNXX129EsZ6SAx0cJTcKT");
+    this.stripe = StripeCheckout.configure({
+      key: "pk_test_nZ4JNXX129EsZ6SAx0cJTcKT",
+      locale: "auto",
+      token: token => {
+        this.checkout.stripeToken = token.id;
+        this.checkout.stripeEmail = token.email;
+        console.log("token", token);
+        axios.post("/pay", this.checkout).then(r => alert("complete"));
+      }
+    });
+  },
   created() {
     this.basket = this.$route.params.basket;
-    console.log("Confirmer", this.basket);
+
+    console.log("stripe", this.stripe);
   },
   updated() {}
 };
