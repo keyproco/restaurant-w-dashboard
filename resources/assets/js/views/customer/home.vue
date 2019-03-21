@@ -47,9 +47,6 @@
             </div>
           </b-tab-item>
         </div>
-        <!-- 
-        <b-tab-item label="Desserts" icon="library-music"></b-tab-item>
-        <b-tab-item label="Boissons" icon="video"></b-tab-item>-->
       </b-tabs>
     </div>
     <div class="column is-3">
