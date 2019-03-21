@@ -2,8 +2,27 @@
   <div class="columns">
     <div class="column is-9">
       <p class="bd-notification is-danger">First column</p>
-
       <b-tabs type="is-toggle-rounded" expanded>
+        <div v-if="isLoading" class="is-flex" style="flex-wrap:wrap">
+          <content-loader
+            style="display:block; width: 200px; height: 250"
+            :key="time*5"
+            v-for="time of 6"
+            :height="150"
+            :width="200"
+            :speed="2"
+            primaryColor="#FFF7EB"
+            secondaryColor="#c59d5f"
+          >
+            <circle cx="78.49364293939723" cy="41.37364293939723" r="31.033642939397232"/>
+            <rect x="71.66" y="91.75" rx="0" ry="0" width="18.54" height="7.95"/>
+            <rect x="27.5" y="103.25" rx="0" ry="0" width="123" height="7.54"/>
+            <rect x="27.5" y="113.25" rx="0" ry="0" width="123" height="7.54"/>
+            <rect x="27.5" y="123.25" rx="0" ry="0" width="123" height="7.54"/>
+            <rect x="53.41" y="78.25" rx="0" ry="0" width="54" height="10"/>
+          </content-loader>
+        </div>
+
         <div :key="category.id" v-for="(category) in data">
           <b-tab-item :label="category.name" icon="google-photos">
             <div
@@ -64,6 +83,7 @@ export default {
     return {
       data: [],
       quantity: 1,
+      isLoading: false,
       orders: {
         products: []
       }
@@ -83,6 +103,7 @@ export default {
     }
   },
   mounted() {
+    this.isLoading = true;
     axios
       .get(`http://localhost:8000/by-categories`)
       .then(r => {
@@ -107,6 +128,14 @@ export default {
 <style>
 .tab-item {
   display: flex;
+  flex-wrap: wrap;
+}
+svg {
+  display: block;
+}
+.b-tabs .tab-content {
+  flex-direction: row;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 </style>
