@@ -2,42 +2,55 @@
   <div class="columns">
     <div class="column is-9">
       <p class="bd-notification is-danger">First column</p>
-      <div :key="category.id" v-for="(category) in data">
-        <h1>{{category.name}}</h1>
-        <div class="columns is-multiline">
-          <div
-            :key="product.id"
-            v-for="(product) in category.products"
-            class="column is-4 is-mobile"
-          >
-            <div class="card" style="-webkit-box-shadow: none; box-shadow:none">
-              <div class="level">D'autres infos</div>
-              <div class="card-image is-flex is-hcentered">
-                <figure class="image is-128x128">
-                  <img class="is-rounded" :src="product.image" alt="Placeholder image">
-                </figure>
-              </div>
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-content">
-                    <p style=" color:#c59d5f" class="title is-5 has-text-centered">{{product.name}}</p>
-                    <p style="color:#d35400" class="subtitle is-6 has-text-centered">
-                      <b>{{product.price}}$</b>
-                    </p>
-                  </div>
+
+      <b-tabs type="is-toggle-rounded" expanded>
+        <div :key="category.id" v-for="(category) in data">
+          <b-tab-item :label="category.name" icon="google-photos">
+            <div
+              class="section is-3 is-flex"
+              :key="product.id"
+              v-for="(product) in category.products"
+            >
+              <div style="width: 200px;-webkit-box-shadow: none; box-shadow:none" class="card">
+                <div class="level">D'autres infos</div>
+                <div class="card-image is-flex is-hcentered">
+                  <figure class="image is-128x128">
+                    <img
+                      style="border: 5px solid white"
+                      class="is-rounded"
+                      :src="product.image"
+                      alt="Placeholder image"
+                    >
+                  </figure>
                 </div>
-                <div class="content has-text-white">{{product.description}}</div>
-              </div>
-              <div style=" background-color: #f6b93b;" class="level">
-                <b-select v-model="quantity" placeholder="Quantité">
-                  <option v-for="number in 10" :value="number" :key="number">{{ number}}</option>
-                </b-select>
-                <a @click="addOrder(product )" class="button is-danger">+</a>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p
+                        style=" color:#c59d5f"
+                        class="title is-5 has-text-centered"
+                      >{{product.name}}</p>
+                      <p style="color:#d35400" class="subtitle is-6 has-text-centered">
+                        <b>{{product.price}}$</b>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="content has-text-white">{{product.description}}</div>
+                </div>
+                <div style=" background-color: #f6b93b;" class="level">
+                  <b-select v-model="quantity" placeholder="Quantité">
+                    <option v-for="number in 10" :value="number" :key="number">{{ number}}</option>
+                  </b-select>
+                  <a @click="addOrder(product )" class="button is-danger">+</a>
+                </div>
               </div>
             </div>
-          </div>
+          </b-tab-item>
         </div>
-      </div>
+        <!-- 
+        <b-tab-item label="Desserts" icon="library-music"></b-tab-item>
+        <b-tab-item label="Boissons" icon="video"></b-tab-item>-->
+      </b-tabs>
     </div>
     <div class="column is-3">
       <product :orders="orders"/>
@@ -48,7 +61,7 @@
 
 <script>
 import Product from "../../components/product.vue";
-
+import { ContentLoader } from "vue-content-loader";
 export default {
   data() {
     return {
@@ -59,7 +72,7 @@ export default {
       }
     };
   },
-  components: { Product },
+  components: { Product, ContentLoader },
   methods: {
     addOrder: function(product) {
       console.log(this.number);
@@ -93,3 +106,10 @@ export default {
   updated() {}
 };
 </script>
+
+<style>
+.tab-item {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

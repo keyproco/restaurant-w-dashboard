@@ -19474,6 +19474,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(96)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(43)
@@ -19482,7 +19486,7 @@ var __vue_template__ = __webpack_require__(47)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -19524,6 +19528,20 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_product_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_content_loader__ = __webpack_require__(94);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -19586,7 +19604,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
-  components: { Product: __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default.a },
+  components: { Product: __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default.a, ContentLoader: __WEBPACK_IMPORTED_MODULE_1_vue_content_loader__["a" /* ContentLoader */] },
   methods: {
     addOrder: function addOrder(product) {
       var _this = this;
@@ -19907,132 +19925,160 @@ var render = function() {
           _vm._v("First column")
         ]),
         _vm._v(" "),
-        _vm._l(_vm.data, function(category) {
-          return _c("div", { key: category.id }, [
-            _c("h1", [_vm._v(_vm._s(category.name))]),
-            _vm._v(" "),
-            _c(
+        _c(
+          "b-tabs",
+          { attrs: { type: "is-toggle-rounded", expanded: "" } },
+          _vm._l(_vm.data, function(category) {
+            return _c(
               "div",
-              { staticClass: "columns is-multiline" },
-              _vm._l(category.products, function(product) {
-                return _c(
-                  "div",
-                  { key: product.id, staticClass: "column is-4 is-mobile" },
-                  [
-                    _c(
+              { key: category.id },
+              [
+                _c(
+                  "b-tab-item",
+                  { attrs: { label: category.name, icon: "google-photos" } },
+                  _vm._l(category.products, function(product) {
+                    return _c(
                       "div",
-                      {
-                        staticClass: "card",
-                        staticStyle: {
-                          "-webkit-box-shadow": "none",
-                          "box-shadow": "none"
-                        }
-                      },
+                      { key: product.id, staticClass: "section is-3 is-flex" },
                       [
-                        _c("div", { staticClass: "level" }, [
-                          _vm._v("D'autres infos")
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "card-image is-flex is-hcentered" },
-                          [
-                            _c("figure", { staticClass: "image is-128x128" }, [
-                              _c("img", {
-                                staticClass: "is-rounded",
-                                attrs: {
-                                  src: product.image,
-                                  alt: "Placeholder image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "card-content" }, [
-                          _c("div", { staticClass: "media" }, [
-                            _c("div", { staticClass: "media-content" }, [
-                              _c(
-                                "p",
-                                {
-                                  staticClass: "title is-5 has-text-centered",
-                                  staticStyle: { color: "#c59d5f" }
-                                },
-                                [_vm._v(_vm._s(product.name))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "p",
-                                {
-                                  staticClass:
-                                    "subtitle is-6 has-text-centered",
-                                  staticStyle: { color: "#d35400" }
-                                },
-                                [_c("b", [_vm._v(_vm._s(product.price) + "$")])]
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "content has-text-white" }, [
-                            _vm._v(_vm._s(product.description))
-                          ])
-                        ]),
-                        _vm._v(" "),
                         _c(
                           "div",
                           {
-                            staticClass: "level",
-                            staticStyle: { "background-color": "#f6b93b" }
+                            staticClass: "card",
+                            staticStyle: {
+                              width: "200px",
+                              "-webkit-box-shadow": "none",
+                              "box-shadow": "none"
+                            }
                           },
                           [
-                            _c(
-                              "b-select",
-                              {
-                                attrs: { placeholder: "Quantité" },
-                                model: {
-                                  value: _vm.quantity,
-                                  callback: function($$v) {
-                                    _vm.quantity = $$v
-                                  },
-                                  expression: "quantity"
-                                }
-                              },
-                              _vm._l(10, function(number) {
-                                return _c(
-                                  "option",
-                                  { key: number, domProps: { value: number } },
-                                  [_vm._v(_vm._s(number))]
-                                )
-                              }),
-                              0
-                            ),
+                            _c("div", { staticClass: "level" }, [
+                              _vm._v("D'autres infos")
+                            ]),
                             _vm._v(" "),
                             _c(
-                              "a",
+                              "div",
                               {
-                                staticClass: "button is-danger",
-                                on: {
-                                  click: function($event) {
-                                    _vm.addOrder(product)
-                                  }
-                                }
+                                staticClass: "card-image is-flex is-hcentered"
                               },
-                              [_vm._v("+")]
+                              [
+                                _c(
+                                  "figure",
+                                  { staticClass: "image is-128x128" },
+                                  [
+                                    _c("img", {
+                                      staticClass: "is-rounded",
+                                      staticStyle: {
+                                        border: "5px solid white"
+                                      },
+                                      attrs: {
+                                        src: product.image,
+                                        alt: "Placeholder image"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "card-content" }, [
+                              _c("div", { staticClass: "media" }, [
+                                _c("div", { staticClass: "media-content" }, [
+                                  _c(
+                                    "p",
+                                    {
+                                      staticClass:
+                                        "title is-5 has-text-centered",
+                                      staticStyle: { color: "#c59d5f" }
+                                    },
+                                    [_vm._v(_vm._s(product.name))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "p",
+                                    {
+                                      staticClass:
+                                        "subtitle is-6 has-text-centered",
+                                      staticStyle: { color: "#d35400" }
+                                    },
+                                    [
+                                      _c("b", [
+                                        _vm._v(_vm._s(product.price) + "$")
+                                      ])
+                                    ]
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "content has-text-white" },
+                                [_vm._v(_vm._s(product.description))]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "level",
+                                staticStyle: { "background-color": "#f6b93b" }
+                              },
+                              [
+                                _c(
+                                  "b-select",
+                                  {
+                                    attrs: { placeholder: "Quantité" },
+                                    model: {
+                                      value: _vm.quantity,
+                                      callback: function($$v) {
+                                        _vm.quantity = $$v
+                                      },
+                                      expression: "quantity"
+                                    }
+                                  },
+                                  _vm._l(10, function(number) {
+                                    return _c(
+                                      "option",
+                                      {
+                                        key: number,
+                                        domProps: { value: number }
+                                      },
+                                      [_vm._v(_vm._s(number))]
+                                    )
+                                  }),
+                                  0
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "button is-danger",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.addOrder(product)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("+")]
+                                )
+                              ],
+                              1
                             )
-                          ],
-                          1
+                          ]
                         )
                       ]
                     )
-                  ]
+                  }),
+                  0
                 )
-              }),
-              0
+              ],
+              1
             )
-          ])
-        })
+          }),
+          0
+        )
       ],
-      2
+      1
     ),
     _vm._v(" "),
     _c(
@@ -62492,6 +62538,571 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentLoader; });
+/* unused harmony export BulletListLoader */
+/* unused harmony export CodeLoader */
+/* unused harmony export FacebookLoader */
+/* unused harmony export ListLoader */
+/* unused harmony export InstagramLoader */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props__);
+
+
+var uid = (function () {
+  return Math.random().toString(36).substring(2);
+});
+
+var ContentLoader = {
+  name: 'ContentLoader',
+  functional: true,
+  props: {
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 130
+    },
+    speed: {
+      type: Number,
+      default: 2
+    },
+    preserveAspectRatio: {
+      type: String,
+      default: 'xMidYMid meet'
+    },
+    primaryColor: {
+      type: String,
+      default: '#f9f9f9'
+    },
+    secondaryColor: {
+      type: String,
+      default: '#ecebeb'
+    },
+    uniqueKey: {
+      type: String
+    },
+    animate: {
+      type: Boolean,
+      default: true
+    }
+  },
+  render: function render(h, _ref) {
+    var props = _ref.props,
+        data = _ref.data,
+        children = _ref.children;
+    var idClip = props.uniqueKey ? "".concat(props.uniqueKey, "-idClip") : uid();
+    var idGradient = props.uniqueKey ? "".concat(props.uniqueKey, "-idGradient") : uid();
+    return h("svg", __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props___default()([data, {
+      attrs: {
+        viewBox: "0 0 ".concat(props.width, " ").concat(props.height),
+        version: "1.1",
+        preserveAspectRatio: props.preserveAspectRatio
+      }
+    }]), [h("rect", {
+      style: {
+        fill: "url(#".concat(idGradient, ")")
+      },
+      attrs: {
+        "clip-path": "url(#".concat(idClip, ")"),
+        x: "0",
+        y: "0",
+        width: props.width,
+        height: props.height
+      }
+    }), h("defs", [h("clipPath", {
+      attrs: {
+        id: idClip
+      }
+    }, [children || h("rect", {
+      attrs: {
+        x: "0",
+        y: "0",
+        rx: "5",
+        ry: "5",
+        width: props.width,
+        height: props.height
+      }
+    })]), h("linearGradient", {
+      attrs: {
+        id: idGradient
+      }
+    }, [h("stop", {
+      attrs: {
+        offset: "0%",
+        "stop-color": props.primaryColor
+      }
+    }, [props.animate ? h("animate", {
+      attrs: {
+        attributeName: "offset",
+        values: "-2; 1",
+        dur: "".concat(props.speed, "s"),
+        repeatCount: "indefinite"
+      }
+    }) : null]), h("stop", {
+      attrs: {
+        offset: "50%",
+        "stop-color": props.secondaryColor
+      }
+    }, [props.animate ? h("animate", {
+      attrs: {
+        attributeName: "offset",
+        values: "-1.5; 1.5",
+        dur: "".concat(props.speed, "s"),
+        repeatCount: "indefinite"
+      }
+    }) : null]), h("stop", {
+      attrs: {
+        offset: "100%",
+        "stop-color": props.primaryColor
+      }
+    }, [props.animate ? h("animate", {
+      attrs: {
+        attributeName: "offset",
+        values: "-1; 2",
+        dur: "".concat(props.speed, "s"),
+        repeatCount: "indefinite"
+      }
+    }) : null])])])]);
+  }
+};
+
+var BulletListLoader = {
+  name: 'BulletListLoader',
+  functional: true,
+  render: function render(h, _ref) {
+    var data = _ref.data;
+    return h(ContentLoader, data, [h("circle", {
+      attrs: {
+        cx: "10",
+        cy: "20",
+        r: "8"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "25",
+        y: "15",
+        rx: "5",
+        ry: "5",
+        width: "220",
+        height: "10"
+      }
+    }), h("circle", {
+      attrs: {
+        cx: "10",
+        cy: "50",
+        r: "8"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "25",
+        y: "45",
+        rx: "5",
+        ry: "5",
+        width: "220",
+        height: "10"
+      }
+    }), h("circle", {
+      attrs: {
+        cx: "10",
+        cy: "80",
+        r: "8"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "25",
+        y: "75",
+        rx: "5",
+        ry: "5",
+        width: "220",
+        height: "10"
+      }
+    }), h("circle", {
+      attrs: {
+        cx: "10",
+        cy: "110",
+        r: "8"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "25",
+        y: "105",
+        rx: "5",
+        ry: "5",
+        width: "220",
+        height: "10"
+      }
+    })]);
+  }
+};
+
+var CodeLoader = {
+  name: 'CodeLoader',
+  functional: true,
+  render: function render(h, _ref) {
+    var data = _ref.data;
+    return h(ContentLoader, data, [h("rect", {
+      attrs: {
+        x: "0",
+        y: "0",
+        rx: "3",
+        ry: "3",
+        width: "70",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "80",
+        y: "0",
+        rx: "3",
+        ry: "3",
+        width: "100",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "190",
+        y: "0",
+        rx: "3",
+        ry: "3",
+        width: "10",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "15",
+        y: "20",
+        rx: "3",
+        ry: "3",
+        width: "130",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "155",
+        y: "20",
+        rx: "3",
+        ry: "3",
+        width: "130",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "15",
+        y: "40",
+        rx: "3",
+        ry: "3",
+        width: "90",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "115",
+        y: "40",
+        rx: "3",
+        ry: "3",
+        width: "60",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "185",
+        y: "40",
+        rx: "3",
+        ry: "3",
+        width: "60",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "60",
+        rx: "3",
+        ry: "3",
+        width: "30",
+        height: "10"
+      }
+    })]);
+  }
+};
+
+var FacebookLoader = {
+  name: 'FacebookLoader',
+  functional: true,
+  render: function render(h, _ref) {
+    var data = _ref.data;
+    return h(ContentLoader, data, [h("rect", {
+      attrs: {
+        x: "70",
+        y: "15",
+        rx: "4",
+        ry: "4",
+        width: "117",
+        height: "6.4"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "70",
+        y: "35",
+        rx: "3",
+        ry: "3",
+        width: "85",
+        height: "6.4"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "80",
+        rx: "3",
+        ry: "3",
+        width: "350",
+        height: "6.4"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "100",
+        rx: "3",
+        ry: "3",
+        width: "380",
+        height: "6.4"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "120",
+        rx: "3",
+        ry: "3",
+        width: "201",
+        height: "6.4"
+      }
+    }), h("circle", {
+      attrs: {
+        cx: "30",
+        cy: "30",
+        r: "30"
+      }
+    })]);
+  }
+};
+
+var ListLoader = {
+  name: 'ListLoader',
+  functional: true,
+  render: function render(h, _ref) {
+    var data = _ref.data;
+    return h(ContentLoader, data, [h("rect", {
+      attrs: {
+        x: "0",
+        y: "0",
+        rx: "3",
+        ry: "3",
+        width: "250",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "20",
+        y: "20",
+        rx: "3",
+        ry: "3",
+        width: "220",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "20",
+        y: "40",
+        rx: "3",
+        ry: "3",
+        width: "170",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "60",
+        rx: "3",
+        ry: "3",
+        width: "250",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "20",
+        y: "80",
+        rx: "3",
+        ry: "3",
+        width: "200",
+        height: "10"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "20",
+        y: "100",
+        rx: "3",
+        ry: "3",
+        width: "80",
+        height: "10"
+      }
+    })]);
+  }
+};
+
+var InstagramLoader = {
+  name: 'InstagramLoader',
+  functional: true,
+  render: function render(h, _ref) {
+    var data = _ref.data;
+    return h(ContentLoader, __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props___default()([data, {
+      attrs: {
+        height: 480
+      }
+    }]), [h("circle", {
+      attrs: {
+        cx: "30",
+        cy: "30",
+        r: "30"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "75",
+        y: "13",
+        rx: "4",
+        ry: "4",
+        width: "100",
+        height: "13"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "75",
+        y: "37",
+        rx: "4",
+        ry: "4",
+        width: "50",
+        height: "8"
+      }
+    }), h("rect", {
+      attrs: {
+        x: "0",
+        y: "70",
+        rx: "5",
+        ry: "5",
+        width: "400",
+        height: "400"
+      }
+    })]);
+  }
+};
+
+
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports) {
+
+var nestRE = /^(attrs|props|on|nativeOn|class|style|hook)$/
+
+module.exports = function mergeJSXProps (objs) {
+  return objs.reduce(function (a, b) {
+    var aa, bb, key, nestedKey, temp
+    for (key in b) {
+      aa = a[key]
+      bb = b[key]
+      if (aa && nestRE.test(key)) {
+        // normalize class
+        if (key === 'class') {
+          if (typeof aa === 'string') {
+            temp = aa
+            a[key] = aa = {}
+            aa[temp] = true
+          }
+          if (typeof bb === 'string') {
+            temp = bb
+            b[key] = bb = {}
+            bb[temp] = true
+          }
+        }
+        if (key === 'on' || key === 'nativeOn' || key === 'hook') {
+          // merge functions
+          for (nestedKey in bb) {
+            aa[nestedKey] = mergeFn(aa[nestedKey], bb[nestedKey])
+          }
+        } else if (Array.isArray(aa)) {
+          a[key] = aa.concat(bb)
+        } else if (Array.isArray(bb)) {
+          a[key] = [aa].concat(bb)
+        } else {
+          for (nestedKey in bb) {
+            aa[nestedKey] = bb[nestedKey]
+          }
+        }
+      } else {
+        a[key] = b[key]
+      }
+    }
+    return a
+  }, {})
+}
+
+function mergeFn (a, b) {
+  return function () {
+    a && a.apply(this, arguments)
+    b && b.apply(this, arguments)
+  }
+}
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(97);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(32)("7bfd9530", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c57aac66\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./home.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c57aac66\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./home.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(31)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.tab-item {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\r\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);
