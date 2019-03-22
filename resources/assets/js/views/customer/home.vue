@@ -2,6 +2,7 @@
   <div class="columns">
     <div class="column is-9">
       <p class="bd-notification is-danger">First column</p>
+
       <b-tabs type="is-toggle-rounded" expanded>
         <div v-if="isLoading" class="is-flex" style="flex-wrap:wrap">
           <content-loader
@@ -10,7 +11,7 @@
             v-for="time of 6"
             :height="150"
             :width="200"
-            :speed="2"
+            :speed="4"
             primaryColor="#FFF7EB"
             secondaryColor="#c59d5f"
           >
@@ -60,7 +61,11 @@
                   <b-select v-model="quantity" placeholder="Quantité">
                     <option v-for="number in 10" :value="number" :key="number">{{ number}}</option>
                   </b-select>
-                  <a @click="addOrder(product )" class="button is-danger">+</a>
+                  <b-tooltip label="Ajouter le produit" position="is-bottom">
+                    <a @click="addOrder(product )" class="button is-danger">
+                      <i class="fas fa-plus"></i>
+                    </a>
+                  </b-tooltip>
                 </div>
               </div>
             </div>

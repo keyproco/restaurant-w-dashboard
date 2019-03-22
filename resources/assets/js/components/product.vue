@@ -32,8 +32,10 @@
     <div class="box m-t-10">
       <b>
         <icon icon="cart-arrow-down" size="lg"/>
-        : {{basket.products.length}}
-        Total : {{basket.total}}$
+        <b-tag class="is-danger" rounded>{{basket.products.length}}</b-tag>
+        <section></section>
+        Total : {{basket.total}}
+        <i class="fas fa-euro-sign"></i>
       </b>
     </div>
     <!-- <router-link to="cofirmer-commande">

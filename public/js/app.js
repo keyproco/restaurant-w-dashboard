@@ -19606,6 +19606,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -19707,6 +19712,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -19887,13 +19894,16 @@ var render = function() {
           "b",
           [
             _c("icon", { attrs: { icon: "cart-arrow-down", size: "lg" } }),
+            _vm._v(" "),
+            _c("b-tag", { staticClass: "is-danger", attrs: { rounded: "" } }, [
+              _vm._v(_vm._s(_vm.basket.products.length))
+            ]),
+            _vm._v(" "),
+            _c("section"),
             _vm._v(
-              "\n        : " +
-                _vm._s(_vm.basket.products.length) +
-                "\n        Total : " +
-                _vm._s(_vm.basket.total) +
-                "$\n      "
-            )
+              "\n        Total : " + _vm._s(_vm.basket.total) + "\n        "
+            ),
+            _c("i", { staticClass: "fas fa-euro-sign" })
           ],
           1
         )
@@ -19967,7 +19977,7 @@ var render = function() {
                         attrs: {
                           height: 150,
                           width: 200,
-                          speed: 2,
+                          speed: 4,
                           primaryColor: "#FFF7EB",
                           secondaryColor: "#c59d5f"
                         }
@@ -20167,16 +20177,31 @@ var render = function() {
                                   ),
                                   _vm._v(" "),
                                   _c(
-                                    "a",
+                                    "b-tooltip",
                                     {
-                                      staticClass: "button is-danger",
-                                      on: {
-                                        click: function($event) {
-                                          _vm.addOrder(product)
-                                        }
+                                      attrs: {
+                                        label: "Ajouter le produit",
+                                        position: "is-bottom"
                                       }
                                     },
-                                    [_vm._v("+")]
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "button is-danger",
+                                          on: {
+                                            click: function($event) {
+                                              _vm.addOrder(product)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fas fa-plus"
+                                          })
+                                        ]
+                                      )
+                                    ]
                                   )
                                 ],
                                 1
