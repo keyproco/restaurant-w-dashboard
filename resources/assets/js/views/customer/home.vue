@@ -61,7 +61,7 @@
                   <b-select v-model="quantity" placeholder="Quantité">
                     <option v-for="number in 10" :value="number" :key="number">{{ number}}</option>
                   </b-select>
-                  <b-tooltip label="Ajouter le produit" position="is-bottom">
+                  <b-tooltip label="Ajouter au panier" position="is-bottom">
                     <a @click="addOrder(product )" class="button is-danger">
                       <i class="fas fa-plus"></i>
                     </a>

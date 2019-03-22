@@ -16,7 +16,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.component("icon", FontAwesomeIcon);
 import Buefy from "buefy";
 
-Vue.use(Buefy);
+Vue.use(Buefy, {
+    defaultIconPack: "fa",
+    defaultFirstDayOfWeek: 1
+});
 Vue.use(VueRouter);
 
 new Vue({

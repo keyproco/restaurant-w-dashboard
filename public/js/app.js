@@ -17574,7 +17574,10 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["c" /* library *
 Vue.component("icon", __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__["a" /* FontAwesomeIcon */]);
 
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_5_buefy___default.a);
+Vue.use(__WEBPACK_IMPORTED_MODULE_5_buefy___default.a, {
+    defaultIconPack: "fa",
+    defaultFirstDayOfWeek: 1
+});
 Vue.use(__WEBPACK_IMPORTED_MODULE_8_vue_router__["a" /* default */]);
 
 new Vue({
@@ -20730,7 +20733,7 @@ var render = function() {
                                     "b-tooltip",
                                     {
                                       attrs: {
-                                        label: "Ajouter le produit",
+                                        label: "Ajouter au panier",
                                         position: "is-bottom"
                                       }
                                     },
