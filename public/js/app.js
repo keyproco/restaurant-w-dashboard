@@ -19654,6 +19654,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -20612,7 +20614,17 @@ var render = function() {
                 [
                   _c(
                     "b-tab-item",
-                    { attrs: { label: category.name, icon: "google-photos" } },
+                    {
+                      attrs: {
+                        label: category.name,
+                        icon:
+                          category.id == 1
+                            ? "stroopwafel"
+                            : category.id == 2
+                            ? "cookie"
+                            : "beer"
+                      }
+                    },
                     _vm._l(category.products, function(product) {
                       return _c(
                         "div",
@@ -20632,10 +20644,6 @@ var render = function() {
                               }
                             },
                             [
-                              _c("div", { staticClass: "level" }, [
-                                _vm._v("D'autres infos")
-                              ]),
-                              _vm._v(" "),
                               _c(
                                 "div",
                                 {
