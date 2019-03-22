@@ -129,7 +129,7 @@ export default {
 };
 </script>
 
-<style>
+<style scope>
 .tab-item {
   display: flex;
   flex-wrap: wrap;
