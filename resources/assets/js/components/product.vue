@@ -38,16 +38,9 @@
         <i class="fas fa-euro-sign"></i>
       </b>
     </div>
-    <!-- <router-link to="cofirmer-commande">
-      <a class="button is-primary m-t-25" style="width:100%;">
-        <b>Commander</b>
-      </a>
-    </router-link>-->
-    <!-- <router-link to="cofirmer-commande"> -->
     <a @click="orderItems(basket)" class="button is-primary m-t-25" style="width:100%;">
       <b>Commander</b>
     </a>
-    <!-- </router-link> -->
   </div>
 </template>
 
@@ -80,14 +73,7 @@ export default {
   mounted() {},
   created() {
     this.basket = this.orders;
-    console.log("basket", this.basket);
-    console.log("Product Created", this.orders);
   },
-  updated() {
-    this.basket = this.orders;
-    console.log(this.basket);
-    console.log("Order ID ", this.orders.id);
-    console.log(this.$route.params);
-  }
+  updated() {}
 };
 </script>

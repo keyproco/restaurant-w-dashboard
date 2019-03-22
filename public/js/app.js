@@ -19631,9 +19631,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     addOrder: function addOrder(product) {
       var _this = this;
 
-      console.log(this.number);
+      console.log("selected id Product", this.number);
       axios.post("/order", { id: product.id, quantity: this.quantity }).then(function (r) {
-        console.log("add-order", r.data.product);
         _this.orders.total = r.data.total;
         _this.orders.products.push(r.data.product);
       });
@@ -19759,13 +19758,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -19795,15 +19787,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {},
   created: function created() {
     this.basket = this.orders;
-    console.log("basket", this.basket);
-    console.log("Product Created", this.orders);
   },
-  updated: function updated() {
-    this.basket = this.orders;
-    console.log(this.basket);
-    console.log("Order ID ", this.orders.id);
-    console.log(this.$route.params);
-  }
+  updated: function updated() {}
 });
 
 /***/ }),
