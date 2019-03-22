@@ -18984,12 +18984,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         field: "total",
         label: "Total",
         centered: true
-      }]
+      }],
+      status: {
+        0: "Dans le panier",
+        1: "En attente",
+        2: "Validé",
+        3: "Confirmé"
+      }
     };
   },
 
+  computed: {
+    formatStatus: function formatStatus(order) {
+      var status = function status(code) {
+        return status.labels[code] || status.labels["default"];
+      };
+      status.labels = {
+        0: "Panier",
+        1: "En attente",
+        2: "En préparation",
+        3: "Livré"
+      };
+      return this.orders.map(function (r) {
+        return status(r.status);
+      });
+    }
+  },
   methods: {},
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    // const status = code => {
+    //   return status.labels[code] || status.labels["default"];
+    // };
+    // status.labels = {
+    //   1: "PENDING",
+    //   0: "NOTHING",
+    //   default: "Default"
+    // };
+    // console.log(status(0));
+  },
   created: function created() {
     var _this = this;
 
@@ -19032,7 +19064,7 @@ var render = function() {
             [
               _c(
                 "b-tab-item",
-                { attrs: { label: "Commandes livrées" } },
+                { attrs: { label: "Commandes" } },
                 [
                   _c(
                     "b-table",
@@ -19106,7 +19138,7 @@ var render = function() {
                               _c(
                                 "b-table-column",
                                 { attrs: { label: "Statut" } },
-                                [_vm._v(_vm._s(props.row.status))]
+                                [_vm._v(_vm._s(_vm.formatStatus[props.index]))]
                               ),
                               _vm._v(" "),
                               _c(

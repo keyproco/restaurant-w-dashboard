@@ -3,7 +3,7 @@
     <div class="column">
       <section>
         <b-tabs :animated="false" v-model="activeTab">
-          <b-tab-item label="Commandes livrées">
+          <b-tab-item label="Commandes">
             <b-table
               paginated
               :per-page="perPage"
@@ -23,7 +23,7 @@
                   >{{ new Date(props.row.created_at).toLocaleDateString() }}</span>
                 </b-table-column>
                 <b-table-column label="Confirmé">{{ props.row.confirmed == false ? 'Non' : 'Oui' }}</b-table-column>
-                <b-table-column label="Statut">{{ props.row.status }}</b-table-column>
+                <b-table-column label="Statut">{{ formatStatus[props.index] }}</b-table-column>
                 <b-table-column field="total" label="Total">{{ props.row.total }} &euro;</b-table-column>
               </template>
 
@@ -105,11 +105,41 @@ export default {
           label: "Total",
           centered: true
         }
-      ]
+      ],
+      status: {
+        0: "Dans le panier",
+        1: "En attente",
+        2: "Validé",
+        3: "Confirmé"
+      }
     };
   },
+  computed: {
+    formatStatus: function(order) {
+      const status = code => {
+        return status.labels[code] || status.labels["default"];
+      };
+      status.labels = {
+        0: "Panier",
+        1: "En attente",
+        2: "En préparation",
+        3: "Livré"
+      };
+      return this.orders.map(r => status(r.status));
+    }
+  },
   methods: {},
-  mounted() {},
+  mounted() {
+    // const status = code => {
+    //   return status.labels[code] || status.labels["default"];
+    // };
+    // status.labels = {
+    //   1: "PENDING",
+    //   0: "NOTHING",
+    //   default: "Default"
+    // };
+    // console.log(status(0));
+  },
   created() {
     this.isLoading = true;
     axios
