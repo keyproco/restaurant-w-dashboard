@@ -97,11 +97,10 @@ export default {
   components: { Product, ContentLoader },
   methods: {
     addOrder: function(product) {
-      console.log(this.number);
+      console.log("selected id Product", this.number);
       axios
         .post("/order", { id: product.id, quantity: this.quantity })
         .then(r => {
-          console.log("add-order", r.data.product);
           this.orders.total = r.data.total;
           this.orders.products.push(r.data.product);
         });
