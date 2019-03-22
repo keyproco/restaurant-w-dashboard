@@ -38,6 +38,7 @@
         <i class="fas fa-euro-sign"></i>
       </b>
     </div>
+
     <a @click="orderItems(basket)" class="button is-primary m-t-25" style="width:100%;">
       <b>Commander</b>
     </a>
@@ -74,6 +75,8 @@ export default {
   created() {
     this.basket = this.orders;
   },
-  updated() {}
+  updated() {
+    this.basket = this.orders;
+  }
 };
 </script>
