@@ -25,14 +25,16 @@
         </div>
 
         <div :key="category.id" v-for="(category) in data">
-          <b-tab-item :label="category.name" icon="google-photos">
+          <b-tab-item
+            :label="category.name"
+            :icon="category.id == 1 ? 'stroopwafel' : category.id == 2 ? 'cookie' : 'beer' "
+          >
             <div
               class="section is-3 is-flex"
               :key="product.id"
               v-for="(product) in category.products"
             >
               <div style="width: 200px;-webkit-box-shadow: none; box-shadow:none" class="card">
-                <div class="level">D'autres infos</div>
                 <div class="card-image is-flex is-hcentered">
                   <figure class="image is-128x128">
                     <img
