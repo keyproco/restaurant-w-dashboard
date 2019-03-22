@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 <div class="container">
 <div id="app" class="columns">
     <div  style="background-color: #172A39; " class="column is-narrow">
