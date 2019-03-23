@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orders extends Model
 {
-    const PENDING = -1;
-    const IN_PROGRESS = 1;
-    const PREPARED = 2;
+    const PENDING = 1;
+    const IN_PROGRESS = 2;
+    const PREPARED = 3;
 
     protected $fillable = ['user_id', 'confirmed', 'delivery_id', 'payment_type'];
 
