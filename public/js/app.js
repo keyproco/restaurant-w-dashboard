@@ -18102,7 +18102,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     var _this = this;
 
     axios.get("/admin/stats/").then(function (e) {
-      console.log(e.data.todaySales);
+      console.log(e.data);
       _this.stats.todaySales = e.data.todaySales;
     });
 
