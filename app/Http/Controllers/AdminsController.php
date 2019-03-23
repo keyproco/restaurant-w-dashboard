@@ -28,7 +28,7 @@ class AdminsController extends Controller
                 'labels' => $labels,
             ],
             'todaySales' => Orders::whereDay('updated_at', '=', Carbon::today()->day)->sum('total'),
-            'orders' => Orders::where('status', '!=', 3)->with(['adress', 'user'])->get(),
+            'orders' => Orders::where('status', '!=', 3)->with(['adress', 'user', 'products'])->get(),
         ];
 
     }
