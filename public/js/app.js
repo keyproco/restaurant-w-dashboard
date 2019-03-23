@@ -18959,6 +18959,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -18995,7 +19002,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   computed: {
-    formatStatus: function formatStatus(order) {
+    formatStatus: function formatStatus() {
       var status = function status(code) {
         return status.labels[code] || status.labels["default"];
       };
@@ -19073,9 +19080,7 @@ var render = function() {
                         paginated: "",
                         "per-page": _vm.perPage,
                         loading: _vm.isLoading,
-                        data: _vm.orders.filter(function(order) {
-                          return order.confirmed == 1
-                        })
+                        data: _vm.orders
                       },
                       scopedSlots: _vm._u([
                         {
@@ -19125,14 +19130,36 @@ var render = function() {
                                 "b-table-column",
                                 { attrs: { label: "Confirmé" } },
                                 [
-                                  _vm._v(
-                                    _vm._s(
-                                      props.row.confirmed == false
-                                        ? "Non"
-                                        : "Oui"
-                                    )
+                                  _c(
+                                    "b-tooltip",
+                                    {
+                                      attrs: {
+                                        label:
+                                          props.row.confirmed == false
+                                            ? "Vous n'avez pas encore passé votre commande"
+                                            : "Votre commande est confirmée",
+                                        size: "is-small",
+                                        multilined: ""
+                                      }
+                                    },
+                                    [
+                                      _c("b-icon", {
+                                        style: {
+                                          color:
+                                            props.row.confirmed == false
+                                              ? "#ee5253"
+                                              : "#23d160"
+                                        },
+                                        attrs: {
+                                          icon: "fas fa-circle",
+                                          size: "is-small"
+                                        }
+                                      })
+                                    ],
+                                    1
                                   )
-                                ]
+                                ],
+                                1
                               ),
                               _vm._v(" "),
                               _c(
@@ -19193,7 +19220,7 @@ var render = function() {
                       attrs: {
                         loading: _vm.isLoading,
                         data: _vm.orders.filter(function(order) {
-                          return order.confirmed == 0
+                          return order.status !== 3
                         })
                       },
                       scopedSlots: _vm._u([
@@ -19281,10 +19308,7 @@ var render = function() {
                                 "p",
                                 [
                                   _c("b-icon", {
-                                    attrs: {
-                                      icon: "emoticon-sad",
-                                      size: "is-large"
-                                    }
+                                    attrs: { icon: "sad", size: "is-large" }
                                   })
                                 ],
                                 1

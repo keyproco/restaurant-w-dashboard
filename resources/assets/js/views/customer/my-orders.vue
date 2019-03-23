@@ -4,12 +4,7 @@
       <section>
         <b-tabs :animated="false" v-model="activeTab">
           <b-tab-item label="Commandes">
-            <b-table
-              paginated
-              :per-page="perPage"
-              :loading="isLoading"
-              :data="orders.filter(order => order.confirmed == 1)"
-            >
+            <b-table paginated :per-page="perPage" :loading="isLoading" :data="orders">
               <template slot-scope="props">
                 <b-table-column
                   field="id"
@@ -22,7 +17,19 @@
                     class="tag is-success"
                   >{{ new Date(props.row.created_at).toLocaleDateString() }}</span>
                 </b-table-column>
-                <b-table-column label="Confirmé">{{ props.row.confirmed == false ? 'Non' : 'Oui' }}</b-table-column>
+                <b-table-column label="Confirmé">
+                  <b-tooltip
+                    :label=" props.row.confirmed  == false ? 'Vous n\'avez pas encore passé votre commande' : 'Votre commande est confirmée'"
+                    size="is-small"
+                    multilined
+                  >
+                    <b-icon
+                      :style="{ color: props.row.confirmed == false ? '#ee5253' : '#23d160' } "
+                      icon="fas fa-circle"
+                      size="is-small"
+                    ></b-icon>
+                  </b-tooltip>
+                </b-table-column>
                 <b-table-column label="Statut">{{ formatStatus[props.index] }}</b-table-column>
                 <b-table-column field="total" label="Total">{{ props.row.total }} &euro;</b-table-column>
               </template>
@@ -40,7 +47,7 @@
             </b-table>
           </b-tab-item>
           <b-tab-item label="Commande en cours">
-            <b-table :loading="isLoading" :data="orders.filter(order => order.confirmed == 0 )">
+            <b-table :loading="isLoading" :data="orders.filter(order => order.status !== 3 )">
               <template slot-scope="props">
                 <b-table-column field="id" label="N°" width="140" numeric>N° {{ props.row.id }}</b-table-column>
                 <b-table-column field="date" label="Commandé le" centered>
@@ -56,7 +63,7 @@
                 <section class="section">
                   <div class="content has-text-centered">
                     <p>
-                      <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+                      <b-icon icon="sad" size="is-large"></b-icon>
                     </p>
                     <p>Aucune commande</p>
                   </div>
@@ -115,7 +122,7 @@ export default {
     };
   },
   computed: {
-    formatStatus: function(order) {
+    formatStatus: function() {
       const status = code => {
         return status.labels[code] || status.labels["default"];
       };
