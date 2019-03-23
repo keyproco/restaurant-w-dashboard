@@ -106,7 +106,7 @@ export default {
   methods: {},
   mounted() {
     axios.get("/admin/stats/").then(e => {
-      console.log(e.data.todaySales);
+      console.log(e.data);
       this.stats.todaySales = e.data.todaySales;
     });
 
