@@ -38,7 +38,13 @@
       <div class="tile is-vertical is-8">
         <div class="tile">
           <div class="tile is-parent is-vertical">
-            <Order :key="order.id" v-for="order in orders" :id="order.id" :status="order.status"/>
+            <Order
+              @changeStatus="setNewStatus"
+              :key="order.id"
+              v-for="order in orders"
+              :id="order.id"
+              :status="order.status"
+            />
           </div>
         </div>
       </div>
@@ -85,7 +91,14 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    setNewStatus(e) {
+      console.log("set the new status", e.status);
+      return this.orders.filter(order => {
+        order.id == e.id ? (order.status = e.status) : e.status;
+      });
+    }
+  },
   mounted() {
     axios.get("/admin/stats/").then(e => {
       console.log(e.data);
@@ -107,7 +120,11 @@ export default {
       console.log("From Dashboard", e);
     });
   },
-  created() {},
-  updated() {}
+  created() {
+    console.log("after", this.orders);
+  },
+  updated() {
+    console.log(this.orders);
+  }
 };
 </script>

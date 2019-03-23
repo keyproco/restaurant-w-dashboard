@@ -1,6 +1,6 @@
 
     <template>
-  <article class="tile is-child notification is-white">
+  <article ref="order" class="tile is-child notification is-white">
     <p class="title">{{id}}</p>
     <p class="subtitle">Top tile</p>
     <div class="content">
@@ -13,9 +13,7 @@
 import Status from "./status";
 export default {
   data() {
-    return {
-      data: []
-    };
+    return {};
   },
   components: { Status },
   props: {
@@ -24,13 +22,10 @@ export default {
   },
   methods: {
     onStatusChanged(e) {
-      console.log("Status Changed from Parent", e);
-      // console.log("refId", this.$refs.order);
+      this.$emit("changeStatus", { status: e.status, id: this.$props.id });
     }
   },
-  mounted() {
-    // console.log(this.orders);
-  },
+  mounted() {},
   updated() {
     // console.log(this.orders);
   }
