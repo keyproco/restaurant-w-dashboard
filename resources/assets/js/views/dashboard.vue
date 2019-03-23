@@ -38,30 +38,7 @@
       <div class="tile is-vertical is-8">
         <div class="tile">
           <div class="tile is-parent is-vertical">
-            <article
-              :key="order.id"
-              v-for="order in orders"
-              class="tile is-child notification is-white"
-            >
-              <p class="title">{{order.id}}</p>
-              <p class="subtitle">Top tile</p>
-              <div class="content">Blabli</div>
-              <b-field>
-                <b-radio-button v-model="order.status" :native-value="1" type="is-warning">
-                  <b-icon icon="clock"></b-icon>
-                  <span>En attente</span>
-                </b-radio-button>
-
-                <b-radio-button :model="order.status" :native-value="2" type="is-info">
-                  <b-icon icon="angle-double-right"></b-icon>
-                  <span>Préparation</span>
-                </b-radio-button>
-
-                <b-radio-button :model="order.status" :native-value="3">
-                  <b-icon icon="check"></b-icon>Livraison
-                </b-radio-button>
-              </b-field>
-            </article>
+            <Orders :orders="orders"/>
           </div>
         </div>
       </div>
@@ -70,9 +47,7 @@
           <div class="content">
             <p class="title">Tall tile</p>
             <p class="subtitle">With even more content</p>
-            <div class="content">
-              <!-- Content -->
-            </div>
+            <div class="content"></div>
           </div>
         </article>
       </div>
@@ -98,7 +73,9 @@
 
 
 <script>
+import Orders from "../components/board-orders";
 export default {
+  components: { Orders },
   data() {
     return {
       orders: [],

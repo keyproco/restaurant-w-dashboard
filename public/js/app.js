@@ -17991,31 +17991,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_board_orders__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_board_orders__);
 //
 //
 //
@@ -18091,7 +18068,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: { Orders: __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default.a },
   data: function data() {
     return {
       orders: [],
@@ -18167,79 +18146,8 @@ var render = function() {
           _c(
             "div",
             { staticClass: "tile is-parent is-vertical" },
-            _vm._l(_vm.orders, function(order) {
-              return _c(
-                "article",
-                {
-                  key: order.id,
-                  staticClass: "tile is-child notification is-white"
-                },
-                [
-                  _c("p", { staticClass: "title" }, [_vm._v(_vm._s(order.id))]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "content" }, [_vm._v("Blabli")]),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    [
-                      _c(
-                        "b-radio-button",
-                        {
-                          attrs: { "native-value": 1, type: "is-warning" },
-                          model: {
-                            value: order.status,
-                            callback: function($$v) {
-                              _vm.$set(order, "status", $$v)
-                            },
-                            expression: "order.status"
-                          }
-                        },
-                        [
-                          _c("b-icon", { attrs: { icon: "clock" } }),
-                          _vm._v(" "),
-                          _c("span", [_vm._v("En attente")])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-radio-button",
-                        {
-                          attrs: {
-                            model: order.status,
-                            "native-value": 2,
-                            type: "is-info"
-                          }
-                        },
-                        [
-                          _c("b-icon", {
-                            attrs: { icon: "angle-double-right" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", [_vm._v("Préparation")])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-radio-button",
-                        { attrs: { model: order.status, "native-value": 3 } },
-                        [
-                          _c("b-icon", { attrs: { icon: "check" } }),
-                          _vm._v("Livraison\n              ")
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            }),
-            0
+            [_c("Orders", { attrs: { orders: _vm.orders } })],
+            1
           )
         ])
       ]),
@@ -63240,6 +63148,320 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(99)
+/* template */
+var __vue_template__ = __webpack_require__(100)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/board-orders.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a178f17a", Component.options)
+  } else {
+    hotAPI.reload("data-v-a178f17a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__status__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__status___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__status__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      data: []
+    };
+  },
+
+  components: { Status: __WEBPACK_IMPORTED_MODULE_0__status___default.a },
+  props: ["orders"],
+  methods: {},
+  mounted: function mounted() {
+    console.log(this.orders);
+  },
+  updated: function updated() {
+    console.log(this.orders);
+  }
+});
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.orders, function(order) {
+      return _c(
+        "article",
+        { key: order.id, staticClass: "tile is-child notification is-white" },
+        [
+          _c("p", { staticClass: "title" }, [_vm._v(_vm._s(order.id))]),
+          _vm._v(" "),
+          _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "content" },
+            [_c("Status", { attrs: { status: order.status } })],
+            1
+          )
+        ]
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-a178f17a", module.exports)
+  }
+}
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(102)
+/* template */
+var __vue_template__ = __webpack_require__(103)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/status.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3f2a3fc9", Component.options)
+  } else {
+    hotAPI.reload("data-v-3f2a3fc9", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      statusModel: "1"
+    };
+  },
+
+  props: ["status"],
+  methods: {},
+  mounted: function mounted() {},
+  updated: function updated() {
+    console.log("Status from parent", this.status);
+
+    console.log("status changed To", this.statusModel);
+  }
+});
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-field",
+        [
+          _c(
+            "b-radio-button",
+            {
+              attrs: { "native-value": "1", type: "is-warning" },
+              model: {
+                value: _vm.statusModel,
+                callback: function($$v) {
+                  _vm.statusModel = $$v
+                },
+                expression: "statusModel"
+              }
+            },
+            [
+              _c("b-icon", { attrs: { icon: "clock" } }),
+              _vm._v(" "),
+              _c("span", [_vm._v("En attente")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-radio-button",
+            {
+              attrs: { "native-value": "2", type: "is-info" },
+              model: {
+                value: _vm.statusModel,
+                callback: function($$v) {
+                  _vm.statusModel = $$v
+                },
+                expression: "statusModel"
+              }
+            },
+            [
+              _c("b-icon", { attrs: { icon: "angle-double-right" } }),
+              _vm._v(" "),
+              _c("span", [_vm._v("Préparation")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-radio-button",
+            {
+              attrs: { "native-value": "3" },
+              model: {
+                value: _vm.statusModel,
+                callback: function($$v) {
+                  _vm.statusModel = $$v
+                },
+                expression: "statusModel"
+              }
+            },
+            [
+              _c("b-icon", { attrs: { icon: "check" } }),
+              _vm._v("Livraison\n    ")
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3f2a3fc9", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
