@@ -18070,7 +18070,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { Orders: __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default.a },
+  components: { Order: __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default.a },
   data: function data() {
     return {
       orders: [],
@@ -18146,7 +18146,12 @@ var render = function() {
           _c(
             "div",
             { staticClass: "tile is-parent is-vertical" },
-            [_c("Orders", { attrs: { orders: _vm.orders } })],
+            _vm._l(_vm.orders, function(order) {
+              return _c("Order", {
+                key: order.id,
+                attrs: { id: order.id, status: order.status }
+              })
+            }),
             1
           )
         ])
@@ -63218,8 +63223,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63230,13 +63233,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   components: { Status: __WEBPACK_IMPORTED_MODULE_0__status___default.a },
-  props: ["orders"],
-  methods: {},
+  props: {
+    id: Number,
+    status: Number
+  },
+  methods: {
+    onStatusChanged: function onStatusChanged(e) {
+      console.log("Status Changed from Parent", e);
+      // console.log("refId", this.$refs.order);
+    }
+  },
   mounted: function mounted() {
-    console.log(this.orders);
+    // console.log(this.orders);
   },
   updated: function updated() {
-    console.log(this.orders);
+    // console.log(this.orders);
   }
 });
 
@@ -63248,28 +63259,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    _vm._l(_vm.orders, function(order) {
-      return _c(
-        "article",
-        { key: order.id, staticClass: "tile is-child notification is-white" },
-        [
-          _c("p", { staticClass: "title" }, [_vm._v(_vm._s(order.id))]),
-          _vm._v(" "),
-          _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "content" },
-            [_c("Status", { attrs: { status: order.status } })],
-            1
-          )
-        ]
-      )
-    }),
-    0
-  )
+  return _c("article", { staticClass: "tile is-child notification is-white" }, [
+    _c("p", { staticClass: "title" }, [_vm._v(_vm._s(_vm.id))]),
+    _vm._v(" "),
+    _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "content" },
+      [
+        _c("Status", {
+          attrs: { status: _vm.status },
+          on: { changed: _vm.onStatusChanged }
+        })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63368,8 +63374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {},
   mounted: function mounted() {},
   updated: function updated() {
-    console.log("Status from parent", this.status);
-
+    this.$emit("changed", { status: this.statusModel });
     console.log("status changed To", this.statusModel);
   }
 });
@@ -63431,7 +63436,7 @@ var render = function() {
           _c(
             "b-radio-button",
             {
-              attrs: { "native-value": "3" },
+              attrs: { "native-value": "3", type: "is-success" },
               model: {
                 value: _vm.statusModel,
                 callback: function($$v) {

@@ -13,7 +13,7 @@
         <span>Préparation</span>
       </b-radio-button>
 
-      <b-radio-button v-model="statusModel" native-value="3">
+      <b-radio-button v-model="statusModel" native-value="3" type="is-success">
         <b-icon icon="check"></b-icon>Livraison
       </b-radio-button>
     </b-field>
@@ -31,8 +31,7 @@ export default {
   methods: {},
   mounted() {},
   updated() {
-    console.log("Status from parent", this.status);
-
+    this.$emit("changed", { status: this.statusModel });
     console.log("status changed To", this.statusModel);
   }
 };
