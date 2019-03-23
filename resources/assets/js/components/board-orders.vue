@@ -1,14 +1,12 @@
 
     <template>
-  <div>
-    <article :key="order.id" v-for="order in orders" class="tile is-child notification is-white">
-      <p class="title">{{order.id}}</p>
-      <p class="subtitle">Top tile</p>
-      <div class="content">
-        <Status :status="order.status"/>
-      </div>
-    </article>
-  </div>
+  <article class="tile is-child notification is-white">
+    <p class="title">{{id}}</p>
+    <p class="subtitle">Top tile</p>
+    <div class="content">
+      <Status @changed="onStatusChanged" :status="status"/>
+    </div>
+  </article>
 </template>
 
 <script>
@@ -20,13 +18,21 @@ export default {
     };
   },
   components: { Status },
-  props: ["orders"],
-  methods: {},
+  props: {
+    id: Number,
+    status: Number
+  },
+  methods: {
+    onStatusChanged(e) {
+      console.log("Status Changed from Parent", e);
+      // console.log("refId", this.$refs.order);
+    }
+  },
   mounted() {
-    console.log(this.orders);
+    // console.log(this.orders);
   },
   updated() {
-    console.log(this.orders);
+    // console.log(this.orders);
   }
 };
 </script>

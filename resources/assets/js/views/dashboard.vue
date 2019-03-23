@@ -38,7 +38,7 @@
       <div class="tile is-vertical is-8">
         <div class="tile">
           <div class="tile is-parent is-vertical">
-            <Orders :orders="orders"/>
+            <Order :key="order.id" v-for="order in orders" :id="order.id" :status="order.status"/>
           </div>
         </div>
       </div>
@@ -73,9 +73,9 @@
 
 
 <script>
-import Orders from "../components/board-orders";
+import Order from "../components/board-orders";
 export default {
-  components: { Orders },
+  components: { Order },
   data() {
     return {
       orders: [],
