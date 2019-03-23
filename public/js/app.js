@@ -18086,45 +18086,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      status: "pending",
       stats: {
         todaySales: 0
       }
@@ -18189,7 +18155,99 @@ var render = function() {
       _vm._m(1)
     ]),
     _vm._v(" "),
-    _vm._m(2),
+    _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-vertical is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c("div", { staticClass: "tile is-parent is-vertical" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" }, [_vm._v("Blabli")]),
+                _vm._v(" "),
+                _c(
+                  "b-field",
+                  [
+                    _c(
+                      "b-radio-button",
+                      {
+                        attrs: {
+                          "native-value": "pending",
+                          type: "is-warning"
+                        },
+                        model: {
+                          value: _vm.status,
+                          callback: function($$v) {
+                            _vm.status = $$v
+                          },
+                          expression: "status"
+                        }
+                      },
+                      [
+                        _c("b-icon", { attrs: { icon: "clock" } }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("En attente")])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-radio-button",
+                      {
+                        attrs: {
+                          "native-value": "Préparation",
+                          type: "is-info"
+                        },
+                        model: {
+                          value: _vm.status,
+                          callback: function($$v) {
+                            _vm.status = $$v
+                          },
+                          expression: "status"
+                        }
+                      },
+                      [
+                        _c("b-icon", { attrs: { icon: "angle-double-right" } }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Préparation")])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-radio-button",
+                      {
+                        attrs: { "native-value": "Livraison" },
+                        model: {
+                          value: _vm.status,
+                          callback: function($$v) {
+                            _vm.status = $$v
+                          },
+                          expression: "status"
+                        }
+                      },
+                      [
+                        _c("b-icon", { attrs: { icon: "check" } }),
+                        _vm._v("Livraison\n              ")
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(2)
+    ]),
     _vm._v(" "),
     _vm._m(3)
   ])
@@ -18233,80 +18291,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-vertical is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
-              ]
-            )
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c("article", { staticClass: "tile is-child notification is-white" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "subtitle" }, [
+            _vm._v("With even more content")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "tile is-parent" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("Middle tile")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("With an image")]),
-                _vm._v(" "),
-                _c("figure", { staticClass: "image is-4by3" }, [
-                  _c("img", {
-                    attrs: {
-                      src: "https://bulma.io/images/placeholders/640x480.png"
-                    }
-                  })
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tile is-parent" }, [
-          _c(
-            "article",
-            { staticClass: "tile is-child notification is-white" },
-            [
-              _c("p", { staticClass: "title" }, [_vm._v("Wide tile")]),
-              _vm._v(" "),
-              _c("p", { staticClass: "subtitle" }, [
-                _vm._v("Aligned with the right tile")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "content" })
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "tile is-parent" }, [
-        _c("article", { staticClass: "tile is-child notification is-white" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "subtitle" }, [
-              _vm._v("With even more content")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" })
-          ])
+          _c("div", { staticClass: "content" })
         ])
       ])
     ])
@@ -18338,56 +18332,6 @@ var staticRenderFns = [
                 _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
               ]
             )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "tile is-parent" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("Middle tile")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("With an image")]),
-                _vm._v(" "),
-                _c("figure", { staticClass: "image is-4by3" }, [
-                  _c("img", {
-                    attrs: {
-                      src: "https://bulma.io/images/placeholders/640x480.png"
-                    }
-                  })
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tile is-parent" }, [
-          _c(
-            "article",
-            { staticClass: "tile is-child notification is-white" },
-            [
-              _c("p", { staticClass: "title" }, [_vm._v("Wide tile")]),
-              _vm._v(" "),
-              _c("p", { staticClass: "subtitle" }, [
-                _vm._v("Aligned with the right tile")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "content" })
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "tile is-parent" }, [
-        _c("article", { staticClass: "tile is-child notification is-white" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "subtitle" }, [
-              _vm._v("With even more content")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" })
           ])
         ])
       ])
