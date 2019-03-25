@@ -1,7 +1,7 @@
 
     <template>
   <article ref="order" class="tile is-child notification is-white">
-    <p class="title">{{id}}</p>
+    <p class="title">n° de commande {{id}}</p>
     <p class="subtitle">Top tile</p>
     <div class="content">
       <Status @changed="onStatusChanged" :status="status"/>
