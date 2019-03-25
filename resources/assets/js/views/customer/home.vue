@@ -132,6 +132,9 @@ export default {
 </script>
 
 <style scope>
+.card {
+  background-color: #172a39;
+}
 .tab-item {
   display: flex;
   flex-wrap: wrap;

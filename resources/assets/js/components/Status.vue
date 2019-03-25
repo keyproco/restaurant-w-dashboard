@@ -1,7 +1,7 @@
 
       
     <template>
-  <div>
+  <div class="is-pulled-right">
     <b-field>
       <b-radio-button v-model="statusModel" :native-value="1" type="is-warning">
         <b-icon icon="clock"></b-icon>

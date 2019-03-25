@@ -18074,6 +18074,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18195,6 +18198,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18205,7 +18237,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: { Status: __WEBPACK_IMPORTED_MODULE_0__status___default.a },
   props: {
     id: Number,
-    status: Number
+    status: Number,
+    total: Number,
+    adress: Object,
+    products: Array
   },
   methods: {
     onStatusChanged: function onStatusChanged(e) {
@@ -18321,6 +18356,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "is-pulled-right" },
     [
       _c(
         "b-field",
@@ -18412,12 +18448,6 @@ var render = function() {
     "article",
     { ref: "order", staticClass: "tile is-child notification is-white" },
     [
-      _c("p", { staticClass: "title" }, [
-        _vm._v("n° de commande " + _vm._s(_vm.id))
-      ]),
-      _vm._v(" "),
-      _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
-      _vm._v(" "),
       _c(
         "div",
         { staticClass: "content" },
@@ -18428,8 +18458,99 @@ var render = function() {
           })
         ],
         1
+      ),
+      _vm._v(" "),
+      _c("p", { staticClass: "title is-size-5" }, [
+        _vm._v("Commande n°" + _vm._s(_vm.id))
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "subtitle" }, [
+        _c(
+          "b",
+          {
+            staticClass: "is-size-6",
+            staticStyle: { color: "rgb(39, 238, 156)" }
+          },
+          [_vm._v("Total: " + _vm._s(_vm.total) + " €")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b",
+          _vm._l(_vm.products, function(product) {
+            return _c("ul", { key: product.id }, [
+              _c("li", {
+                staticClass: "is-size-6",
+                staticStyle: {
+                  "list-style": "upper-roman",
+                  "list-style-color": "red"
+                },
+                domProps: {
+                  textContent: _vm._s(
+                    product.name + "  x" + product.pivot.quantity
+                  )
+                }
+              })
+            ])
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "b-collapse",
+        {
+          staticClass: "card",
+          attrs: { open: false, "aria-id": "contentIdForA11y3" },
+          scopedSlots: _vm._u([
+            {
+              key: "trigger",
+              fn: function(props) {
+                return _c(
+                  "div",
+                  {
+                    staticClass: "card-header",
+                    attrs: {
+                      role: "button",
+                      "aria-controls": "contentIdForA11y3"
+                    }
+                  },
+                  [
+                    _c("p", { staticClass: "card-header-title" }, [
+                      _vm._v("Adresse")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "card-header-icon" },
+                      [
+                        _c("b-icon", {
+                          attrs: {
+                            icon: props.open ? "fas menu-down" : "fas menu-up"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]
+                )
+              }
+            }
+          ])
+        },
+        [
+          _c("footer", { staticClass: "card-footer" }, [
+            _c("a", { staticClass: "card-footer-item" }, [
+              _vm._v(_vm._s(_vm.adress.street))
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "card-footer-item" }, [
+              _vm._v(_vm._s(_vm.adress.zipcode))
+            ])
+          ])
+        ]
       )
-    ]
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -18487,7 +18608,13 @@ var render = function() {
             _vm._l(_vm.orders, function(order) {
               return _c("Order", {
                 key: order.id,
-                attrs: { id: order.id, status: order.status },
+                attrs: {
+                  id: order.id,
+                  total: order.total,
+                  status: order.status,
+                  products: order.products,
+                  adress: order.adress
+                },
                 on: { changeStatus: _vm.setNewStatus }
               })
             }),
@@ -19808,7 +19935,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "\n.tab-item {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\nsvg {\r\n  display: block;\n}\n.b-tabs .tab-content {\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  -webkit-box-align: start;\r\n      -ms-flex-align: start;\r\n          align-items: flex-start;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\r\n", ""]);
+exports.push([module.i, "\n.card {\r\n  background-color: #172a39;\n}\n.tab-item {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\nsvg {\r\n  display: block;\n}\n.b-tabs .tab-content {\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  -webkit-box-align: start;\r\n      -ms-flex-align: start;\r\n          align-items: flex-start;\r\n  -ms-flex-wrap: wrap;\r\n      flex-wrap: wrap;\n}\r\n", ""]);
 
 // exports
 
