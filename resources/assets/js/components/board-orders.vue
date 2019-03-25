@@ -17,31 +17,38 @@
         </ul>
       </b>
       <br>
-      <b class="is-size-6" style="color: rgb(39, 238, 156)">Total: {{total}} &euro;</b>
     </p>
-    <b-collapse :open="false" class="card" aria-id="contentIdForA11y3">
-      <div
-        slot="trigger"
-        slot-scope="props"
-        class="card-header"
-        role="button"
-        aria-controls="contentIdForA11y3"
-      >
-        <p class="card-header-title">Adresse</p>
-        <a class="card-header-icon">
-          <b-icon :icon="props.open ? 'fas menu-down' : 'fas menu-up'"></b-icon>
-        </a>
+    <div class="columns">
+      <div class="column">
+        <b class="is-size-5" style="color: rgb(39, 238, 156)">Total: {{getTotal}} &euro;</b>
       </div>
-      <footer class="card-footer">
-        <a class="card-footer-item">{{adress.street}}</a>
-        <a class="card-footer-item">{{adress.zipcode}}</a>
-      </footer>
-    </b-collapse>
+      <div class="column">
+        <b-collapse :open="false" class="card" aria-id="contentIdForA11y3">
+          <div
+            slot="trigger"
+            slot-scope="props"
+            class="card-header"
+            role="button"
+            aria-controls="contentIdForA11y3"
+          >
+            <p class="card-header-title">Adresse</p>
+            <a class="card-header-icon">
+              <b-icon :icon="props.open ? 'fas menu-down' : 'fas menu-up'"></b-icon>
+            </a>
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">{{adress.street}}</a>
+            <a class="card-footer-item">{{adress.zipcode}}</a>
+          </footer>
+        </b-collapse>
+      </div>
+    </div>
   </article>
 </template>
 
 <script>
 import Status from "./status";
+import Numee from "numeral";
 export default {
   data() {
     return {};
@@ -54,6 +61,11 @@ export default {
     adress: Object,
     products: Array,
     user: Object
+  },
+  computed: {
+    getTotal() {
+      return Numee(this.total).format("0,0.00");
+    }
   },
   methods: {
     onStatusChanged(e) {
