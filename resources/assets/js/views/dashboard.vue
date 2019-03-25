@@ -7,14 +7,14 @@
           <div class="tile is-parent is-vertical">
             <article class="tile is-child notification is-aqua-gradient">
               <p class="title is-5 has-text-light">Recette du jour</p>
-              <p class="subtitle has-text-light">{{stats.todaySales}}</p>
+              <p class="subtitle is-1 has-text-light has-text-centered">{{totalSales}} EUR</p>
             </article>
           </div>
         </div>
         <div class="tile is-parent">
           <article class="tile is-child notification is-rose-gradient">
             <p class="title is-5 has-text-light">Nombre de commandes</p>
-            <p class="subtitle has-text-light">Aligned with the right tile</p>
+            <p class="subtitle has-text-light is-1 has-text-light has-text-centered">14</p>
             <div class="content">
               <!-- Content -->
             </div>
@@ -24,8 +24,8 @@
       <div class="tile is-parent">
         <article class="tile is-child notification is-orangina e">
           <div class="content">
-            <p class="title is-5 has-text-light">Tall tile</p>
-            <p class="subtitle has-text-light">With even more content</p>
+            <p class="title is-5 has-text-light">Nombre d'utilisateurs</p>
+            <p class="subtitle has-text-light is-1 has-text-light has-text-centered">1k</p>
             <div class="content">
               <!-- Content -->
             </div>
@@ -84,6 +84,7 @@
 
 
 <script>
+import Numee from "numeral";
 import Order from "../components/board-orders";
 export default {
   components: { Order },
@@ -95,6 +96,11 @@ export default {
         todaySales: 0
       }
     };
+  },
+  computed: {
+    totalSales() {
+      return Numee(this.stats.todaySales).format("0,00.00");
+    }
   },
   methods: {
     setNewStatus(e) {
