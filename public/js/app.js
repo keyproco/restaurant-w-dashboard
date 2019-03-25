@@ -17995,8 +17995,10 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_board_orders__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_board_orders__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_numeral__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_numeral___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_numeral__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_board_orders__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_board_orders___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_board_orders__);
 //
 //
 //
@@ -18082,10 +18084,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { Order: __WEBPACK_IMPORTED_MODULE_0__components_board_orders___default.a },
+  components: { Order: __WEBPACK_IMPORTED_MODULE_1__components_board_orders___default.a },
   data: function data() {
     return {
       orders: [],
@@ -18096,6 +18099,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+  computed: {
+    totalSales: function totalSales() {
+      return __WEBPACK_IMPORTED_MODULE_0_numeral___default()(this.stats.todaySales).format("0,00.00");
+    }
+  },
   methods: {
     setNewStatus: function setNewStatus(e) {
       console.log("set the new status", e.status);
@@ -63560,9 +63568,14 @@ var render = function() {
                   _vm._v("Recette du jour")
                 ]),
                 _vm._v(" "),
-                _c("p", { staticClass: "subtitle has-text-light" }, [
-                  _vm._v(_vm._s(_vm.stats.todaySales))
-                ])
+                _c(
+                  "p",
+                  {
+                    staticClass:
+                      "subtitle is-1 has-text-light has-text-centered"
+                  },
+                  [_vm._v(_vm._s(_vm.totalSales) + " EUR")]
+                )
               ]
             )
           ])
@@ -63619,9 +63632,14 @@ var staticRenderFns = [
             _vm._v("Nombre de commandes")
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "subtitle has-text-light" }, [
-            _vm._v("Aligned with the right tile")
-          ]),
+          _c(
+            "p",
+            {
+              staticClass:
+                "subtitle has-text-light is-1 has-text-light has-text-centered"
+            },
+            [_vm._v("14")]
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "content" })
         ]
@@ -63639,12 +63657,17 @@ var staticRenderFns = [
         [
           _c("div", { staticClass: "content" }, [
             _c("p", { staticClass: "title is-5 has-text-light" }, [
-              _vm._v("Tall tile")
+              _vm._v("Nombre d'utilisateurs")
             ]),
             _vm._v(" "),
-            _c("p", { staticClass: "subtitle has-text-light" }, [
-              _vm._v("With even more content")
-            ]),
+            _c(
+              "p",
+              {
+                staticClass:
+                  "subtitle has-text-light is-1 has-text-light has-text-centered"
+              },
+              [_vm._v("1k")]
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "content" })
           ])
