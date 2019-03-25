@@ -18111,6 +18111,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     });
 
     window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
+      console.log("OrderPusher", e);
+      _this.orders.unshift(e.order);
       _this.stats.todaySales = parseInt(e.order.total) + parseInt(_this.stats.todaySales);
       _this.$toast.open({
         message: e.order.user.name + " commande pour un total de " + e.order.total + "  €",
