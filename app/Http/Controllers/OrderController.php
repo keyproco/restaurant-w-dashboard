@@ -130,7 +130,7 @@ class OrderController extends Controller
         $order->status = Orders::PENDING;
 
         $order->save();
-        UserConfirmedOrder::dispatch($order->load('user'));
+        UserConfirmedOrder::dispatch($order->load(['user', 'adress']));
         return $order->with('adress')->first();
 
     }

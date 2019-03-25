@@ -48,6 +48,7 @@
               :status="order.status"
               :products="order.products"
               :adress="order.adress"
+              :user="order.user"
             />
           </div>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::find(2)->orders->where('confirmed', false)->load('products')->first();
+
+        return User::find(Auth::id()
+        )->orders->where('confirmed', false)->load('products')->first();
     }
 
     /**
