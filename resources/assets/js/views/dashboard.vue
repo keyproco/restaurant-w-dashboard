@@ -1,5 +1,6 @@
 <template>
-  <div>Dashboard
+  <div>
+    Dashboard
     <div class="tile is-ancestor">
       <div class="tile is-horizontal is-8">
         <div class="tile">
@@ -95,7 +96,10 @@ export default {
     setNewStatus(e) {
       console.log("set the new status", e.status);
       return this.orders.filter(order => {
-        order.id == e.id ? (order.status = e.status) : e.status;
+        if (order.id == e.id) {
+          order.status = e.status;
+          axios.post("/update-status").then(status => console.log(status));
+        }
       });
     }
   },
