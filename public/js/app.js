@@ -18077,6 +18077,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18227,6 +18228,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18240,7 +18243,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     status: Number,
     total: Number,
     adress: Object,
-    products: Array
+    products: Array,
+    user: Object
   },
   methods: {
     onStatusChanged: function onStatusChanged(e) {
@@ -18460,30 +18464,23 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("p", { staticClass: "title is-size-5" }, [
-        _vm._v("Commande n°" + _vm._s(_vm.id))
+      _c("p", { staticClass: "title is-size-6" }, [
+        _vm._v(
+          "Commande n°" +
+            _vm._s(_vm.id) +
+            " - Client : " +
+            _vm._s(_vm.user.name)
+        )
       ]),
       _vm._v(" "),
       _c("p", { staticClass: "subtitle" }, [
-        _c(
-          "b",
-          {
-            staticClass: "is-size-6",
-            staticStyle: { color: "rgb(39, 238, 156)" }
-          },
-          [_vm._v("Total: " + _vm._s(_vm.total) + " €")]
-        ),
-        _vm._v(" "),
         _c(
           "b",
           _vm._l(_vm.products, function(product) {
             return _c("ul", { key: product.id }, [
               _c("li", {
                 staticClass: "is-size-6",
-                staticStyle: {
-                  "list-style": "upper-roman",
-                  "list-style-color": "red"
-                },
+                staticStyle: { "list-style": "upper-roman" },
                 domProps: {
                   textContent: _vm._s(
                     product.name + "  x" + product.pivot.quantity
@@ -18493,6 +18490,17 @@ var render = function() {
             ])
           }),
           0
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c(
+          "b",
+          {
+            staticClass: "is-size-6",
+            staticStyle: { color: "rgb(39, 238, 156)" }
+          },
+          [_vm._v("Total: " + _vm._s(_vm.total) + " €")]
         )
       ]),
       _vm._v(" "),
@@ -18613,7 +18621,8 @@ var render = function() {
                   total: order.total,
                   status: order.status,
                   products: order.products,
-                  adress: order.adress
+                  adress: order.adress,
+                  user: order.user
                 },
                 on: { changeStatus: _vm.setNewStatus }
               })

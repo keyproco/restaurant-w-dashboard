@@ -4,18 +4,20 @@
     <div class="content">
       <Status @changed="onStatusChanged" :status="status"/>
     </div>
-    <p class="title is-size-5">Commande n°{{id}}</p>
+    <p class="title is-size-6">Commande n°{{id}} - Client : {{user.name}}</p>
+
     <p class="subtitle">
-      <b class="is-size-6" style="color: rgb(39, 238, 156)">Total: {{total}} &euro;</b>
       <b>
         <ul :key="product.id" v-for="product in products">
           <li
-            style="list-style: upper-roman;; list-style-color:red"
+            style="list-style: upper-roman;; "
             class="is-size-6"
             v-text="product.name + '  x' + product.pivot.quantity "
           ></li>
         </ul>
       </b>
+      <br>
+      <b class="is-size-6" style="color: rgb(39, 238, 156)">Total: {{total}} &euro;</b>
     </p>
     <b-collapse :open="false" class="card" aria-id="contentIdForA11y3">
       <div
@@ -50,7 +52,8 @@ export default {
     status: Number,
     total: Number,
     adress: Object,
-    products: Array
+    products: Array,
+    user: Object
   },
   methods: {
     onStatusChanged(e) {
