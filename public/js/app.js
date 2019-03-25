@@ -18404,7 +18404,9 @@ var render = function() {
     "article",
     { ref: "order", staticClass: "tile is-child notification is-white" },
     [
-      _c("p", { staticClass: "title" }, [_vm._v(_vm._s(_vm.id))]),
+      _c("p", { staticClass: "title" }, [
+        _vm._v("n° de commande " + _vm._s(_vm.id))
+      ]),
       _vm._v(" "),
       _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")]),
       _vm._v(" "),
