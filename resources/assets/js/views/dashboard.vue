@@ -5,16 +5,16 @@
       <div class="tile is-horizontal is-8">
         <div class="tile">
           <div class="tile is-parent is-vertical">
-            <article class="tile is-child notification is-white">
-              <p class="title is-5">Recette du jour</p>
-              <p class="subtitle">{{stats.todaySales}}</p>
+            <article class="tile is-child notification is-aqua-gradient">
+              <p class="title is-5 has-text-light">Recette du jour</p>
+              <p class="subtitle has-text-light">{{stats.todaySales}}</p>
             </article>
           </div>
         </div>
         <div class="tile is-parent">
-          <article class="tile is-child notification is-white">
-            <p class="title is-5">Nombre de commandes</p>
-            <p class="subtitle">Aligned with the right tile</p>
+          <article class="tile is-child notification is-rose-gradient">
+            <p class="title is-5 has-text-light">Nombre de commandes</p>
+            <p class="subtitle has-text-light">Aligned with the right tile</p>
             <div class="content">
               <!-- Content -->
             </div>
@@ -22,10 +22,10 @@
         </div>
       </div>
       <div class="tile is-parent">
-        <article class="tile is-child notification is-white">
+        <article class="tile is-child notification is-orangina e">
           <div class="content">
-            <p class="title is-5">Tall tile</p>
-            <p class="subtitle">With even more content</p>
+            <p class="title is-5 has-text-light">Tall tile</p>
+            <p class="subtitle has-text-light">With even more content</p>
             <div class="content">
               <!-- Content -->
             </div>
@@ -140,3 +140,39 @@ export default {
   }
 };
 </script>
+
+
+
+<style scoped>
+.is-rose-gradient {
+  background: #f857a6;
+  background: -webkit-linear-gradient(to right, #f857a6, #ff5858);
+  background: linear-gradient(to right, #f857a6, #ff5858);
+}
+.is-aqua-gradient {
+  background: #ff512f; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #dd2476,
+    #ff512f
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #dd2476,
+    #ff512f
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.is-orangina {
+  background: #ec008c; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #fc6767,
+    #ec008c
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #fc6767,
+    #ec008c
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+</style>
