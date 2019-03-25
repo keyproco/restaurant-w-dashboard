@@ -44,7 +44,10 @@
               :key="order.id"
               v-for="order in orders"
               :id="order.id"
+              :total="order.total"
               :status="order.status"
+              :products="order.products"
+              :adress="order.adress"
             />
           </div>
         </div>
