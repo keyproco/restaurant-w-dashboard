@@ -10,7 +10,7 @@
       <b>
         <ul :key="product.id" v-for="product in products">
           <li
-            style="list-style: upper-roman;; "
+            style="list-style: upper-roman; "
             class="is-size-6"
             v-text="product.name + '  x' + product.pivot.quantity "
           ></li>

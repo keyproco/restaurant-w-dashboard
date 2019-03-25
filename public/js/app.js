@@ -17943,17 +17943,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(106)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(24)
 /* template */
-var __vue_template__ = __webpack_require__(31)
+var __vue_template__ = __webpack_require__(108)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-067b0c71"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -18572,168 +18576,7 @@ if (false) {
 }
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\n  Dashboard\n  "),
-    _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-horizontal is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title is-5" }, [
-                  _vm._v("Recette du jour")
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [
-                  _vm._v(_vm._s(_vm.stats.todaySales))
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _vm._m(0)
-      ]),
-      _vm._v(" "),
-      _vm._m(1)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-vertical is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c(
-            "div",
-            { staticClass: "tile is-parent is-vertical" },
-            _vm._l(_vm.orders, function(order) {
-              return _c("Order", {
-                key: order.id,
-                attrs: {
-                  id: order.id,
-                  total: order.total,
-                  status: order.status,
-                  products: order.products,
-                  adress: order.adress,
-                  user: order.user
-                },
-                on: { changeStatus: _vm.setNewStatus }
-              })
-            }),
-            1
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(2)
-    ]),
-    _vm._v(" "),
-    _vm._m(3)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c("article", { staticClass: "tile is-child notification is-white" }, [
-        _c("p", { staticClass: "title is-5" }, [_vm._v("Nombre de commandes")]),
-        _vm._v(" "),
-        _c("p", { staticClass: "subtitle" }, [
-          _vm._v("Aligned with the right tile")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "content" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c("article", { staticClass: "tile is-child notification is-white" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("p", { staticClass: "title is-5" }, [_vm._v("Tall tile")]),
-          _vm._v(" "),
-          _c("p", { staticClass: "subtitle" }, [
-            _vm._v("With even more content")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" })
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c("article", { staticClass: "tile is-child notification is-white" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
-          _vm._v(" "),
-          _c("p", { staticClass: "subtitle" }, [
-            _vm._v("With even more content")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" })
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-vertical is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
-              ]
-            )
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-067b0c71", module.exports)
-  }
-}
-
-/***/ }),
+/* 31 */,
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -63623,6 +63466,225 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(107);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(9)("46a35b0c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.is-rose-gradient[data-v-067b0c71] {\r\n  background: #f857a6;\r\n  background: -webkit-gradient(linear, left top, right top, from(#f857a6), to(#ff5858));\r\n  background: linear-gradient(to right, #f857a6, #ff5858);\n}\n.is-aqua-gradient[data-v-067b0c71] {\r\n  background: #ff512f; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#dd2476),\r\n    to(#ff512f)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #dd2476,\r\n    #ff512f\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n.is-orangina[data-v-067b0c71] {\r\n  background: #ec008c; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#fc6767),\r\n    to(#ec008c)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #fc6767,\r\n    #ec008c\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._v("\n  Dashboard\n  "),
+    _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-horizontal is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c("div", { staticClass: "tile is-parent is-vertical" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-aqua-gradient" },
+              [
+                _c("p", { staticClass: "title is-5 has-text-light" }, [
+                  _vm._v("Recette du jour")
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle has-text-light" }, [
+                  _vm._v(_vm._s(_vm.stats.todaySales))
+                ])
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ]),
+      _vm._v(" "),
+      _vm._m(1)
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-vertical is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c(
+            "div",
+            { staticClass: "tile is-parent is-vertical" },
+            _vm._l(_vm.orders, function(order) {
+              return _c("Order", {
+                key: order.id,
+                attrs: {
+                  id: order.id,
+                  total: order.total,
+                  status: order.status,
+                  products: order.products,
+                  adress: order.adress,
+                  user: order.user
+                },
+                on: { changeStatus: _vm.setNewStatus }
+              })
+            }),
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(2)
+    ]),
+    _vm._v(" "),
+    _vm._m(3)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c(
+        "article",
+        { staticClass: "tile is-child notification is-rose-gradient" },
+        [
+          _c("p", { staticClass: "title is-5 has-text-light" }, [
+            _vm._v("Nombre de commandes")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "subtitle has-text-light" }, [
+            _vm._v("Aligned with the right tile")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" })
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c(
+        "article",
+        { staticClass: "tile is-child notification is-orangina e" },
+        [
+          _c("div", { staticClass: "content" }, [
+            _c("p", { staticClass: "title is-5 has-text-light" }, [
+              _vm._v("Tall tile")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "subtitle has-text-light" }, [
+              _vm._v("With even more content")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" })
+          ])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c("article", { staticClass: "tile is-child notification is-white" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "subtitle" }, [
+            _vm._v("With even more content")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-vertical is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c("div", { staticClass: "tile is-parent is-vertical" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-white" },
+              [
+                _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
+                _vm._v(" "),
+                _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-067b0c71", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
