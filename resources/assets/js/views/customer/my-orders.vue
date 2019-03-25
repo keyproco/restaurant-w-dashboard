@@ -112,25 +112,20 @@ export default {
           label: "Total",
           centered: true
         }
-      ],
-      status: {
-        0: "Dans le panier",
-        1: "En attente",
-        2: "Validé",
-        3: "Confirmé"
-      }
+      ]
     };
   },
   computed: {
     formatStatus: function() {
       const status = code => {
+        console.log(code);
         return status.labels[code] || status.labels["default"];
       };
       status.labels = {
-        0: "Panier",
         1: "En attente",
         2: "En préparation",
-        3: "Livré"
+        3: "Livrée",
+        default: "NAN"
       };
       return this.orders.map(r => status(r.status));
     }
