@@ -18073,6 +18073,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -18091,7 +18092,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     setNewStatus: function setNewStatus(e) {
       console.log("set the new status", e.status);
       return this.orders.filter(function (order) {
-        order.id == e.id ? order.status = e.status : e.status;
+        if (order.id == e.id) {
+          order.status = e.status;
+          axios.post("/update-status").then(function (status) {
+            return console.log(status);
+          });
+        }
       });
     }
   },
@@ -18443,7 +18449,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._v("Dashboard\n  "),
+    _vm._v("\n  Dashboard\n  "),
     _c("div", { staticClass: "tile is-ancestor" }, [
       _c("div", { staticClass: "tile is-horizontal is-8" }, [
         _c("div", { staticClass: "tile" }, [

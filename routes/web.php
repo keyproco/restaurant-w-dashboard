@@ -32,6 +32,7 @@ Route::resource('/users', 'UserController');
 Route::resource('/permissions', 'PermissionsController');
 Route::resource('/products', 'ProductsController');
 Route::post('/pay', 'PaymentController@store');
+// Route::post('/change-status', 'UserController@');
 Route::get('/admin/dashboard/{vue_capture?}', function () {
     return view('layouts.admin');
 })->where('vue_capture', '[\/\w\.-]*');
