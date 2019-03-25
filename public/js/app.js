@@ -18094,7 +18094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.orders.filter(function (order) {
         if (order.id == e.id) {
           order.status = e.status;
-          axios.post("/update-status").then(function (status) {
+          axios.put("/status/" + order.id, { status: e.status }).then(function (status) {
             return console.log(status);
           });
         }

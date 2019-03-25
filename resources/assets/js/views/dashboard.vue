@@ -98,7 +98,9 @@ export default {
       return this.orders.filter(order => {
         if (order.id == e.id) {
           order.status = e.status;
-          axios.post("/update-status").then(status => console.log(status));
+          axios
+            .put("/status/" + order.id, { status: e.status })
+            .then(status => console.log(status));
         }
       });
     }
