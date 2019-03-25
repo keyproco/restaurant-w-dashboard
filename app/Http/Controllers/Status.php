@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Orders;
 use Illuminate\Http\Request;
 
 class Status extends Controller
@@ -68,7 +69,11 @@ class Status extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $order = Orders::find($id);
+        $order->status = $request->status;
+        $order->save();
+
     }
 
     /**
