@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -179,8 +179,8 @@ module.exports = function normalizeComponent (
 "use strict";
 
 
-var bind = __webpack_require__(10);
-var isBuffer = __webpack_require__(66);
+var bind = __webpack_require__(11);
+var isBuffer = __webpack_require__(69);
 
 /*global toString:true*/
 
@@ -3136,13 +3136,323 @@ if (inBrowser && window.Vue) {
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(27)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(68);
+var normalizeHeaderName = __webpack_require__(71);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -3158,10 +3468,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(12);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(12);
   }
   return adapter;
 }
@@ -3236,10 +3546,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14326,10 +14636,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(6).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(8).setImmediate))
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -14385,7 +14695,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(18);
+__webpack_require__(19);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -14399,7 +14709,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -14589,317 +14899,1030 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! @preserve
+ * numeral.js
+ * version : 2.0.6
+ * author : Adam Draper
+ * license : MIT
+ * http://adamwdraper.github.com/Numeral-js/
+ */
 
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(39)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
+(function (global, factory) {
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = factory();
     } else {
-      styles = []
+        global.numeral = factory();
     }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
+}(this, function () {
+    /************************************
+        Variables
+    ************************************/
+
+    var numeral,
+        _,
+        VERSION = '2.0.6',
+        formats = {},
+        locales = {},
+        defaults = {
+            currentLocale: 'en',
+            zeroFormat: null,
+            nullFormat: null,
+            defaultFormat: '0,0',
+            scalePercentBy100: true
+        },
+        options = {
+            currentLocale: defaults.currentLocale,
+            zeroFormat: defaults.zeroFormat,
+            nullFormat: defaults.nullFormat,
+            defaultFormat: defaults.defaultFormat,
+            scalePercentBy100: defaults.scalePercentBy100
+        };
+
+
+    /************************************
+        Constructors
+    ************************************/
+
+    // Numeral prototype object
+    function Numeral(input, number) {
+        this._input = input;
+
+        this._value = number;
+    }
+
+    numeral = function(input) {
+        var value,
+            kind,
+            unformatFunction,
+            regexp;
+
+        if (numeral.isNumeral(input)) {
+            value = input.value();
+        } else if (input === 0 || typeof input === 'undefined') {
+            value = 0;
+        } else if (input === null || _.isNaN(input)) {
+            value = null;
+        } else if (typeof input === 'string') {
+            if (options.zeroFormat && input === options.zeroFormat) {
+                value = 0;
+            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
+                value = null;
+            } else {
+                for (kind in formats) {
+                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
+
+                    if (regexp && input.match(regexp)) {
+                        unformatFunction = formats[kind].unformat;
+
+                        break;
+                    }
+                }
+
+                unformatFunction = unformatFunction || numeral._.stringToNumber;
+
+                value = unformatFunction(input);
+            }
+        } else {
+            value = Number(input)|| null;
         }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
 
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
+        return new Numeral(input, value);
+    };
 
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
+    // version number
+    numeral.version = VERSION;
 
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+    // compare numeral object
+    numeral.isNumeral = function(obj) {
+        return obj instanceof Numeral;
+    };
 
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
+    // helper functions
+    numeral._ = _ = {
+        // formats numbers separators, decimals places, signs, abbreviations
+        numberToFormat: function(value, format, roundingFunction) {
+            var locale = locales[numeral.options.currentLocale],
+                negP = false,
+                optDec = false,
+                leadingCount = 0,
+                abbr = '',
+                trillion = 1000000000000,
+                billion = 1000000000,
+                million = 1000000,
+                thousand = 1000,
+                decimal = '',
+                neg = false,
+                abbrForce, // force abbreviation
+                abs,
+                min,
+                max,
+                power,
+                int,
+                precision,
+                signed,
+                thousands,
+                output;
 
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
+            // make sure we never format a null value
+            value = value || 0;
 
-  update(obj)
+            abs = Math.abs(value);
 
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
+            // see if we should use parentheses for negative number or if we should prefix with a sign
+            // if both are present we default to parentheses
+            if (numeral._.includes(format, '(')) {
+                negP = true;
+                format = format.replace(/[\(|\)]/g, '');
+            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
+                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
+                format = format.replace(/[\+|\-]/g, '');
+            }
 
-var replaceText = (function () {
-  var textStore = []
+            // see if abbreviation is wanted
+            if (numeral._.includes(format, 'a')) {
+                abbrForce = format.match(/a(k|m|b|t)?/);
 
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
+                abbrForce = abbrForce ? abbrForce[1] : false;
 
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
+                // check for space before abbreviation
+                if (numeral._.includes(format, ' a')) {
+                    abbr = ' ';
+                }
 
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
+                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
 
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
+                if (abs >= trillion && !abbrForce || abbrForce === 't') {
+                    // trillion
+                    abbr += locale.abbreviations.trillion;
+                    value = value / trillion;
+                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
+                    // billion
+                    abbr += locale.abbreviations.billion;
+                    value = value / billion;
+                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
+                    // million
+                    abbr += locale.abbreviations.million;
+                    value = value / million;
+                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
+                    // thousand
+                    abbr += locale.abbreviations.thousand;
+                    value = value / thousand;
+                }
+            }
 
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
+            // check for optional decimals
+            if (numeral._.includes(format, '[.]')) {
+                optDec = true;
+                format = format.replace('[.]', '.');
+            }
 
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
+            // break number and format
+            int = value.toString().split('.')[0];
+            precision = format.split('.')[1];
+            thousands = format.indexOf(',');
+            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
 
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
+            if (precision) {
+                if (numeral._.includes(precision, '[')) {
+                    precision = precision.replace(']', '');
+                    precision = precision.split('[');
+                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+                } else {
+                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
+                }
+
+                int = decimal.split('.')[0];
+
+                if (numeral._.includes(decimal, '.')) {
+                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
+                } else {
+                    decimal = '';
+                }
+
+                if (optDec && Number(decimal.slice(1)) === 0) {
+                    decimal = '';
+                }
+            } else {
+                int = numeral._.toFixed(value, 0, roundingFunction);
+            }
+
+            // check abbreviation again after rounding
+            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
+                int = String(Number(int) / 1000);
+
+                switch (abbr) {
+                    case locale.abbreviations.thousand:
+                        abbr = locale.abbreviations.million;
+                        break;
+                    case locale.abbreviations.million:
+                        abbr = locale.abbreviations.billion;
+                        break;
+                    case locale.abbreviations.billion:
+                        abbr = locale.abbreviations.trillion;
+                        break;
+                }
+            }
+
+
+            // format number
+            if (numeral._.includes(int, '-')) {
+                int = int.slice(1);
+                neg = true;
+            }
+
+            if (int.length < leadingCount) {
+                for (var i = leadingCount - int.length; i > 0; i--) {
+                    int = '0' + int;
+                }
+            }
+
+            if (thousands > -1) {
+                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
+            }
+
+            if (format.indexOf('.') === 0) {
+                int = '';
+            }
+
+            output = int + decimal + (abbr ? abbr : '');
+
+            if (negP) {
+                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
+            } else {
+                if (signed >= 0) {
+                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
+                } else if (neg) {
+                    output = '-' + output;
+                }
+            }
+
+            return output;
+        },
+        // unformats numbers separators, decimals places, signs, abbreviations
+        stringToNumber: function(string) {
+            var locale = locales[options.currentLocale],
+                stringOriginal = string,
+                abbreviations = {
+                    thousand: 3,
+                    million: 6,
+                    billion: 9,
+                    trillion: 12
+                },
+                abbreviation,
+                value,
+                i,
+                regexp;
+
+            if (options.zeroFormat && string === options.zeroFormat) {
+                value = 0;
+            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
+                value = null;
+            } else {
+                value = 1;
+
+                if (locale.delimiters.decimal !== '.') {
+                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
+                }
+
+                for (abbreviation in abbreviations) {
+                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
+
+                    if (stringOriginal.match(regexp)) {
+                        value *= Math.pow(10, abbreviations[abbreviation]);
+                        break;
+                    }
+                }
+
+                // check for negative number
+                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
+
+                // remove non numbers
+                string = string.replace(/[^0-9\.]+/g, '');
+
+                value *= Number(string);
+            }
+
+            return value;
+        },
+        isNaN: function(value) {
+            return typeof value === 'number' && isNaN(value);
+        },
+        includes: function(string, search) {
+            return string.indexOf(search) !== -1;
+        },
+        insert: function(string, subString, start) {
+            return string.slice(0, start) + subString + string.slice(start);
+        },
+        reduce: function(array, callback /*, initialValue*/) {
+            if (this === null) {
+                throw new TypeError('Array.prototype.reduce called on null or undefined');
+            }
+
+            if (typeof callback !== 'function') {
+                throw new TypeError(callback + ' is not a function');
+            }
+
+            var t = Object(array),
+                len = t.length >>> 0,
+                k = 0,
+                value;
+
+            if (arguments.length === 3) {
+                value = arguments[2];
+            } else {
+                while (k < len && !(k in t)) {
+                    k++;
+                }
+
+                if (k >= len) {
+                    throw new TypeError('Reduce of empty array with no initial value');
+                }
+
+                value = t[k++];
+            }
+            for (; k < len; k++) {
+                if (k in t) {
+                    value = callback(value, t[k], k, t);
+                }
+            }
+            return value;
+        },
+        /**
+         * Computes the multiplier necessary to make x >= 1,
+         * effectively eliminating miscalculations caused by
+         * finite precision.
+         */
+        multiplier: function (x) {
+            var parts = x.toString().split('.');
+
+            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
+        },
+        /**
+         * Given a variable number of arguments, returns the maximum
+         * multiplier that must be used to normalize an operation involving
+         * all of them.
+         */
+        correctionFactor: function () {
+            var args = Array.prototype.slice.call(arguments);
+
+            return args.reduce(function(accum, next) {
+                var mn = _.multiplier(next);
+                return accum > mn ? accum : mn;
+            }, 1);
+        },
+        /**
+         * Implementation of toFixed() that treats floats more like decimals
+         *
+         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+         * problems for accounting- and finance-related software.
+         */
+        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
+            var splitValue = value.toString().split('.'),
+                minDecimals = maxDecimals - (optionals || 0),
+                boundedPrecision,
+                optionalsRegExp,
+                power,
+                output;
+
+            // Use the smallest precision value possible to avoid errors from floating point representation
+            if (splitValue.length === 2) {
+              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
+            } else {
+              boundedPrecision = minDecimals;
+            }
+
+            power = Math.pow(10, boundedPrecision);
+
+            // Multiply up by precision, round accurately, then divide and use native toFixed():
+            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+
+            if (optionals > maxDecimals - boundedPrecision) {
+                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
+                output = output.replace(optionalsRegExp, '');
+            }
+
+            return output;
+        }
+    };
+
+    // avaliable options
+    numeral.options = options;
+
+    // avaliable formats
+    numeral.formats = formats;
+
+    // avaliable formats
+    numeral.locales = locales;
+
+    // This function sets the current locale.  If
+    // no arguments are passed in, it will simply return the current global
+    // locale key.
+    numeral.locale = function(key) {
+        if (key) {
+            options.currentLocale = key.toLowerCase();
+        }
+
+        return options.currentLocale;
+    };
+
+    // This function provides access to the loaded locale data.  If
+    // no arguments are passed in, it will simply return the current
+    // global locale object.
+    numeral.localeData = function(key) {
+        if (!key) {
+            return locales[options.currentLocale];
+        }
+
+        key = key.toLowerCase();
+
+        if (!locales[key]) {
+            throw new Error('Unknown locale : ' + key);
+        }
+
+        return locales[key];
+    };
+
+    numeral.reset = function() {
+        for (var property in defaults) {
+            options[property] = defaults[property];
+        }
+    };
+
+    numeral.zeroFormat = function(format) {
+        options.zeroFormat = typeof(format) === 'string' ? format : null;
+    };
+
+    numeral.nullFormat = function (format) {
+        options.nullFormat = typeof(format) === 'string' ? format : null;
+    };
+
+    numeral.defaultFormat = function(format) {
+        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
+    };
+
+    numeral.register = function(type, name, format) {
+        name = name.toLowerCase();
+
+        if (this[type + 's'][name]) {
+            throw new TypeError(name + ' ' + type + ' already registered.');
+        }
+
+        this[type + 's'][name] = format;
+
+        return format;
+    };
+
+
+    numeral.validate = function(val, culture) {
+        var _decimalSep,
+            _thousandSep,
+            _currSymbol,
+            _valArray,
+            _abbrObj,
+            _thousandRegEx,
+            localeData,
+            temp;
+
+        //coerce val to string
+        if (typeof val !== 'string') {
+            val += '';
+
+            if (console.warn) {
+                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
+            }
+        }
+
+        //trim whitespaces from either sides
+        val = val.trim();
+
+        //if val is just digits return true
+        if (!!val.match(/^\d+$/)) {
+            return true;
+        }
+
+        //if val is empty return false
+        if (val === '') {
+            return false;
+        }
+
+        //get the decimal and thousands separator from numeral.localeData
+        try {
+            //check if the culture is understood by numeral. if not, default it to current locale
+            localeData = numeral.localeData(culture);
+        } catch (e) {
+            localeData = numeral.localeData(numeral.locale());
+        }
+
+        //setup the delimiters and currency symbol based on culture/locale
+        _currSymbol = localeData.currency.symbol;
+        _abbrObj = localeData.abbreviations;
+        _decimalSep = localeData.delimiters.decimal;
+        if (localeData.delimiters.thousands === '.') {
+            _thousandSep = '\\.';
+        } else {
+            _thousandSep = localeData.delimiters.thousands;
+        }
+
+        // validating currency symbol
+        temp = val.match(/^[^\d]+/);
+        if (temp !== null) {
+            val = val.substr(1);
+            if (temp[0] !== _currSymbol) {
+                return false;
+            }
+        }
+
+        //validating abbreviation symbol
+        temp = val.match(/[^\d]+$/);
+        if (temp !== null) {
+            val = val.slice(0, -1);
+            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
+                return false;
+            }
+        }
+
+        _thousandRegEx = new RegExp(_thousandSep + '{2}');
+
+        if (!val.match(/[^\d.,]/g)) {
+            _valArray = val.split(_decimalSep);
+            if (_valArray.length > 2) {
+                return false;
+            } else {
+                if (_valArray.length < 2) {
+                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
+                } else {
+                    if (_valArray[0].length === 1) {
+                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+                    } else {
+                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
+                    }
+                }
+            }
+        }
+
+        return false;
+    };
+
+
+    /************************************
+        Numeral Prototype
+    ************************************/
+
+    numeral.fn = Numeral.prototype = {
+        clone: function() {
+            return numeral(this);
+        },
+        format: function(inputString, roundingFunction) {
+            var value = this._value,
+                format = inputString || options.defaultFormat,
+                kind,
+                output,
+                formatFunction;
+
+            // make sure we have a roundingFunction
+            roundingFunction = roundingFunction || Math.round;
+
+            // format based on value
+            if (value === 0 && options.zeroFormat !== null) {
+                output = options.zeroFormat;
+            } else if (value === null && options.nullFormat !== null) {
+                output = options.nullFormat;
+            } else {
+                for (kind in formats) {
+                    if (format.match(formats[kind].regexps.format)) {
+                        formatFunction = formats[kind].format;
+
+                        break;
+                    }
+                }
+
+                formatFunction = formatFunction || numeral._.numberToFormat;
+
+                output = formatFunction(value, format, roundingFunction);
+            }
+
+            return output;
+        },
+        value: function() {
+            return this._value;
+        },
+        input: function() {
+            return this._input;
+        },
+        set: function(value) {
+            this._value = Number(value);
+
+            return this;
+        },
+        add: function(value) {
+            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+            function cback(accum, curr, currI, O) {
+                return accum + Math.round(corrFactor * curr);
+            }
+
+            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
+
+            return this;
+        },
+        subtract: function(value) {
+            var corrFactor = _.correctionFactor.call(null, this._value, value);
+
+            function cback(accum, curr, currI, O) {
+                return accum - Math.round(corrFactor * curr);
+            }
+
+            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
+
+            return this;
+        },
+        multiply: function(value) {
+            function cback(accum, curr, currI, O) {
+                var corrFactor = _.correctionFactor(accum, curr);
+                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
+            }
+
+            this._value = _.reduce([this._value, value], cback, 1);
+
+            return this;
+        },
+        divide: function(value) {
+            function cback(accum, curr, currI, O) {
+                var corrFactor = _.correctionFactor(accum, curr);
+                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
+            }
+
+            this._value = _.reduce([this._value, value], cback);
+
+            return this;
+        },
+        difference: function(value) {
+            return Math.abs(numeral(this._value).subtract(value).value());
+        }
+    };
+
+    /************************************
+        Default Locale && Format
+    ************************************/
+
+    numeral.register('locale', 'en', {
+        delimiters: {
+            thousands: ',',
+            decimal: '.'
+        },
+        abbreviations: {
+            thousand: 'k',
+            million: 'm',
+            billion: 'b',
+            trillion: 't'
+        },
+        ordinal: function(number) {
+            var b = number % 10;
+            return (~~(number % 100 / 10) === 1) ? 'th' :
+                (b === 1) ? 'st' :
+                (b === 2) ? 'nd' :
+                (b === 3) ? 'rd' : 'th';
+        },
+        currency: {
+            symbol: '$'
+        }
+    });
+
+    
+
+(function() {
+        numeral.register('format', 'bps', {
+            regexps: {
+                format: /(BPS)/,
+                unformat: /(BPS)/
+            },
+            format: function(value, format, roundingFunction) {
+                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
+                    output;
+
+                value = value * 10000;
+
+                // check for space before BPS
+                format = format.replace(/\s?BPS/, '');
+
+                output = numeral._.numberToFormat(value, format, roundingFunction);
+
+                if (numeral._.includes(output, ')')) {
+                    output = output.split('');
+
+                    output.splice(-1, 0, space + 'BPS');
+
+                    output = output.join('');
+                } else {
+                    output = output + space + 'BPS';
+                }
+
+                return output;
+            },
+            unformat: function(string) {
+                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
+            }
+        });
+})();
+
+
+(function() {
+        var decimal = {
+            base: 1000,
+            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+        },
+        binary = {
+            base: 1024,
+            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+        };
+
+    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
+            return decimal.suffixes.indexOf(item) < 0;
+        }));
+        var unformatRegex = allSuffixes.join('|');
+        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
+        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
+
+    numeral.register('format', 'bytes', {
+        regexps: {
+            format: /([0\s]i?b)/,
+            unformat: new RegExp(unformatRegex)
+        },
+        format: function(value, format, roundingFunction) {
+            var output,
+                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
+                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
+                power,
+                min,
+                max;
+
+            // check for space before
+            format = format.replace(/\s?i?b/, '');
+
+            for (power = 0; power <= bytes.suffixes.length; power++) {
+                min = Math.pow(bytes.base, power);
+                max = Math.pow(bytes.base, power + 1);
+
+                if (value === null || value === 0 || value >= min && value < max) {
+                    suffix += bytes.suffixes[power];
+
+                    if (min > 0) {
+                        value = value / min;
+                    }
+
+                    break;
+                }
+            }
+
+            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+            return output + suffix;
+        },
+        unformat: function(string) {
+            var value = numeral._.stringToNumber(string),
+                power,
+                bytesMultiplier;
+
+            if (value) {
+                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
+                    if (numeral._.includes(string, decimal.suffixes[power])) {
+                        bytesMultiplier = Math.pow(decimal.base, power);
+
+                        break;
+                    }
+
+                    if (numeral._.includes(string, binary.suffixes[power])) {
+                        bytesMultiplier = Math.pow(binary.base, power);
+
+                        break;
+                    }
+                }
+
+                value *= (bytesMultiplier || 1);
+            }
+
+            return value;
+        }
+    });
+})();
+
+
+(function() {
+        numeral.register('format', 'currency', {
+        regexps: {
+            format: /(\$)/
+        },
+        format: function(value, format, roundingFunction) {
+            var locale = numeral.locales[numeral.options.currentLocale],
+                symbols = {
+                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
+                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
+                },
+                output,
+                symbol,
+                i;
+
+            // strip format of spaces and $
+            format = format.replace(/\s?\$\s?/, '');
+
+            // format the number
+            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+            // update the before and after based on value
+            if (value >= 0) {
+                symbols.before = symbols.before.replace(/[\-\(]/, '');
+                symbols.after = symbols.after.replace(/[\-\)]/, '');
+            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
+                symbols.before = '-' + symbols.before;
+            }
+
+            // loop through each before symbol
+            for (i = 0; i < symbols.before.length; i++) {
+                symbol = symbols.before[i];
+
+                switch (symbol) {
+                    case '$':
+                        output = numeral._.insert(output, locale.currency.symbol, i);
+                        break;
+                    case ' ':
+                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
+                        break;
+                }
+            }
+
+            // loop through each after symbol
+            for (i = symbols.after.length - 1; i >= 0; i--) {
+                symbol = symbols.after[i];
+
+                switch (symbol) {
+                    case '$':
+                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
+                        break;
+                    case ' ':
+                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
+                        break;
+                }
+            }
+
+
+            return output;
+        }
+    });
+})();
+
+
+(function() {
+        numeral.register('format', 'exponential', {
+        regexps: {
+            format: /(e\+|e-)/,
+            unformat: /(e\+|e-)/
+        },
+        format: function(value, format, roundingFunction) {
+            var output,
+                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
+                parts = exponential.split('e');
+
+            format = format.replace(/e[\+|\-]{1}0/, '');
+
+            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
+
+            return output + 'e' + parts[1];
+        },
+        unformat: function(string) {
+            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
+                value = Number(parts[0]),
+                power = Number(parts[1]);
+
+            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
+
+            function cback(accum, curr, currI, O) {
+                var corrFactor = numeral._.correctionFactor(accum, curr),
+                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
+                return num;
+            }
+
+            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
+        }
+    });
+})();
+
+
+(function() {
+        numeral.register('format', 'ordinal', {
+        regexps: {
+            format: /(o)/
+        },
+        format: function(value, format, roundingFunction) {
+            var locale = numeral.locales[numeral.options.currentLocale],
+                output,
+                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
+
+            // check for space before
+            format = format.replace(/\s?o/, '');
+
+            ordinal += locale.ordinal(value);
+
+            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+            return output + ordinal;
+        }
+    });
+})();
+
+
+(function() {
+        numeral.register('format', 'percentage', {
+        regexps: {
+            format: /(%)/,
+            unformat: /(%)/
+        },
+        format: function(value, format, roundingFunction) {
+            var space = numeral._.includes(format, ' %') ? ' ' : '',
+                output;
+
+            if (numeral.options.scalePercentBy100) {
+                value = value * 100;
+            }
+
+            // check for space before %
+            format = format.replace(/\s?\%/, '');
+
+            output = numeral._.numberToFormat(value, format, roundingFunction);
+
+            if (numeral._.includes(output, ')')) {
+                output = output.split('');
+
+                output.splice(-1, 0, space + '%');
+
+                output = output.join('');
+            } else {
+                output = output + space + '%';
+            }
+
+            return output;
+        },
+        unformat: function(string) {
+            var number = numeral._.stringToNumber(string);
+            if (numeral.options.scalePercentBy100) {
+                return number * 0.01;
+            }
+            return number;
+        }
+    });
+})();
+
+
+(function() {
+        numeral.register('format', 'time', {
+        regexps: {
+            format: /(:)/,
+            unformat: /(:)/
+        },
+        format: function(value, format, roundingFunction) {
+            var hours = Math.floor(value / 60 / 60),
+                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
+                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
+
+            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+        },
+        unformat: function(string) {
+            var timeArray = string.split(':'),
+                seconds = 0;
+
+            // turn hours and minutes into seconds and add them all up
+            if (timeArray.length === 3) {
+                // hours
+                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+                // minutes
+                seconds = seconds + (Number(timeArray[1]) * 60);
+                // seconds
+                seconds = seconds + Number(timeArray[2]);
+            } else if (timeArray.length === 2) {
+                // minutes
+                seconds = seconds + (Number(timeArray[0]) * 60);
+                // seconds
+                seconds = seconds + Number(timeArray[1]);
+            }
+            return Number(seconds);
+        }
+    });
+})();
+
+return numeral;
+}));
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14917,19 +15940,19 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(69);
-var buildURL = __webpack_require__(71);
-var parseHeaders = __webpack_require__(72);
-var isURLSameOrigin = __webpack_require__(73);
-var createError = __webpack_require__(12);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(74);
+var settle = __webpack_require__(72);
+var buildURL = __webpack_require__(74);
+var parseHeaders = __webpack_require__(75);
+var isURLSameOrigin = __webpack_require__(76);
+var createError = __webpack_require__(13);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(77);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -15026,7 +16049,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(75);
+      var cookies = __webpack_require__(78);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -15104,13 +16127,13 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(70);
+var enhanceError = __webpack_require__(73);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -15129,7 +16152,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15141,7 +16164,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15167,7 +16190,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17528,32 +18551,32 @@ var autoReplace = function autoReplace() {
 
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2), __webpack_require__(6).setImmediate))
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(17);
-module.exports = __webpack_require__(100);
-
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2), __webpack_require__(8).setImmediate))
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(18);
+module.exports = __webpack_require__(103);
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__customer_routes__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fortawesome_free_solid_svg_icons__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_buefy__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__customer_routes__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fortawesome_free_solid_svg_icons__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_buefy__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_buefy___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_buefy__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_table__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_table__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_table__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_products_create__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_products_create__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_products_create___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_products_create__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_vue_router__ = __webpack_require__(3);
 /**
@@ -17561,12 +18584,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-window.Vue = __webpack_require__(5);
+window.Vue = __webpack_require__(7);
 
 window.Event = new Vue();
 
 
-__webpack_require__(62);
+__webpack_require__(65);
 
 
 __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["c" /* library */].add(__WEBPACK_IMPORTED_MODULE_3__fortawesome_free_solid_svg_icons__["a" /* faCartArrowDown */]);
@@ -17614,8 +18637,8 @@ var products = new Vue({
         }
     }
 });
-Vue.component("login-view", __webpack_require__(94));
-Vue.component("login-profile", __webpack_require__(97));
+Vue.component("login-view", __webpack_require__(97));
+Vue.component("login-profile", __webpack_require__(100));
 var login = new Vue({
     el: document.getElementById("login")
 });
@@ -17625,7 +18648,7 @@ var loginProfile = new Vue({
 });
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -17815,24 +18838,24 @@ var loginProfile = new Vue({
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(9)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_manage_users_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_manage_users_vue__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_manage_users_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__views_manage_users_vue__);
 
 
 var routes = [{
     path: "/admin/dashboard/",
-    component: __webpack_require__(23)
+    component: __webpack_require__(24)
 }, {
     path: "/admin/dashboard/manage-products",
-    component: __webpack_require__(32)
+    component: __webpack_require__(36)
 }, {
     path: "/admin/dashboard/manage-users",
     component: __WEBPACK_IMPORTED_MODULE_1__views_manage_users_vue___default.a
@@ -17845,15 +18868,15 @@ var routes = [{
 }));
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(21)
+var __vue_script__ = __webpack_require__(22)
 /* template */
-var __vue_template__ = __webpack_require__(22)
+var __vue_template__ = __webpack_require__(23)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -17892,7 +18915,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17917,7 +18940,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -17939,19 +18962,19 @@ if (false) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(106)
+  __webpack_require__(25)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(24)
+var __vue_script__ = __webpack_require__(28)
 /* template */
-var __vue_template__ = __webpack_require__(108)
+var __vue_template__ = __webpack_require__(35)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -17990,14 +19013,87 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 24 */
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(26);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("46a35b0c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.is-rose-gradient[data-v-067b0c71] {\r\n  background: #f857a6;\r\n  background: -webkit-gradient(linear, left top, right top, from(#f857a6), to(#ff5858));\r\n  background: linear-gradient(to right, #f857a6, #ff5858);\n}\n.is-aqua-gradient[data-v-067b0c71] {\r\n  background: #ff512f; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#dd2476),\r\n    to(#ff512f)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #dd2476,\r\n    #ff512f\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n.is-orangina[data-v-067b0c71] {\r\n  background: #ec008c; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#fc6767),\r\n    to(#ec008c)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #fc6767,\r\n    #ec008c\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_numeral__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_numeral__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_numeral___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_numeral__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_board_orders__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_board_orders__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_board_orders___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_board_orders__);
 //
 //
@@ -18147,15 +19243,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(26)
+var __vue_script__ = __webpack_require__(30)
 /* template */
-var __vue_template__ = __webpack_require__(30)
+var __vue_template__ = __webpack_require__(34)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -18194,14 +19290,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__status__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__status__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__status___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__status__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_numeral__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_numeral__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_numeral___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_numeral__);
 //
 //
@@ -18285,15 +19381,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(28)
+var __vue_script__ = __webpack_require__(32)
 /* template */
-var __vue_template__ = __webpack_require__(29)
+var __vue_template__ = __webpack_require__(33)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -18332,7 +19428,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18378,7 +19474,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 29 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -18468,7 +19564,7 @@ if (false) {
 }
 
 /***/ }),
-/* 30 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -18615,16 +19711,176 @@ if (false) {
 }
 
 /***/ }),
-/* 31 */,
-/* 32 */
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._v("\n  Dashboard\n  "),
+    _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-horizontal is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c("div", { staticClass: "tile is-parent is-vertical" }, [
+            _c(
+              "article",
+              { staticClass: "tile is-child notification is-aqua-gradient" },
+              [
+                _c("p", { staticClass: "title is-5 has-text-light" }, [
+                  _vm._v("Recette du jour")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    staticClass:
+                      "subtitle is-1 has-text-light has-text-centered"
+                  },
+                  [_vm._v(_vm._s(_vm.totalSales) + " EUR")]
+                )
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tile is-parent" }, [
+          _c(
+            "article",
+            { staticClass: "tile is-child notification is-rose-gradient" },
+            [
+              _c("p", { staticClass: "title is-5 has-text-light" }, [
+                _vm._v("Nombre de commandes du jour")
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "subtitle has-text-light is-1 has-text-light has-text-centered"
+                },
+                [_vm._v(_vm._s(_vm.stats.ordersNumber))]
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(0)
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-vertical is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c(
+            "div",
+            { staticClass: "tile is-parent is-vertical" },
+            _vm._l(_vm.orders, function(order) {
+              return _c("Order", {
+                key: order.id,
+                attrs: {
+                  id: order.id,
+                  total: order.total,
+                  status: order.status,
+                  products: order.products,
+                  adress: order.adress,
+                  user: order.user
+                },
+                on: { changeStatus: _vm.setNewStatus }
+              })
+            }),
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(1)
+    ]),
+    _vm._v(" "),
+    _vm._m(2)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c(
+        "article",
+        { staticClass: "tile is-child notification is-orangina e" },
+        [
+          _c("div", { staticClass: "content" }, [
+            _c("p", { staticClass: "title is-5 has-text-light" }, [
+              _vm._v("Nombre d'utilisateurs")
+            ]),
+            _vm._v(" "),
+            _c(
+              "p",
+              {
+                staticClass:
+                  "subtitle has-text-light is-1 has-text-light has-text-centered"
+              },
+              [_vm._v("1k")]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" })
+          ])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-parent" }, [
+      _c("article", { staticClass: "tile is-child notification is-white" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("p", { staticClass: "title" }, [_vm._v("Graphe avec ChartJs")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "subtitle" }, [
+            _vm._v("CA par Jour/Semaine/Mois")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tile is-ancestor" }, [
+      _c("div", { staticClass: "tile is-vertical is-8" }, [
+        _c("div", { staticClass: "tile" }, [
+          _c("div", { staticClass: "tile is-parent is-vertical" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-067b0c71", module.exports)
+  }
+}
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(33)
+var __vue_script__ = __webpack_require__(37)
 /* template */
-var __vue_template__ = __webpack_require__(34)
+var __vue_template__ = __webpack_require__(38)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -18663,7 +19919,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18770,7 +20026,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -18918,20 +20174,20 @@ if (false) {
 }
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__views_customer_my_orders_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__views_customer_my_account_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__views_customer_my_bills_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__views_customer_home_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_customer_order_vue__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_customer_order_vue__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_customer_order_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__views_customer_order_vue__);
 
 
@@ -18965,19 +20221,19 @@ var routes = [{
 }));
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(37)
+  __webpack_require__(41)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(40)
+var __vue_script__ = __webpack_require__(43)
 /* template */
-var __vue_template__ = __webpack_require__(41)
+var __vue_template__ = __webpack_require__(44)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -19016,17 +20272,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("565976a7", content, false, {});
+var update = __webpack_require__(5)("565976a7", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -19042,10 +20298,10 @@ if(false) {
 }
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(4)(false);
 // imports
 
 
@@ -19056,40 +20312,7 @@ exports.push([module.i, "\n.tabs li.is-active a[data-v-4690a1a8] {\r\n  backgrou
 
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19251,7 +20474,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -19552,15 +20775,15 @@ if (false) {
 }
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(43)
+var __vue_script__ = __webpack_require__(46)
 /* template */
-var __vue_template__ = __webpack_require__(44)
+var __vue_template__ = __webpack_require__(47)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -19599,7 +20822,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19624,7 +20847,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -19644,15 +20867,15 @@ if (false) {
 }
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(46)
+var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(47)
+var __vue_template__ = __webpack_require__(50)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -19691,7 +20914,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19716,7 +20939,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -19736,19 +20959,19 @@ if (false) {
 }
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(49)
+  __webpack_require__(52)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(51)
+var __vue_script__ = __webpack_require__(54)
 /* template */
-var __vue_template__ = __webpack_require__(57)
+var __vue_template__ = __webpack_require__(60)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -19787,17 +21010,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 49 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(50);
+var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("7bfd9530", content, false, {});
+var update = __webpack_require__(5)("7bfd9530", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -19813,10 +21036,10 @@ if(false) {
 }
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(4)(false);
 // imports
 
 
@@ -19827,14 +21050,14 @@ exports.push([module.i, "\n.card {\r\n  background-color: #172a39;\n}\n.tab-item
 
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_product_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_product_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_content_loader__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_content_loader__ = __webpack_require__(58);
 //
 //
 //
@@ -19967,15 +21190,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(53)
+var __vue_script__ = __webpack_require__(56)
 /* template */
-var __vue_template__ = __webpack_require__(54)
+var __vue_template__ = __webpack_require__(57)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -20014,7 +21237,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20103,7 +21326,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -20233,7 +21456,7 @@ if (false) {
 }
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20243,7 +21466,7 @@ if (false) {
 /* unused harmony export FacebookLoader */
 /* unused harmony export ListLoader */
 /* unused harmony export InstagramLoader */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_helper_vue_jsx_merge_props__);
 
 
@@ -20699,7 +21922,7 @@ var InstagramLoader = {
 
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, exports) {
 
 var nestRE = /^(attrs|props|on|nativeOn|class|style|hook)$/
@@ -20755,7 +21978,7 @@ function mergeFn (a, b) {
 
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -21067,15 +22290,15 @@ if (false) {
 }
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(59)
+var __vue_script__ = __webpack_require__(62)
 /* template */
-var __vue_template__ = __webpack_require__(61)
+var __vue_template__ = __webpack_require__(64)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -21114,12 +22337,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_good_wizard__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_good_wizard__ = __webpack_require__(63);
 //
 //
 //
@@ -21280,7 +22503,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21452,7 +22675,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -21629,12 +22852,12 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_laravel_echo__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_laravel_echo__ = __webpack_require__(86);
 // window._ = require('lodash');
 // window.Popper = require('popper.js').default;
 
@@ -21645,7 +22868,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 
 try {
-    window.$ = window.jQuery = __webpack_require__(63);
+    window.$ = window.jQuery = __webpack_require__(66);
 
     // require('bootstrap');
 } catch (e) {}
@@ -21656,7 +22879,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(64);
+window.axios = __webpack_require__(67);
 
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
@@ -21682,7 +22905,7 @@ if (token) {
 
 
 
-window.Pusher = __webpack_require__(84);
+window.Pusher = __webpack_require__(87);
 
 window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */]({
     broadcaster: "pusher",
@@ -21696,7 +22919,7 @@ window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
 });
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -32067,22 +33290,22 @@ return jQuery;
 
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(65);
+module.exports = __webpack_require__(68);
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(10);
-var Axios = __webpack_require__(67);
-var defaults = __webpack_require__(4);
+var bind = __webpack_require__(11);
+var Axios = __webpack_require__(70);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -32115,15 +33338,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(14);
-axios.CancelToken = __webpack_require__(81);
-axios.isCancel = __webpack_require__(13);
+axios.Cancel = __webpack_require__(15);
+axios.CancelToken = __webpack_require__(84);
+axios.isCancel = __webpack_require__(14);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(82);
+axios.spread = __webpack_require__(85);
 
 module.exports = axios;
 
@@ -32132,7 +33355,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports) {
 
 /*!
@@ -32159,16 +33382,16 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(76);
-var dispatchRequest = __webpack_require__(77);
+var InterceptorManager = __webpack_require__(79);
+var dispatchRequest = __webpack_require__(80);
 
 /**
  * Create a new instance of Axios
@@ -32245,7 +33468,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32264,13 +33487,13 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(12);
+var createError = __webpack_require__(13);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -32297,7 +33520,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32325,7 +33548,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32398,7 +33621,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32458,7 +33681,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32533,7 +33756,7 @@ module.exports = (
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32576,7 +33799,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32636,7 +33859,7 @@ module.exports = (
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32695,18 +33918,18 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(78);
-var isCancel = __webpack_require__(13);
-var defaults = __webpack_require__(4);
-var isAbsoluteURL = __webpack_require__(79);
-var combineURLs = __webpack_require__(80);
+var transformData = __webpack_require__(81);
+var isCancel = __webpack_require__(14);
+var defaults = __webpack_require__(6);
+var isAbsoluteURL = __webpack_require__(82);
+var combineURLs = __webpack_require__(83);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -32788,7 +34011,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32815,7 +34038,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32836,7 +34059,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32857,13 +34080,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(14);
+var Cancel = __webpack_require__(15);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -32921,7 +34144,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32955,7 +34178,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34209,7 +35432,7 @@ var Echo = function () {
 
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -43098,7 +44321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49671,14 +50894,14 @@ var _iconsCache = {
 
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FontAwesomeIcon; });
 /* unused harmony export FontAwesomeLayers */
 /* unused harmony export FontAwesomeLayersText */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fortawesome_fontawesome_svg_core__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fortawesome_fontawesome_svg_core__ = __webpack_require__(16);
 
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -50189,13 +51412,13 @@ var FontAwesomeLayersText = {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*! Buefy v0.6.7 | MIT License | github.com/buefy/buefy */ 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(true)
-		module.exports = factory(__webpack_require__(5));
+		module.exports = factory(__webpack_require__(7));
 	else if(typeof define === 'function' && define.amd)
 		define(["vue"], factory);
 	else if(typeof exports === 'object')
@@ -62432,15 +63655,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 });
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(89)
+var __vue_script__ = __webpack_require__(92)
 /* template */
-var __vue_template__ = __webpack_require__(90)
+var __vue_template__ = __webpack_require__(93)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62479,7 +63702,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -62593,7 +63816,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -62752,15 +63975,15 @@ if (false) {
 }
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(92)
+var __vue_script__ = __webpack_require__(95)
 /* template */
-var __vue_template__ = __webpack_require__(93)
+var __vue_template__ = __webpack_require__(96)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62799,7 +64022,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -62873,7 +64096,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63048,15 +64271,15 @@ if (false) {
 }
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(95)
+var __vue_script__ = __webpack_require__(98)
 /* template */
-var __vue_template__ = __webpack_require__(96)
+var __vue_template__ = __webpack_require__(99)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -63095,7 +64318,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -63151,7 +64374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63255,15 +64478,15 @@ if (false) {
 }
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(98)
+var __vue_script__ = __webpack_require__(101)
 /* template */
-var __vue_template__ = __webpack_require__(99)
+var __vue_template__ = __webpack_require__(102)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -63302,7 +64525,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -63372,7 +64595,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63507,1239 +64730,10 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(107);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(9)("46a35b0c", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-067b0c71\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./dashboard.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(8)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.is-rose-gradient[data-v-067b0c71] {\r\n  background: #f857a6;\r\n  background: -webkit-gradient(linear, left top, right top, from(#f857a6), to(#ff5858));\r\n  background: linear-gradient(to right, #f857a6, #ff5858);\n}\n.is-aqua-gradient[data-v-067b0c71] {\r\n  background: #ff512f; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#dd2476),\r\n    to(#ff512f)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #dd2476,\r\n    #ff512f\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n.is-orangina[data-v-067b0c71] {\r\n  background: #ec008c; /* fallback for old browsers */ /* Chrome 10-25, Safari 5.1-6 */\r\n  background: -webkit-gradient(\r\n    linear,\r\n    left top, right top,\r\n    from(#fc6767),\r\n    to(#ec008c)\r\n  );\r\n  background: linear-gradient(\r\n    to right,\r\n    #fc6767,\r\n    #ec008c\r\n  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\n  Dashboard\n  "),
-    _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-horizontal is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-aqua-gradient" },
-              [
-                _c("p", { staticClass: "title is-5 has-text-light" }, [
-                  _vm._v("Recette du jour")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    staticClass:
-                      "subtitle is-1 has-text-light has-text-centered"
-                  },
-                  [_vm._v(_vm._s(_vm.totalSales) + " EUR")]
-                )
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tile is-parent" }, [
-          _c(
-            "article",
-            { staticClass: "tile is-child notification is-rose-gradient" },
-            [
-              _c("p", { staticClass: "title is-5 has-text-light" }, [
-                _vm._v("Nombre de commandes du jour")
-              ]),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass:
-                    "subtitle has-text-light is-1 has-text-light has-text-centered"
-                },
-                [_vm._v(_vm._s(_vm.stats.ordersNumber))]
-              )
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(0)
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-vertical is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c(
-            "div",
-            { staticClass: "tile is-parent is-vertical" },
-            _vm._l(_vm.orders, function(order) {
-              return _c("Order", {
-                key: order.id,
-                attrs: {
-                  id: order.id,
-                  total: order.total,
-                  status: order.status,
-                  products: order.products,
-                  adress: order.adress,
-                  user: order.user
-                },
-                on: { changeStatus: _vm.setNewStatus }
-              })
-            }),
-            1
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(1)
-    ]),
-    _vm._v(" "),
-    _vm._m(2)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c(
-        "article",
-        { staticClass: "tile is-child notification is-orangina e" },
-        [
-          _c("div", { staticClass: "content" }, [
-            _c("p", { staticClass: "title is-5 has-text-light" }, [
-              _vm._v("Nombre d'utilisateurs")
-            ]),
-            _vm._v(" "),
-            _c(
-              "p",
-              {
-                staticClass:
-                  "subtitle has-text-light is-1 has-text-light has-text-centered"
-              },
-              [_vm._v("1k")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" })
-          ])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c("article", { staticClass: "tile is-child notification is-white" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("p", { staticClass: "title" }, [_vm._v("Graphe avec ChartJs")]),
-          _vm._v(" "),
-          _c("p", { staticClass: "subtitle" }, [
-            _vm._v("CA par Jour/Semaine/Mois")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" })
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-ancestor" }, [
-      _c("div", { staticClass: "tile is-vertical is-8" }, [
-        _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" })
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-067b0c71", module.exports)
-  }
-}
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! @preserve
- * numeral.js
- * version : 2.0.6
- * author : Adam Draper
- * license : MIT
- * http://adamwdraper.github.com/Numeral-js/
- */
-
-(function (global, factory) {
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
-    } else {
-        global.numeral = factory();
-    }
-}(this, function () {
-    /************************************
-        Variables
-    ************************************/
-
-    var numeral,
-        _,
-        VERSION = '2.0.6',
-        formats = {},
-        locales = {},
-        defaults = {
-            currentLocale: 'en',
-            zeroFormat: null,
-            nullFormat: null,
-            defaultFormat: '0,0',
-            scalePercentBy100: true
-        },
-        options = {
-            currentLocale: defaults.currentLocale,
-            zeroFormat: defaults.zeroFormat,
-            nullFormat: defaults.nullFormat,
-            defaultFormat: defaults.defaultFormat,
-            scalePercentBy100: defaults.scalePercentBy100
-        };
-
-
-    /************************************
-        Constructors
-    ************************************/
-
-    // Numeral prototype object
-    function Numeral(input, number) {
-        this._input = input;
-
-        this._value = number;
-    }
-
-    numeral = function(input) {
-        var value,
-            kind,
-            unformatFunction,
-            regexp;
-
-        if (numeral.isNumeral(input)) {
-            value = input.value();
-        } else if (input === 0 || typeof input === 'undefined') {
-            value = 0;
-        } else if (input === null || _.isNaN(input)) {
-            value = null;
-        } else if (typeof input === 'string') {
-            if (options.zeroFormat && input === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                for (kind in formats) {
-                    regexp = typeof formats[kind].regexps.unformat === 'function' ? formats[kind].regexps.unformat() : formats[kind].regexps.unformat;
-
-                    if (regexp && input.match(regexp)) {
-                        unformatFunction = formats[kind].unformat;
-
-                        break;
-                    }
-                }
-
-                unformatFunction = unformatFunction || numeral._.stringToNumber;
-
-                value = unformatFunction(input);
-            }
-        } else {
-            value = Number(input)|| null;
-        }
-
-        return new Numeral(input, value);
-    };
-
-    // version number
-    numeral.version = VERSION;
-
-    // compare numeral object
-    numeral.isNumeral = function(obj) {
-        return obj instanceof Numeral;
-    };
-
-    // helper functions
-    numeral._ = _ = {
-        // formats numbers separators, decimals places, signs, abbreviations
-        numberToFormat: function(value, format, roundingFunction) {
-            var locale = locales[numeral.options.currentLocale],
-                negP = false,
-                optDec = false,
-                leadingCount = 0,
-                abbr = '',
-                trillion = 1000000000000,
-                billion = 1000000000,
-                million = 1000000,
-                thousand = 1000,
-                decimal = '',
-                neg = false,
-                abbrForce, // force abbreviation
-                abs,
-                min,
-                max,
-                power,
-                int,
-                precision,
-                signed,
-                thousands,
-                output;
-
-            // make sure we never format a null value
-            value = value || 0;
-
-            abs = Math.abs(value);
-
-            // see if we should use parentheses for negative number or if we should prefix with a sign
-            // if both are present we default to parentheses
-            if (numeral._.includes(format, '(')) {
-                negP = true;
-                format = format.replace(/[\(|\)]/g, '');
-            } else if (numeral._.includes(format, '+') || numeral._.includes(format, '-')) {
-                signed = numeral._.includes(format, '+') ? format.indexOf('+') : value < 0 ? format.indexOf('-') : -1;
-                format = format.replace(/[\+|\-]/g, '');
-            }
-
-            // see if abbreviation is wanted
-            if (numeral._.includes(format, 'a')) {
-                abbrForce = format.match(/a(k|m|b|t)?/);
-
-                abbrForce = abbrForce ? abbrForce[1] : false;
-
-                // check for space before abbreviation
-                if (numeral._.includes(format, ' a')) {
-                    abbr = ' ';
-                }
-
-                format = format.replace(new RegExp(abbr + 'a[kmbt]?'), '');
-
-                if (abs >= trillion && !abbrForce || abbrForce === 't') {
-                    // trillion
-                    abbr += locale.abbreviations.trillion;
-                    value = value / trillion;
-                } else if (abs < trillion && abs >= billion && !abbrForce || abbrForce === 'b') {
-                    // billion
-                    abbr += locale.abbreviations.billion;
-                    value = value / billion;
-                } else if (abs < billion && abs >= million && !abbrForce || abbrForce === 'm') {
-                    // million
-                    abbr += locale.abbreviations.million;
-                    value = value / million;
-                } else if (abs < million && abs >= thousand && !abbrForce || abbrForce === 'k') {
-                    // thousand
-                    abbr += locale.abbreviations.thousand;
-                    value = value / thousand;
-                }
-            }
-
-            // check for optional decimals
-            if (numeral._.includes(format, '[.]')) {
-                optDec = true;
-                format = format.replace('[.]', '.');
-            }
-
-            // break number and format
-            int = value.toString().split('.')[0];
-            precision = format.split('.')[1];
-            thousands = format.indexOf(',');
-            leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
-
-            if (precision) {
-                if (numeral._.includes(precision, '[')) {
-                    precision = precision.replace(']', '');
-                    precision = precision.split('[');
-                    decimal = numeral._.toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-                } else {
-                    decimal = numeral._.toFixed(value, precision.length, roundingFunction);
-                }
-
-                int = decimal.split('.')[0];
-
-                if (numeral._.includes(decimal, '.')) {
-                    decimal = locale.delimiters.decimal + decimal.split('.')[1];
-                } else {
-                    decimal = '';
-                }
-
-                if (optDec && Number(decimal.slice(1)) === 0) {
-                    decimal = '';
-                }
-            } else {
-                int = numeral._.toFixed(value, 0, roundingFunction);
-            }
-
-            // check abbreviation again after rounding
-            if (abbr && !abbrForce && Number(int) >= 1000 && abbr !== locale.abbreviations.trillion) {
-                int = String(Number(int) / 1000);
-
-                switch (abbr) {
-                    case locale.abbreviations.thousand:
-                        abbr = locale.abbreviations.million;
-                        break;
-                    case locale.abbreviations.million:
-                        abbr = locale.abbreviations.billion;
-                        break;
-                    case locale.abbreviations.billion:
-                        abbr = locale.abbreviations.trillion;
-                        break;
-                }
-            }
-
-
-            // format number
-            if (numeral._.includes(int, '-')) {
-                int = int.slice(1);
-                neg = true;
-            }
-
-            if (int.length < leadingCount) {
-                for (var i = leadingCount - int.length; i > 0; i--) {
-                    int = '0' + int;
-                }
-            }
-
-            if (thousands > -1) {
-                int = int.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + locale.delimiters.thousands);
-            }
-
-            if (format.indexOf('.') === 0) {
-                int = '';
-            }
-
-            output = int + decimal + (abbr ? abbr : '');
-
-            if (negP) {
-                output = (negP && neg ? '(' : '') + output + (negP && neg ? ')' : '');
-            } else {
-                if (signed >= 0) {
-                    output = signed === 0 ? (neg ? '-' : '+') + output : output + (neg ? '-' : '+');
-                } else if (neg) {
-                    output = '-' + output;
-                }
-            }
-
-            return output;
-        },
-        // unformats numbers separators, decimals places, signs, abbreviations
-        stringToNumber: function(string) {
-            var locale = locales[options.currentLocale],
-                stringOriginal = string,
-                abbreviations = {
-                    thousand: 3,
-                    million: 6,
-                    billion: 9,
-                    trillion: 12
-                },
-                abbreviation,
-                value,
-                i,
-                regexp;
-
-            if (options.zeroFormat && string === options.zeroFormat) {
-                value = 0;
-            } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
-                value = null;
-            } else {
-                value = 1;
-
-                if (locale.delimiters.decimal !== '.') {
-                    string = string.replace(/\./g, '').replace(locale.delimiters.decimal, '.');
-                }
-
-                for (abbreviation in abbreviations) {
-                    regexp = new RegExp('[^a-zA-Z]' + locale.abbreviations[abbreviation] + '(?:\\)|(\\' + locale.currency.symbol + ')?(?:\\))?)?$');
-
-                    if (stringOriginal.match(regexp)) {
-                        value *= Math.pow(10, abbreviations[abbreviation]);
-                        break;
-                    }
-                }
-
-                // check for negative number
-                value *= (string.split('-').length + Math.min(string.split('(').length - 1, string.split(')').length - 1)) % 2 ? 1 : -1;
-
-                // remove non numbers
-                string = string.replace(/[^0-9\.]+/g, '');
-
-                value *= Number(string);
-            }
-
-            return value;
-        },
-        isNaN: function(value) {
-            return typeof value === 'number' && isNaN(value);
-        },
-        includes: function(string, search) {
-            return string.indexOf(search) !== -1;
-        },
-        insert: function(string, subString, start) {
-            return string.slice(0, start) + subString + string.slice(start);
-        },
-        reduce: function(array, callback /*, initialValue*/) {
-            if (this === null) {
-                throw new TypeError('Array.prototype.reduce called on null or undefined');
-            }
-
-            if (typeof callback !== 'function') {
-                throw new TypeError(callback + ' is not a function');
-            }
-
-            var t = Object(array),
-                len = t.length >>> 0,
-                k = 0,
-                value;
-
-            if (arguments.length === 3) {
-                value = arguments[2];
-            } else {
-                while (k < len && !(k in t)) {
-                    k++;
-                }
-
-                if (k >= len) {
-                    throw new TypeError('Reduce of empty array with no initial value');
-                }
-
-                value = t[k++];
-            }
-            for (; k < len; k++) {
-                if (k in t) {
-                    value = callback(value, t[k], k, t);
-                }
-            }
-            return value;
-        },
-        /**
-         * Computes the multiplier necessary to make x >= 1,
-         * effectively eliminating miscalculations caused by
-         * finite precision.
-         */
-        multiplier: function (x) {
-            var parts = x.toString().split('.');
-
-            return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-        },
-        /**
-         * Given a variable number of arguments, returns the maximum
-         * multiplier that must be used to normalize an operation involving
-         * all of them.
-         */
-        correctionFactor: function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            return args.reduce(function(accum, next) {
-                var mn = _.multiplier(next);
-                return accum > mn ? accum : mn;
-            }, 1);
-        },
-        /**
-         * Implementation of toFixed() that treats floats more like decimals
-         *
-         * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-         * problems for accounting- and finance-related software.
-         */
-        toFixed: function(value, maxDecimals, roundingFunction, optionals) {
-            var splitValue = value.toString().split('.'),
-                minDecimals = maxDecimals - (optionals || 0),
-                boundedPrecision,
-                optionalsRegExp,
-                power,
-                output;
-
-            // Use the smallest precision value possible to avoid errors from floating point representation
-            if (splitValue.length === 2) {
-              boundedPrecision = Math.min(Math.max(splitValue[1].length, minDecimals), maxDecimals);
-            } else {
-              boundedPrecision = minDecimals;
-            }
-
-            power = Math.pow(10, boundedPrecision);
-
-            // Multiply up by precision, round accurately, then divide and use native toFixed():
-            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
-
-            if (optionals > maxDecimals - boundedPrecision) {
-                optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
-                output = output.replace(optionalsRegExp, '');
-            }
-
-            return output;
-        }
-    };
-
-    // avaliable options
-    numeral.options = options;
-
-    // avaliable formats
-    numeral.formats = formats;
-
-    // avaliable formats
-    numeral.locales = locales;
-
-    // This function sets the current locale.  If
-    // no arguments are passed in, it will simply return the current global
-    // locale key.
-    numeral.locale = function(key) {
-        if (key) {
-            options.currentLocale = key.toLowerCase();
-        }
-
-        return options.currentLocale;
-    };
-
-    // This function provides access to the loaded locale data.  If
-    // no arguments are passed in, it will simply return the current
-    // global locale object.
-    numeral.localeData = function(key) {
-        if (!key) {
-            return locales[options.currentLocale];
-        }
-
-        key = key.toLowerCase();
-
-        if (!locales[key]) {
-            throw new Error('Unknown locale : ' + key);
-        }
-
-        return locales[key];
-    };
-
-    numeral.reset = function() {
-        for (var property in defaults) {
-            options[property] = defaults[property];
-        }
-    };
-
-    numeral.zeroFormat = function(format) {
-        options.zeroFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.nullFormat = function (format) {
-        options.nullFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.defaultFormat = function(format) {
-        options.defaultFormat = typeof(format) === 'string' ? format : '0.0';
-    };
-
-    numeral.register = function(type, name, format) {
-        name = name.toLowerCase();
-
-        if (this[type + 's'][name]) {
-            throw new TypeError(name + ' ' + type + ' already registered.');
-        }
-
-        this[type + 's'][name] = format;
-
-        return format;
-    };
-
-
-    numeral.validate = function(val, culture) {
-        var _decimalSep,
-            _thousandSep,
-            _currSymbol,
-            _valArray,
-            _abbrObj,
-            _thousandRegEx,
-            localeData,
-            temp;
-
-        //coerce val to string
-        if (typeof val !== 'string') {
-            val += '';
-
-            if (console.warn) {
-                console.warn('Numeral.js: Value is not string. It has been co-erced to: ', val);
-            }
-        }
-
-        //trim whitespaces from either sides
-        val = val.trim();
-
-        //if val is just digits return true
-        if (!!val.match(/^\d+$/)) {
-            return true;
-        }
-
-        //if val is empty return false
-        if (val === '') {
-            return false;
-        }
-
-        //get the decimal and thousands separator from numeral.localeData
-        try {
-            //check if the culture is understood by numeral. if not, default it to current locale
-            localeData = numeral.localeData(culture);
-        } catch (e) {
-            localeData = numeral.localeData(numeral.locale());
-        }
-
-        //setup the delimiters and currency symbol based on culture/locale
-        _currSymbol = localeData.currency.symbol;
-        _abbrObj = localeData.abbreviations;
-        _decimalSep = localeData.delimiters.decimal;
-        if (localeData.delimiters.thousands === '.') {
-            _thousandSep = '\\.';
-        } else {
-            _thousandSep = localeData.delimiters.thousands;
-        }
-
-        // validating currency symbol
-        temp = val.match(/^[^\d]+/);
-        if (temp !== null) {
-            val = val.substr(1);
-            if (temp[0] !== _currSymbol) {
-                return false;
-            }
-        }
-
-        //validating abbreviation symbol
-        temp = val.match(/[^\d]+$/);
-        if (temp !== null) {
-            val = val.slice(0, -1);
-            if (temp[0] !== _abbrObj.thousand && temp[0] !== _abbrObj.million && temp[0] !== _abbrObj.billion && temp[0] !== _abbrObj.trillion) {
-                return false;
-            }
-        }
-
-        _thousandRegEx = new RegExp(_thousandSep + '{2}');
-
-        if (!val.match(/[^\d.,]/g)) {
-            _valArray = val.split(_decimalSep);
-            if (_valArray.length > 2) {
-                return false;
-            } else {
-                if (_valArray.length < 2) {
-                    return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx));
-                } else {
-                    if (_valArray[0].length === 1) {
-                        return ( !! _valArray[0].match(/^\d+$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    } else {
-                        return ( !! _valArray[0].match(/^\d+.*\d$/) && !_valArray[0].match(_thousandRegEx) && !! _valArray[1].match(/^\d+$/));
-                    }
-                }
-            }
-        }
-
-        return false;
-    };
-
-
-    /************************************
-        Numeral Prototype
-    ************************************/
-
-    numeral.fn = Numeral.prototype = {
-        clone: function() {
-            return numeral(this);
-        },
-        format: function(inputString, roundingFunction) {
-            var value = this._value,
-                format = inputString || options.defaultFormat,
-                kind,
-                output,
-                formatFunction;
-
-            // make sure we have a roundingFunction
-            roundingFunction = roundingFunction || Math.round;
-
-            // format based on value
-            if (value === 0 && options.zeroFormat !== null) {
-                output = options.zeroFormat;
-            } else if (value === null && options.nullFormat !== null) {
-                output = options.nullFormat;
-            } else {
-                for (kind in formats) {
-                    if (format.match(formats[kind].regexps.format)) {
-                        formatFunction = formats[kind].format;
-
-                        break;
-                    }
-                }
-
-                formatFunction = formatFunction || numeral._.numberToFormat;
-
-                output = formatFunction(value, format, roundingFunction);
-            }
-
-            return output;
-        },
-        value: function() {
-            return this._value;
-        },
-        input: function() {
-            return this._input;
-        },
-        set: function(value) {
-            this._value = Number(value);
-
-            return this;
-        },
-        add: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum + Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 0) / corrFactor;
-
-            return this;
-        },
-        subtract: function(value) {
-            var corrFactor = _.correctionFactor.call(null, this._value, value);
-
-            function cback(accum, curr, currI, O) {
-                return accum - Math.round(corrFactor * curr);
-            }
-
-            this._value = _.reduce([value], cback, Math.round(this._value * corrFactor)) / corrFactor;
-
-            return this;
-        },
-        multiply: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) * Math.round(curr * corrFactor) / Math.round(corrFactor * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback, 1);
-
-            return this;
-        },
-        divide: function(value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = _.correctionFactor(accum, curr);
-                return Math.round(accum * corrFactor) / Math.round(curr * corrFactor);
-            }
-
-            this._value = _.reduce([this._value, value], cback);
-
-            return this;
-        },
-        difference: function(value) {
-            return Math.abs(numeral(this._value).subtract(value).value());
-        }
-    };
-
-    /************************************
-        Default Locale && Format
-    ************************************/
-
-    numeral.register('locale', 'en', {
-        delimiters: {
-            thousands: ',',
-            decimal: '.'
-        },
-        abbreviations: {
-            thousand: 'k',
-            million: 'm',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function(number) {
-            var b = number % 10;
-            return (~~(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-        },
-        currency: {
-            symbol: '$'
-        }
-    });
-
-    
-
-(function() {
-        numeral.register('format', 'bps', {
-            regexps: {
-                format: /(BPS)/,
-                unformat: /(BPS)/
-            },
-            format: function(value, format, roundingFunction) {
-                var space = numeral._.includes(format, ' BPS') ? ' ' : '',
-                    output;
-
-                value = value * 10000;
-
-                // check for space before BPS
-                format = format.replace(/\s?BPS/, '');
-
-                output = numeral._.numberToFormat(value, format, roundingFunction);
-
-                if (numeral._.includes(output, ')')) {
-                    output = output.split('');
-
-                    output.splice(-1, 0, space + 'BPS');
-
-                    output = output.join('');
-                } else {
-                    output = output + space + 'BPS';
-                }
-
-                return output;
-            },
-            unformat: function(string) {
-                return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
-            }
-        });
-})();
-
-
-(function() {
-        var decimal = {
-            base: 1000,
-            suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        },
-        binary = {
-            base: 1024,
-            suffixes: ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-        };
-
-    var allSuffixes =  decimal.suffixes.concat(binary.suffixes.filter(function (item) {
-            return decimal.suffixes.indexOf(item) < 0;
-        }));
-        var unformatRegex = allSuffixes.join('|');
-        // Allow support for BPS (http://www.investopedia.com/terms/b/basispoint.asp)
-        unformatRegex = '(' + unformatRegex.replace('B', 'B(?!PS)') + ')';
-
-    numeral.register('format', 'bytes', {
-        regexps: {
-            format: /([0\s]i?b)/,
-            unformat: new RegExp(unformatRegex)
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                bytes = numeral._.includes(format, 'ib') ? binary : decimal,
-                suffix = numeral._.includes(format, ' b') || numeral._.includes(format, ' ib') ? ' ' : '',
-                power,
-                min,
-                max;
-
-            // check for space before
-            format = format.replace(/\s?i?b/, '');
-
-            for (power = 0; power <= bytes.suffixes.length; power++) {
-                min = Math.pow(bytes.base, power);
-                max = Math.pow(bytes.base, power + 1);
-
-                if (value === null || value === 0 || value >= min && value < max) {
-                    suffix += bytes.suffixes[power];
-
-                    if (min > 0) {
-                        value = value / min;
-                    }
-
-                    break;
-                }
-            }
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            return output + suffix;
-        },
-        unformat: function(string) {
-            var value = numeral._.stringToNumber(string),
-                power,
-                bytesMultiplier;
-
-            if (value) {
-                for (power = decimal.suffixes.length - 1; power >= 0; power--) {
-                    if (numeral._.includes(string, decimal.suffixes[power])) {
-                        bytesMultiplier = Math.pow(decimal.base, power);
-
-                        break;
-                    }
-
-                    if (numeral._.includes(string, binary.suffixes[power])) {
-                        bytesMultiplier = Math.pow(binary.base, power);
-
-                        break;
-                    }
-                }
-
-                value *= (bytesMultiplier || 1);
-            }
-
-            return value;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'currency', {
-        regexps: {
-            format: /(\$)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                symbols = {
-                    before: format.match(/^([\+|\-|\(|\s|\$]*)/)[0],
-                    after: format.match(/([\+|\-|\)|\s|\$]*)$/)[0]
-                },
-                output,
-                symbol,
-                i;
-
-            // strip format of spaces and $
-            format = format.replace(/\s?\$\s?/, '');
-
-            // format the number
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            // update the before and after based on value
-            if (value >= 0) {
-                symbols.before = symbols.before.replace(/[\-\(]/, '');
-                symbols.after = symbols.after.replace(/[\-\)]/, '');
-            } else if (value < 0 && (!numeral._.includes(symbols.before, '-') && !numeral._.includes(symbols.before, '('))) {
-                symbols.before = '-' + symbols.before;
-            }
-
-            // loop through each before symbol
-            for (i = 0; i < symbols.before.length; i++) {
-                symbol = symbols.before[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = numeral._.insert(output, locale.currency.symbol, i);
-                        break;
-                    case ' ':
-                        output = numeral._.insert(output, ' ', i + locale.currency.symbol.length - 1);
-                        break;
-                }
-            }
-
-            // loop through each after symbol
-            for (i = symbols.after.length - 1; i >= 0; i--) {
-                symbol = symbols.after[i];
-
-                switch (symbol) {
-                    case '$':
-                        output = i === symbols.after.length - 1 ? output + locale.currency.symbol : numeral._.insert(output, locale.currency.symbol, -(symbols.after.length - (1 + i)));
-                        break;
-                    case ' ':
-                        output = i === symbols.after.length - 1 ? output + ' ' : numeral._.insert(output, ' ', -(symbols.after.length - (1 + i) + locale.currency.symbol.length - 1));
-                        break;
-                }
-            }
-
-
-            return output;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'exponential', {
-        regexps: {
-            format: /(e\+|e-)/,
-            unformat: /(e\+|e-)/
-        },
-        format: function(value, format, roundingFunction) {
-            var output,
-                exponential = typeof value === 'number' && !numeral._.isNaN(value) ? value.toExponential() : '0e+0',
-                parts = exponential.split('e');
-
-            format = format.replace(/e[\+|\-]{1}0/, '');
-
-            output = numeral._.numberToFormat(Number(parts[0]), format, roundingFunction);
-
-            return output + 'e' + parts[1];
-        },
-        unformat: function(string) {
-            var parts = numeral._.includes(string, 'e+') ? string.split('e+') : string.split('e-'),
-                value = Number(parts[0]),
-                power = Number(parts[1]);
-
-            power = numeral._.includes(string, 'e-') ? power *= -1 : power;
-
-            function cback(accum, curr, currI, O) {
-                var corrFactor = numeral._.correctionFactor(accum, curr),
-                    num = (accum * corrFactor) * (curr * corrFactor) / (corrFactor * corrFactor);
-                return num;
-            }
-
-            return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'ordinal', {
-        regexps: {
-            format: /(o)/
-        },
-        format: function(value, format, roundingFunction) {
-            var locale = numeral.locales[numeral.options.currentLocale],
-                output,
-                ordinal = numeral._.includes(format, ' o') ? ' ' : '';
-
-            // check for space before
-            format = format.replace(/\s?o/, '');
-
-            ordinal += locale.ordinal(value);
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            return output + ordinal;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'percentage', {
-        regexps: {
-            format: /(%)/,
-            unformat: /(%)/
-        },
-        format: function(value, format, roundingFunction) {
-            var space = numeral._.includes(format, ' %') ? ' ' : '',
-                output;
-
-            if (numeral.options.scalePercentBy100) {
-                value = value * 100;
-            }
-
-            // check for space before %
-            format = format.replace(/\s?\%/, '');
-
-            output = numeral._.numberToFormat(value, format, roundingFunction);
-
-            if (numeral._.includes(output, ')')) {
-                output = output.split('');
-
-                output.splice(-1, 0, space + '%');
-
-                output = output.join('');
-            } else {
-                output = output + space + '%';
-            }
-
-            return output;
-        },
-        unformat: function(string) {
-            var number = numeral._.stringToNumber(string);
-            if (numeral.options.scalePercentBy100) {
-                return number * 0.01;
-            }
-            return number;
-        }
-    });
-})();
-
-
-(function() {
-        numeral.register('format', 'time', {
-        regexps: {
-            format: /(:)/,
-            unformat: /(:)/
-        },
-        format: function(value, format, roundingFunction) {
-            var hours = Math.floor(value / 60 / 60),
-                minutes = Math.floor((value - (hours * 60 * 60)) / 60),
-                seconds = Math.round(value - (hours * 60 * 60) - (minutes * 60));
-
-            return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-        },
-        unformat: function(string) {
-            var timeArray = string.split(':'),
-                seconds = 0;
-
-            // turn hours and minutes into seconds and add them all up
-            if (timeArray.length === 3) {
-                // hours
-                seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-                // minutes
-                seconds = seconds + (Number(timeArray[1]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[2]);
-            } else if (timeArray.length === 2) {
-                // minutes
-                seconds = seconds + (Number(timeArray[0]) * 60);
-                // seconds
-                seconds = seconds + Number(timeArray[1]);
-            }
-            return Number(seconds);
-        }
-    });
-})();
-
-return numeral;
-}));
-
 
 /***/ })
 /******/ ]);
