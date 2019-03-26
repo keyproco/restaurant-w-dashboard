@@ -13,11 +13,10 @@
         </div>
         <div class="tile is-parent">
           <article class="tile is-child notification is-rose-gradient">
-            <p class="title is-5 has-text-light">Nombre de commandes</p>
-            <p class="subtitle has-text-light is-1 has-text-light has-text-centered">14</p>
-            <div class="content">
-              <!-- Content -->
-            </div>
+            <p class="title is-5 has-text-light">Nombre de commandes du jour</p>
+            <p
+              class="subtitle has-text-light is-1 has-text-light has-text-centered"
+            >{{orders.length}}</p>
           </article>
         </div>
       </div>
