@@ -19217,7 +19217,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     axios.get("/admin/stats/").then(function (e) {
       console.log(e.data);
-      _this.orders = e.data.orders;
+      _this.orders = e.data.orders.filter(function (order) {
+        return order.status != 0;
+      });
       _this.stats.todaySales = e.data.todaySales;
       _this.stats.ordersNumber = e.data.ordersNumber;
     });
