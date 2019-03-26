@@ -19212,7 +19212,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         1: "En attente",
         2: "En préparation",
         3: "Livrée",
-        default: "NAN"
+        default: "Dans le panier"
       };
       return this.orders.map(function (r) {
         return status(r.status);
@@ -21168,6 +21168,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -21454,10 +21455,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns" }, [
-    _c("a", { staticClass: "button", on: { click: _vm.buy } }, [
-      _vm._v("Payer")
-    ]),
-    _vm._v(" "),
     _c("div", { staticClass: "column" }, [
       _vm.confirmed
         ? _c(
@@ -21591,7 +21588,16 @@ var render = function() {
               _c("div", { attrs: { slot: "page3" }, slot: "page3" }, [
                 _c("h4", [_vm._v("Step 3")]),
                 _vm._v(" "),
-                _c("p", [_vm._v("This is step 3")])
+                _c("p", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button is-warning",
+                      on: { click: _vm.buy }
+                    },
+                    [_vm._v("Payer")]
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c("div", { attrs: { slot: "page4" }, slot: "page4" }, [
