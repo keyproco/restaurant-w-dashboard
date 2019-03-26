@@ -63682,10 +63682,10 @@ var staticRenderFns = [
     return _c("div", { staticClass: "tile is-parent" }, [
       _c("article", { staticClass: "tile is-child notification is-white" }, [
         _c("div", { staticClass: "content" }, [
-          _c("p", { staticClass: "title" }, [_vm._v("Tall tile")]),
+          _c("p", { staticClass: "title" }, [_vm._v("Graphe avec ChartJs")]),
           _vm._v(" "),
           _c("p", { staticClass: "subtitle" }, [
-            _vm._v("With even more content")
+            _vm._v("CA par Jour/Semaine/Mois")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "content" })
@@ -63700,27 +63700,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "tile is-ancestor" }, [
       _c("div", { staticClass: "tile is-vertical is-8" }, [
         _c("div", { staticClass: "tile" }, [
-          _c("div", { staticClass: "tile is-parent is-vertical" }, [
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("Vertical...")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Top tile")])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "article",
-              { staticClass: "tile is-child notification is-white" },
-              [
-                _c("p", { staticClass: "title" }, [_vm._v("...tiles")]),
-                _vm._v(" "),
-                _c("p", { staticClass: "subtitle" }, [_vm._v("Bottom tile")])
-              ]
-            )
-          ])
+          _c("div", { staticClass: "tile is-parent is-vertical" })
         ])
       ])
     ])

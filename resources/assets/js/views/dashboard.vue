@@ -56,8 +56,8 @@
       <div class="tile is-parent">
         <article class="tile is-child notification is-white">
           <div class="content">
-            <p class="title">Tall tile</p>
-            <p class="subtitle">With even more content</p>
+            <p class="title">Graphe avec ChartJs</p>
+            <p class="subtitle">CA par Jour/Semaine/Mois</p>
             <div class="content"></div>
           </div>
         </article>
@@ -67,14 +67,14 @@
       <div class="tile is-vertical is-8">
         <div class="tile">
           <div class="tile is-parent is-vertical">
-            <article class="tile is-child notification is-white">
+            <!-- <article class="tile is-child notification is-white">
               <p class="title">Vertical...</p>
               <p class="subtitle">Top tile</p>
             </article>
             <article class="tile is-child notification is-white">
-              <p class="title">...tiles</p>
-              <p class="subtitle">Bottom tile</p>
-            </article>
+              <p class="title">Graphe avec ChartJs</p>
+              <p class="subtitle">CA par Jour/Semaine/Mois</p>
+            </article>-->
           </div>
         </div>
       </div>

@@ -40,18 +40,6 @@
             <li>
                <router-link to="/admin/dashboard/manage-products" exact> Gérer les produits </router-link>
             </li>
-            <li>
-              <a >Manage Your Team</a>
-            </li>
-            <li>
-              <a>Invitations</a>
-            </li>
-            <li>
-              <a>Cloud Storage Environment </a>
-            </li>
-            <li>
-              <a>Authentication</a>
-            </li>
           </ul>
           <p class="menu-label">Gestion des ressources</p>
           <ul class="menu-list">
