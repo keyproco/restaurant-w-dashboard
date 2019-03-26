@@ -117,7 +117,7 @@ export default {
   mounted() {
     axios.get("/admin/stats/").then(e => {
       console.log(e.data);
-      this.orders = e.data.orders;
+      this.orders = e.data.orders.filter(order => order.status != 0);
       this.stats.todaySales = e.data.todaySales;
       this.stats.ordersNumber = e.data.ordersNumber;
     });
