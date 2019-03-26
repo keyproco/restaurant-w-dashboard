@@ -11,7 +11,7 @@ class AdminsController extends Controller
     public function index()
     {
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('dashboard');
     }
     public function dashboard()
     {
