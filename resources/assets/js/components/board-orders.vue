@@ -8,7 +8,7 @@
 
     <p class="subtitle">
       <b>
-        <ul :key="product.id" v-for="product in products">
+        <ul :v-if="product.status != 3" :key="product.id" v-for="product in products">
           <li
             style="list-style: upper-roman; "
             class="is-size-6"
