@@ -16,7 +16,7 @@
             <p class="title is-5 has-text-light">Nombre de commandes du jour</p>
             <p
               class="subtitle has-text-light is-1 has-text-light has-text-centered"
-            >{{orders.length}}</p>
+            >{{ stats.ordersNumber}}</p>
           </article>
         </div>
       </div>
@@ -119,6 +119,7 @@ export default {
       console.log(e.data);
       this.orders = e.data.orders;
       this.stats.todaySales = e.data.todaySales;
+      this.stats.ordersNumber = e.data.ordersNumber;
     });
 
     window.Echo.channel("orders").listen("UserConfirmedOrder", e => {

@@ -18123,6 +18123,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(e.data);
       _this.orders = e.data.orders;
       _this.stats.todaySales = e.data.todaySales;
+      _this.stats.ordersNumber = e.data.ordersNumber;
     });
 
     window.Echo.channel("orders").listen("UserConfirmedOrder", function (e) {
@@ -18502,17 +18503,21 @@ var render = function() {
         _c(
           "b",
           _vm._l(_vm.products, function(product) {
-            return _c("ul", { key: product.id }, [
-              _c("li", {
-                staticClass: "is-size-6",
-                staticStyle: { "list-style": "upper-roman" },
-                domProps: {
-                  textContent: _vm._s(
-                    product.name + "  x" + product.pivot.quantity
-                  )
-                }
-              })
-            ])
+            return _c(
+              "ul",
+              { key: product.id, attrs: { "v-if": product.status != 3 } },
+              [
+                _c("li", {
+                  staticClass: "is-size-6",
+                  staticStyle: { "list-style": "upper-roman" },
+                  domProps: {
+                    textContent: _vm._s(
+                      product.name + "  x" + product.pivot.quantity
+                    )
+                  }
+                })
+              ]
+            )
           }),
           0
         ),
@@ -63601,7 +63606,7 @@ var render = function() {
                   staticClass:
                     "subtitle has-text-light is-1 has-text-light has-text-centered"
                 },
-                [_vm._v(_vm._s(_vm.orders.length))]
+                [_vm._v(_vm._s(_vm.stats.ordersNumber))]
               )
             ]
           )
