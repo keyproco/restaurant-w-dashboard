@@ -1,6 +1,5 @@
 <template>
   <div class="columns">
-    <a @click="buy" class="button">Payer</a>
     <div class="column">
       <div v-if="confirmed">
         <b-notification
@@ -38,7 +37,9 @@
           </div>
           <div slot="page3">
             <h4>Step 3</h4>
-            <p>This is step 3</p>
+            <p>
+              <a @click="buy" class="button is-warning">Payer</a>
+            </p>
           </div>
           <div slot="page4">
             <h4>Step 4</h4>

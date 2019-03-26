@@ -125,7 +125,7 @@ export default {
         1: "En attente",
         2: "En préparation",
         3: "Livrée",
-        default: "NAN"
+        default: "Dans le panier"
       };
       return this.orders.map(r => status(r.status));
     }
