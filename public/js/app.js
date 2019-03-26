@@ -18083,7 +18083,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -63587,10 +63586,29 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm._m(0)
+        _c("div", { staticClass: "tile is-parent" }, [
+          _c(
+            "article",
+            { staticClass: "tile is-child notification is-rose-gradient" },
+            [
+              _c("p", { staticClass: "title is-5 has-text-light" }, [
+                _vm._v("Nombre de commandes du jour")
+              ]),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "subtitle has-text-light is-1 has-text-light has-text-centered"
+                },
+                [_vm._v(_vm._s(_vm.orders.length))]
+              )
+            ]
+          )
+        ])
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _vm._m(0)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "tile is-ancestor" }, [
@@ -63618,40 +63636,13 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _vm._m(1)
     ]),
     _vm._v(" "),
-    _vm._m(3)
+    _vm._m(2)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tile is-parent" }, [
-      _c(
-        "article",
-        { staticClass: "tile is-child notification is-rose-gradient" },
-        [
-          _c("p", { staticClass: "title is-5 has-text-light" }, [
-            _vm._v("Nombre de commandes")
-          ]),
-          _vm._v(" "),
-          _c(
-            "p",
-            {
-              staticClass:
-                "subtitle has-text-light is-1 has-text-light has-text-centered"
-            },
-            [_vm._v("14")]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" })
-        ]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
