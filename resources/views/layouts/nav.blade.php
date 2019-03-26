@@ -9,7 +9,7 @@
     <div class="navbar-menu" id="navMenu">
         <div class="navbar-start">
             <a class="navbar-item" href="/">
-                <img src="https://bulma.io/images/bulma-logo.png" alt="i am alt" width="112" height="28">
+                <!-- <img src="https://previews.123rf.com/images/butenkow/butenkow1612/butenkow161200835/67325972-mod%C3%A8le-de-conception-logo-pizza-vector-illustration-de-l-ic%C3%B4ne.jpg" alt="i am alt" width="112" height="128"> -->
             </a>
         </div>
         <div class="navbar-end">
@@ -17,16 +17,16 @@
             @guest
            <div id="login">
                 <login-view></login-view>
-            </div> 
+            </div>
             <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
             @else
             <div id="login-profile">
                 <login-profile></login-profile>
-            </div>        
+            </div>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
-        @endguest       
+        @endguest
     </div>
 </div>
 </div>
