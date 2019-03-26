@@ -125,6 +125,7 @@ export default {
     window.Echo.channel("orders").listen("UserConfirmedOrder", e => {
       console.log("OrderPusher", e);
       this.orders.unshift(e.order);
+      this.stats.ordersNumber++;
       this.stats.todaySales =
         parseInt(e.order.total) + parseInt(this.stats.todaySales);
       this.$toast.open({
