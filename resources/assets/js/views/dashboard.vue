@@ -1,6 +1,5 @@
 <template>
   <div>
-    Dashboard
     <div class="tile is-ancestor">
       <div class="tile is-horizontal is-8">
         <div class="tile">
@@ -57,7 +56,9 @@
           <div class="content">
             <p class="title">Graphe avec ChartJs</p>
             <p class="subtitle">CA par Jour/Semaine/Mois</p>
-            <div class="content"></div>
+            <div class="content">
+              <canvas style="width: 100%; height: 100%;"></canvas>
+            </div>
           </div>
         </article>
       </div>
