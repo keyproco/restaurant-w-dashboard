@@ -19179,6 +19179,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -19721,7 +19722,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._v("\n  Dashboard\n  "),
     _c("div", { staticClass: "tile is-ancestor" }, [
       _c("div", { staticClass: "tile is-horizontal is-8" }, [
         _c("div", { staticClass: "tile" }, [
@@ -19846,7 +19846,9 @@ var staticRenderFns = [
             _vm._v("CA par Jour/Semaine/Mois")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "content" })
+          _c("div", { staticClass: "content" }, [
+            _c("canvas", { staticStyle: { width: "100%", height: "100%" } })
+          ])
         ])
       ])
     ])
