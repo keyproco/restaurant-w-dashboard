@@ -2,7 +2,7 @@
 
 @section('content')
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<div class="container">
+
 <div id="app" class="columns">
     <div  style="background-color: #172A39; " class="column is-narrow">
         <aside class="menu">
@@ -21,7 +21,7 @@
   <div style="background-color: #0A1F30;" class="column">
     <router-view> </router-view>
   </div>
-</div></div>
+</div>
 <style>
 .menu-list a {
     color: white;
